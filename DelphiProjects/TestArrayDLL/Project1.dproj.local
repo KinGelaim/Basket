@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.255,=C:\Users\admin\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.800,=C:\Users\admin\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.070,C:\Users\admin\Documents\Embarcadero\Studio\Projects\TestArrayDLL\Unit1.pas=C:\Users\admin\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.637,=C:\Users\admin\Documents\Embarcadero\Studio\16.0\Imports\TestArrayDLL_TLB.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.070,C:\Users\admin\Documents\Embarcadero\Studio\Projects\TestArrayDLL\Unit1.dfm=C:\Users\admin\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.354,C:\Users\admin\Documents\Embarcadero\Studio\Projects\TestArrayDLL\Project1.dproj=C:\Users\admin\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
