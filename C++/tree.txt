@@ -1,0 +1,108 @@
+Структура папок тома SYSTEM
+Серийный номер тома: D0F4-6F52
+C:.
+|   tree.txt
+|   
+\---MovingWorkersCeh2
+    +---Application
+    |   |   abouttheprogram.o
+    |   |   database.o
+    |   |   main.o
+    |   |   mainwindow.o
+    |   |   Makefile
+    |   |   moc_abouttheprogram.cpp
+    |   |   moc_abouttheprogram.o
+    |   |   moc_database.cpp
+    |   |   moc_database.o
+    |   |   moc_mainwindow.cpp
+    |   |   moc_mainwindow.o
+    |   |   moc_positionswindow.cpp
+    |   |   moc_positionswindow.o
+    |   |   moc_reportpositionswindow.cpp
+    |   |   moc_reportpositionswindow.o
+    |   |   moc_sectorswindow.cpp
+    |   |   moc_sectorswindow.o
+    |   |   moc_settingswindow.cpp
+    |   |   moc_settingswindow.o
+    |   |   moc_usersdismisswindow.cpp
+    |   |   moc_usersdismisswindow.o
+    |   |   moc_userswindow.cpp
+    |   |   moc_userswindow.o
+    |   |   MovingWorkersCeh2
+    |   |   position.o
+    |   |   positionswindow.o
+    |   |   reportpositionswindow.o
+    |   |   sector.o
+    |   |   sectorswindow.o
+    |   |   settingswindow.o
+    |   |   ui_abouttheprogram.h
+    |   |   ui_mainwindow.h
+    |   |   ui_positionswindow.h
+    |   |   ui_reportpositionswindow.h
+    |   |   ui_sectorswindow.h
+    |   |   ui_settingswindow.h
+    |   |   ui_usersdismisswindow.h
+    |   |   ui_userswindow.h
+    |   |   user.o
+    |   |   usersdismisswindow.o
+    |   |   userswindow.o
+    |   |   
+    |   +---DataBase
+    |   |       SecondCehDataBase.db
+    |   |       
+    |   +---Reports
+    |   |       1
+    |   |       2
+    |   |       3
+    |   |       4
+    |   |       asd
+    |   |       qsx
+    |   |       qwe
+    |   |       Reports
+    |   |       sector
+    |   |       zxc
+    |   |       
+    |   \---Settings
+    |           settings.txt
+    |           
+    +---Instructions
+    |       Инструкция по использованию программного обеспечения.doc
+    |       Код приложения.doc
+    |       
+    \---MovingWorkersCeh2_OriginalCode
+            abouttheprogram.cpp
+            abouttheprogram.h
+            abouttheprogram.ui
+            database.cpp
+            database.h
+            main.cpp
+            mainwindow.cpp
+            mainwindow.h
+            mainwindow.ui
+            MovingWorkersCeh2.pro
+            MovingWorkersCeh2.pro.user
+            position.cpp
+            position.h
+            positionswindow.cpp
+            positionswindow.h
+            positionswindow.ui
+            reportpositionswindow.cpp
+            reportpositionswindow.h
+            reportpositionswindow.ui
+            sector.cpp
+            sector.h
+            sectorswindow.cpp
+            sectorswindow.h
+            sectorswindow.ui
+            settingswindow.cpp
+            settingswindow.h
+            settingswindow.ui
+            user.cpp
+            user.h
+            usersdismisswindow.cpp
+            usersdismisswindow.h
+            usersdismisswindow.ui
+            userswindow.cpp
+            userswindow.h
+            userswindow.ui
+            

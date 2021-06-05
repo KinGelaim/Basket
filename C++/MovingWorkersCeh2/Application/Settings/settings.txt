@@ -1,0 +1,1 @@
+/home/mishanya/ProjectsQT5/MovingWorkersCeh2-build-Desktop_Qt_5_0_0_GCC_64bit_SDK-Debug/DataBase/
