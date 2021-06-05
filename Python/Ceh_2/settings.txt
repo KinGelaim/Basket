@@ -1,0 +1,4 @@
+path_db=db/ceh2.db;
+path_resource=resources;
+path_resolution=C:\Users\admin\Documents\Python\Ceh_2\resolutions;
+path_reports=C:/Users/admin/Documents/Python/Ceh_2/reports;
