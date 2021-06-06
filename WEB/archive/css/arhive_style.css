@@ -1,0 +1,22 @@
+.cursorPointer{
+	cursor: pointer;
+}
+
+.hoverRow:hover {
+	background-color: rgb(61, 213, 200);
+}
+
+.hoverRow:hover > td{
+	color: white;
+}
+
+@media print {
+	.print-hidden {
+		display: none;
+	}
+}
+
+@page {
+	size: landscape;
+	margin: 0.2in;
+}
