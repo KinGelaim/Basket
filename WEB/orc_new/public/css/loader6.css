@@ -1,0 +1,137 @@
+.bull {
+  position: relative;
+  width: 100%;
+  max-width: 20em;
+  overflow: hidden;
+  background-color: #e6dcdc;
+}
+.bull::before {
+  content: '';
+  display: block;
+  padding-bottom: 100%;
+}
+.bull:hover > * {
+  -webkit-animation-play-state: paused;
+          animation-play-state: paused;
+}
+.bull:active > * {
+  -webkit-animation-play-state: running;
+          animation-play-state: running;
+}
+
+.bull__head, .bull__tail, .bull__body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-animation: rotating 2.79s cubic-bezier(0.65, 0.54, 0.12, 0.93) infinite;
+          animation: rotating 2.79s cubic-bezier(0.65, 0.54, 0.12, 0.93) infinite;
+}
+.bull__head::before, .bull__tail::before, .bull__body::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-image: url('images/bull_light.jpg');
+}
+
+.bull__head{
+  -webkit-animation-delay: .1s;
+          animation-delay: .1s;
+}
+
+.bull__head::before {
+  top: 0;
+  right: 0;
+  background-position: 100% 0%;
+  -webkit-transform-origin: 0% 100%;
+          transform-origin: 0% 100%;
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+}
+
+.bull__tail {
+  -webkit-animation-delay: .0s;
+          animation-delay: .0s;
+}
+.bull__tail::before {
+  left: 0;
+  bottom: 0;
+  background-position: 0% 100%;
+  -webkit-transform-origin: 100% 0%;
+          transform-origin: 100% 0%;
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+}
+
+.bull__body {
+  -webkit-animation-delay: .1s;
+          animation-delay: .1s;
+}
+.bull__body:nth-of-type(2) {
+  -webkit-animation-delay: .0s;
+          animation-delay: .0s;
+}
+.bull__body::before {
+  right: 0;
+  bottom: 0;
+  background-position: 100% 100%;
+  -webkit-transform-origin: 0% 0%;
+          transform-origin: 0% 0%;
+}
+
+@-webkit-keyframes rotating {
+  from {
+    -webkit-transform: rotate(720deg);
+            transform: rotate(720deg);
+  }
+  to {
+    -webkit-transform: none;
+            transform: none;
+  }
+}
+
+@keyframes rotating {
+  from {
+    -webkit-transform: rotate(720deg);
+            transform: rotate(720deg);
+  }
+  to {
+    -webkit-transform: none;
+            transform: none;
+  }
+}
+.box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #e6dcdc;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
