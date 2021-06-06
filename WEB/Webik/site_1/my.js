@@ -1,0 +1,9 @@
+$(document).ready(function(){
+	$('.card').click(function(){
+		if($(this).hasClass('big-card')){
+			$(this).removeClass('big-card');
+		}else{
+			$(this).addClass('big-card');
+		}
+	});
+});
