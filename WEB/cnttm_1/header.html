@@ -1,0 +1,35 @@
+<?php
+	//echo 'http://' . $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+?>
+<div class="header-top">
+	<div class="container">
+		<div class="head-main">
+			<h1><a href="index.php">ЦНТТМ</a></h1>
+		</div>
+		<div class="hea-rgt">
+			<a href="#">Авторизация</a>
+		</div>
+		<div class="navigation">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="<?php $k=explode('/', $_SERVER['REQUEST_URI']); if($k[count($k)-1]=='index.php') echo 'active'; ?>"><a href="index.php">Главная</a></li>
+						<li class="<?php $k=explode('/', $_SERVER['REQUEST_URI']); if($k[count($k)-1]=='centr.php') echo 'active'; ?>"><a href="centr.php">Центр</a></li>
+						<li class="<?php $k=explode('/', $_SERVER['REQUEST_URI']); if($k[count($k)-1]=='prepods.php') echo 'active'; ?>"><a href="prepods.php">Преподаватели</a></li>
+						<li class="<?php $k=explode('/', $_SERVER['REQUEST_URI']); if($k[count($k)-1]=='control.php') echo 'active'; ?>"><a href="control.php">Аттестация</a></li>
+						<li class="<?php $k=explode('/', $_SERVER['REQUEST_URI']); if($k[count($k)-1]=='contact.php') echo 'active'; ?>"><a href="contact.php">Связь</a></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
