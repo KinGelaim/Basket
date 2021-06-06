@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<title>WebGL boring triangle</title>
+	</head>
+	<body onload="InitDemo();">
+		<canvas id="game-surface" width="800" height="600">
+			Your browser does not support HTML5
+		</canvas>
+		<br/>
+		<i>Demo is above this text</i>
+		<script type="shader" id="vertex-shader">
+			precision mediump float;
+			
+			attribute vec2 vertPosition;
+			attribute vec3 vertColor;
+			varying vec3 fragColor;
+			
+			void main()
+			{
+				fragColor = vertColor;
+				gl_Position = vec4(vertPosition, 0.0, 1.0);
+			}
+		</script>
+		
+		<script type="my-little-shader" id="fragment-shader">
+			precision mediump float;
+
+			varying vec3 fragColor;
+			void main()
+			{
+				gl_FragColor = vec4(fragColor, 1.0);
+			}
+		</script>
+		
+		<script src="WebGL_1_2.js"></script>
+	</body>
+</html>

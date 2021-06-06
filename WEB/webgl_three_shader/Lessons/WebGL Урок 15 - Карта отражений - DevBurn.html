@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU" prefix="og: http://ogp.me/ns#">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="https://devburn.ru/xmlrpc.php">
+
+<link rel='stylesheet' href='/wp-includes/css/prism.css' type='text/css' media='all' />
+<script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=GItzKKrhXqV_z2hkX7wgxnGpcbb5n_T155PFa53ov3ak-BmhAJXY8qkqQwSws0SpEwRuimZ3_lG7ILJbjvCjOW9v_f_kIuMOriDgJDHol5LMWHaFPq6cv4PWEckA8vai7F2ug4TbSQNrZ5eGHwN0IODXcQBZ8iV3FcXgs9rC1ZWvse6ldm6wIiWAIBhJWmX2tZ2GLl8vp5sVSZTBVuMyBA" charset="UTF-8"></script><script type='text/javascript' src='/wp-includes/js/prism.js'></script>
+
+<title>WebGL Урок 15 - Карта отражений - DevBurn</title>
+
+<!-- This site is optimized with the Yoast SEO plugin v7.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-15-%d0%ba%d0%b0%d1%80%d1%82%d0%b0-%d0%be%d1%82%d1%80%d0%b0%d0%b6%d0%b5%d0%bd%d0%b8%d0%b9/" />
+<meta property="og:locale" content="ru_RU" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="WebGL Урок 15 - Карта отражений - DevBurn" />
+<meta property="og:description" content="Урок 16 &gt;&gt; &gt;" />
+<meta property="og:url" content="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-15-%d0%ba%d0%b0%d1%80%d1%82%d0%b0-%d0%be%d1%82%d1%80%d0%b0%d0%b6%d0%b5%d0%bd%d0%b8%d0%b9/" />
+<meta property="og:site_name" content="DevBurn" />
+<meta property="og:image" content="https://devburn.ru/wp-includes/webgl-lessons/lesson15/earth.jpg" />
+<meta property="og:image:secure_url" content="https://devburn.ru/wp-includes/webgl-lessons/lesson15/earth.jpg" />
+<meta property="og:image" content="https://devburn.ru/wp-includes/webgl-lessons/lesson15/earth-specular.gif" />
+<meta property="og:image:secure_url" content="https://devburn.ru/wp-includes/webgl-lessons/lesson15/earth-specular.gif" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="Урок 16 &gt;&gt; &gt;" />
+<meta name="twitter:title" content="WebGL Урок 15 - Карта отражений - DevBurn" />
+<meta name="twitter:image" content="https://devburn.ru/wp-includes/webgl-lessons/lesson15/earth.jpg" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="DevBurn &raquo; Лента" href="https://devburn.ru/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DevBurn &raquo; Лента комментариев" href="https://devburn.ru/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DevBurn &raquo; Лента комментариев к &laquo;WebGL Урок 15 &#8212; Карта отражений&raquo;" href="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-15-%d0%ba%d0%b0%d1%80%d1%82%d0%b0-%d0%be%d1%82%d1%80%d0%b0%d0%b6%d0%b5%d0%bd%d0%b8%d0%b9/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/devburn.ru\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.3"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56692,8205,9792,65039],[55357,56692,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='ample-bxslider-css'  href='https://devburn.ru/wp-content/themes/ample/js/jquery.bxslider/jquery.bxslider.css?ver=4.0' type='text/css' media='all' />
+<link rel='stylesheet' id='ample-google-fonts-css'  href='//fonts.googleapis.com/css?family=Roboto%3A400%2C300&#038;ver=4.9.3' type='text/css' media='all' />
+<link rel='stylesheet' id='ample-fontawesome-css'  href='https://devburn.ru/wp-content/themes/ample/font-awesome/css/font-awesome.min.css?ver=4.2.0' type='text/css' media='all' />
+<link rel='stylesheet' id='ample-style-css'  href='https://devburn.ru/wp-content/themes/ample/style.css?ver=4.9.3' type='text/css' media='all' />
+<script type='text/javascript' src='https://devburn.ru/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='https://devburn.ru/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://devburn.ru/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://devburn.ru/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.9.3" />
+<link rel='shortlink' href='https://devburn.ru/?p=110' />
+<link rel="alternate" type="application/json+oembed" href="https://devburn.ru/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fdevburn.ru%2Fwebgl-%25d1%2583%25d1%2580%25d0%25be%25d0%25ba-15-%25d0%25ba%25d0%25b0%25d1%2580%25d1%2582%25d0%25b0-%25d0%25be%25d1%2582%25d1%2580%25d0%25b0%25d0%25b6%25d0%25b5%25d0%25bd%25d0%25b8%25d0%25b9%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://devburn.ru/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fdevburn.ru%2Fwebgl-%25d1%2583%25d1%2580%25d0%25be%25d0%25ba-15-%25d0%25ba%25d0%25b0%25d1%2580%25d1%2582%25d0%25b0-%25d0%25be%25d1%2582%25d1%2580%25d0%25b0%25d0%25b6%25d0%25b5%25d0%25bd%25d0%25b8%25d0%25b9%2F&#038;format=xml" />
+		<style type="text/css" id="wp-custom-css">
+			/*
+Здесь можно добавить ваши CSS-стили.
+
+Нажмите на значок помощи выше, чтобы узнать больше.
+*/
+
+.webglFundArticle {
+	float: left;
+	width:100%;
+}
+
+.webglFundArticle img {
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	float: left;
+	margin-right: 1em;
+}
+
+.webglFundArticle p {
+	text-align: justify;
+	margin-top: 1.5em;
+}
+
+.webglFundSection {
+	float: left;
+	margin-top: 2em;
+	width:100%;
+}
+
+.webglFundSection h2 {
+	padding: 0;
+}		</style>
+	</head>
+
+<body class="page-template page-template-page-templates page-template-template-webgl-lesson page-template-page-templatestemplate-webgl-lesson-php page page-id-110  wide">
+   <div id="page" class="hfeed site">
+   <header id="masthead" class="site-header" role="banner">
+      <div class="header">
+         
+         <div class="main-head-wrap inner-wrap clearfix">
+            <div id="header-left-section">
+                                 <div id="header-text">
+                     <h1 id="site-title">
+                        <a href="https://devburn.ru/" title="DevBurn" rel="home">DevBurn</a>
+                     </h1>
+                     <h2 id="site-description">О разработке и не только&#8230;</h2>
+                  </div>
+                           </div>
+
+            <div id="header-right-section">
+               <nav id="site-navigation" class="main-navigation" role="navigation">
+                  <h3 class="menu-toggle"></h3>
+                  <div class="menu-%d0%b3%d0%bb%d0%b0%d0%b2%d0%bd%d0%be%d0%b5-%d0%bc%d0%b5%d0%bd%d1%8e-container"><ul id="menu-%d0%b3%d0%bb%d0%b0%d0%b2%d0%bd%d0%be%d0%b5-%d0%bc%d0%b5%d0%bd%d1%8e" class="menu menu-primary-container"><li id="menu-item-808" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-808"><a href="https://devburn.ru/2017/04/22/%d0%be%d1%81%d0%bd%d0%be%d0%b2%d1%8b-webgl-%d0%bd%d0%b0-%d1%80%d1%83%d1%81%d1%81%d0%ba%d0%be%d0%bc/">Основы WebGL</a></li>
+<li id="menu-item-153" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-153"><a href="https://devburn.ru/%d1%83%d1%80%d0%be%d0%ba%d0%b8-webgl/">Уроки WebGL</a></li>
+</ul></div>               </nav>
+               <i class="fa fa-search search-top"></i>
+               <div class="search-form-top">
+                  
+<form action="https://devburn.ru/" class="search-form searchform clearfix" method="get">
+   <div class="search-wrap">
+      <input type="text" placeholder="Поиск" class="s field" name="s">
+      <button class="search-icon" type="submit"></button>
+   </div>
+</form><!-- .searchform -->               </div>
+   	      </div>
+   	   </div><!-- .main-head-wrap -->
+           	   </div><!-- .header -->
+	</header><!-- end of header -->
+   <div class="main-wrapper">
+
+               <div class="header-post-title-container clearfix">
+            <div class="inner-wrap">
+               <div class="post-title-wrapper">
+                  <h1 class="header-post-title-class entry-title">WebGL Урок 15 &#8212; Карта отражений</h1>
+               </div>
+                           </div>
+         </div>
+     
+   <div class="single-page clearfix">
+      <div class="inner-wrap">
+         <div id="primary">
+            <div id="content">
+
+               
+                  
+<article id="post-110" class="post-110 page type-page status-publish hentry">
+   
+   <div class="entry-content">
+      <p>
+<a style="float: right;" href="/webgl-урок-16-рендеринг-в-текстуру/">Урок 16 >></a>
+<a href="/webgl-урок-14-блики-и-загрузка-json-модели/"><< Урок 14</a>
+</p>
+<p>
+Материал в оригинале можно найти <a href="http://learningwebgl.com/blog/?p=1778">здесь</a>
+</p>
+<p>
+Добро пожаловать на мой пятнадцатый урок по WebGL! В нем мы рассмотрим карты отражений, которые дадут вашим сценам более реалистичный вид через указание отражающего эффекта различных точек поверхности объекта &#8212; так же, как обычные текстуры указывают цвет пикселей. Если говорить о коде, в нем мы увидим довольно небольшие изменения по сравнению с пройденными ранее материалами. Но концептуально это небольшой прорыв.
+</p>
+<p>
+Вот как выглядит результат урока в браузере с поддержкой WebGL:
+</p>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/t5ccMHCauuE" frameborder="0" allowfullscreen></iframe>
+<p>
+<a href="/webgl-урок-15-демо/">Здесь</a> можно посмотреть онлайн-демонстрацию, если ваш браузер поддерживает WebGL. <a href="/урок-0-приступаем-к-работе-с-webgl/">Здесь</a> можно узнать, что делать, если браузер не поддерживает WebGL. Вы увидите вращающуюся модель Земли с очень ярким бликом &#8212; отражение лучей Солнца от поверхности. Если вы присмотритесь, то заметите, что блик появляется только над океанами. Суша, как вы и могли ожидать, не отражает свет подобным образом.
+</p>
+<p>
+Попробуйте снять галочку на &#171;Использовать карту отражений&#187; под элементом canvas. Вы увидите, что блики появляются и на поверхности суши тоже. У вас может сложиться впечатление (как сложилось у меня), что это поведение портит иллюзию Солнца, и блик выглядит так, будто нам светят очень ярким прожектором с поверхности Земли. Карты отражений могут значительно улучшить реализм с помощью описания того, как отдельные части вашей модели будут вести себя при воздействии света.
+</p>
+<p>
+Теперь снова включите карту отражений, уменьшите интенсивность рассеянного освещения до, скажем, (0.5, 0.5, 0.5) и снимите галочку с &#171;Использовать цветовую карту&#187;. Вы увидите, что текстура пропала, но появление бликов по-прежнему зависят от того, суша это или вода.
+</p>
+<p>
+Как же это все работает? Читайте дальше и узнаете.
+</p>
+<p>
+Уже обычное предупреждение: эти уроки ориентированы на людей с некоторым знанием программирования, но без опыта работы с 3D-графикой. С хорошим пониманием того, что происходит в коде, вы быстро начнете писать собственные 3D веб-страницы. Если вы не прочитали предыдущие уроки, возможно, вам следует сделать это перед чтением урока, где я буду объяснять лишь новые вещи. Урок основан на <a href="/webgl-урок-14-блики-и-загрузка-json-модели/">четырнадцатом уроке</a>, поэтому вы должны хорошо понимать происходившие там вещи.
+</p>
+<p>
+Как и прежде здесь могут быть ошибки. Если встретите что-то некорректное, дайте мне знать и я постараюсь поскорей их исправить.
+</p>
+<p>
+Вы можете посмотреть код этого примера двумя способами: посмотреть исходный код страницы с демонстрацией или, если вы используете GitHub, вы можете копировать урок (и другие уроки) из <a href="https://github.com/gpjt/webgl-lessons">репозитория</a>.
+</p>
+<p>
+Пожалуй, начну с объяснения теории перед тем, как мы приступим к коду. До этого текстуры для нас были хорошим и простым инструментом &#171;одеть&#187; наши 3D-объекты в изображения. Мы указываем изображение, а наш объект содержит вершинные координаты, чтобы понять куда какая часть текстуры будет наложена, поэтому при отрисовке каждого пикселя во фрагментном шейдере мы можем вычислить часть изображения, которая соответствует данной части объекта, взять цвет текстуры в шейдере и использовать ее в качестве цвета объекта в данной точке.
+</p>
+<p>
+Карты отражений возводят эту логику на второй этап. Цвет точки в текстуре указан в красном, зеленом, белом цвете и альфа-канале. В шейдере каждый компонент является числом с плавающей точкой. Но на самом деле нет никакой причины, по которой мы <i>должны</i> использовать их как значения компонентов цвета. Как вы помните из последнего урока, блеск материала определяется одним числом с плавающей точкой. Мы могли бы передать &#171;карту блеска&#187; фрагментному шейдеру, как мы обычно использовали карту цвета.
+</p>
+<p>
+Это и является основным трюком в данном уроке. Две различных текстуры передаются во фрагментный шейдер для моделирования Земли. Карта цвета выглядит следующим образом:
+</p>
+<img style="width: 100%;" border="0" src="/wp-includes/webgl-lessons/lesson15/earth.jpg" />
+<p>
+&#8230;и изображение более низкого разрешения для карты бликов выглядит так:
+</p>
+<img style="width: 100%;" border="0" src="/wp-includes/webgl-lessons/lesson15/earth-specular.gif" />
+<p>
+Это обычный файл GIF, который я создал в <a href="http://www.getpaint.net/">Paint.NET</a>, используя карту цветов как отправную точку. Я решил устанавливать красную, зеленую и синюю составляющую цвета в каждой точке в одинаковое значение, которое бы обозначало уровень блеска поверхности. Мне также нужно было выбрать значение, которое бы означало &#171;этот фрагмент поверхности Земли не блестит&#187;. Из-за того, что большинство изображений были достаточно темными (блеск со значением 32 соответствует цвету RGB, равному (32, 32, 32), а это очень темный серый цвет), я решил использовать просто белый цвет.
+</p>
+<p>
+Теперь, когда теория пройдена, можно переходить к коду. Разница между кодом этого урока и четырнадцатым очень мала и довольно проста в понимании. Как вы могли полагать, самое важное отличие находится во фрагментном шейдере, поэтому взглянем на него (как и обычно, новые части кода выделены красным).
+</p>
+<p>
+Первое изменение в добавлении пары новых uniform-переменных, которые указывают, нужно ли нам использовать карту цветов и карту отражений:
+</p>
+<pre data-line="8-9">
+<code class="language-javascript">
+  precision mediump float;
+
+  varying vec2 vTextureCoord;
+  varying vec3 vTransformedNormal;
+  varying vec4 vPosition;
+
+  uniform bool uUseColorMap;
+  uniform bool uUseSpecularMap;
+  uniform bool uUseLighting;
+</code>
+</pre>
+<p>
+Далее, у нас появились uniform-переменные для двух текстур. Мы переименовали uSampler, которая использовалась для текстуры цвета, в uColorMapSampler, а еще добавили новую переменную для карты отражений.
+</p>
+<pre data-line="8-9">
+<code class="language-javascript">
+  uniform vec3 uAmbientColor;
+
+  uniform vec3 uPointLightingLocation;
+  uniform vec3 uPointLightingSpecularColor;
+  uniform vec3 uPointLightingDiffuseColor;
+
+  uniform sampler2D uColorMapSampler;
+  uniform sampler2D uSpecularMapSampler;
+</code>
+</pre>
+<p>
+Далее идет наш стандартный код для ситуации, когда пользователь отключает освещение, и для расчета нормалей и направления света, если свет остается включенным:
+</p>
+<pre>
+<code class="language-javascript">
+  void main(void) {
+    vec3 lightWeighting;
+    if (!uUseLighting) {
+      lightWeighting = vec3(1.0, 1.0, 1.0);
+    } else {
+      vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
+      vec3 normal = normalize(vTransformedNormal);
+</code>
+</pre>
+<p>
+И, наконец, мы добрались до кода, который работает с картой отражений. Сначала мы определяем переменную, которая будет содержать &#171;количество&#187; бликового освещения. Она будет равна нулю, если соответствующий фрагмент не будет содержать бликов после всех вычислений.
+</p>
+<pre>
+<code class="language-javascript">
+      float specularLightWeighting = 0.0;
+</code>
+</pre>
+<p>
+Теперь нам нужно вычислить силу блеска для этой части материала. Если пользователь указал, что карта отражений использоваться не будет, код выбирает (практически произвольное) значение 32.0. Иначе мы получим значение из карты отражений по текстурным координатам, как раньше мы находили значение цвета из цветовой карты. Итак, в нашей карте отражений все три компонента цвета &#8212; красный, зеленый и синий &#8212; имеют одинаковое значение, поэтому при просмотре мы видим лишь оттенки серого. В следующем коде мы используем значение красной компоненты, хотя могли бы взять любую другую:
+</p>
+<pre data-line="2-5">
+<code class="language-javascript">
+      float shininess = 32.0;
+      if (uUseSpecularMap) {
+        shininess = texture2D(uSpecularMapSampler, vec2(vTextureCoord.s, vTextureCoord.t)).r * 255.0;
+      }
+</code>
+</pre>
+<p>
+Как вы помните, нам нужен был способ как-то указать на карте отражений, что &#171;этот фрагмент метериала не блестит&#187;, и я выбрал белый, так как он имеен хороший контраст с темно-серыми участками для более блестящих поверхностей Земли. Поэтому мы не выполняем никаких вычислений для бликов, если значение блеска, полученное с карты отражений, больше или равно 255.
+</p>
+<pre data-line="2">
+<code class="language-javascript">
+      if (shininess < 255.0) {
+</code>
+</pre>
+<p>
+Следующий фрагмент кода - просто расчет бликов из прошлого урока за исключением того, что сейчас мы используем константу блеска, полученную из карты отражений:
+</p>
+<pre data-line="6">
+<code class="language-javascript">
+        vec3 eyeDirection = normalize(-vPosition.xyz);
+        vec3 reflectionDirection = reflect(-lightDirection, normal);
+
+        specularLightWeighting = pow(max(dot(reflectionDirection, eyeDirection), 0.0), </code><span class="redWord">shininess</span><code class="language-javascript">);
+      }
+</code>
+</pre>
+<p>
+И, наконец, мы учитываем вклады всех других источников освещения и рассчитываем таким образом суммарный цвет фрагмента, независимо от того, пришел ли он из карты цветов или (при uUseColorMap равной false) просто равен белому цвету.
+</p>
+<pre>
+<code class="language-javascript">
+      float diffuseLightWeighting = max(dot(normal, lightDirection), 0.0);
+      lightWeighting = uAmbientColor
+        + uPointLightingSpecularColor * specularLightWeighting
+        + uPointLightingDiffuseColor * diffuseLightWeighting;
+    }
+
+    vec4 fragmentColor;
+    if (</code><span class="redWord">uUseColorMap</span><code class="language-javascript">) {
+      fragmentColor = texture2D(uColorMapSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+    } else {
+      fragmentColor = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+    gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a);
+  }
+</code>
+</pre>
+<p>
+Что ж, если вы добрались так далеко, то на самом деле уже поняли все то, что я хотел донести до вас в этом уроке. Есть и другие изменения, но ни одно из них не заслуживает подробного рассмотрения. initShaders содержит новые uniform-переменные, initTextures загружает две новых текстуры, код для загрузки чайника заменена на функцию initBuffers, которая была в <a href="/webgl-урок-11-сферы-матрицы-поворотов-и-собы/">одиннадцатом уроке</a>, drawScene отрисовывает сверу вместо чайника, а также обрабатывает значение из полей ввода и помещает их в соответствующие uniform-переменные, а функция animate заставляет Землю вращаться.
+</p>
+<p>
+И на этом все! Теперь вы узнали, как указывать дополнительную информацию о яркости отдельных участков объекта. Как вы несомненно уже поняли, через текстуры можно передавать и другую информацию в шейдеры - например, люди часто используют подобную технику для передачи информации о нормалях поверхности, что позволяет получать выпуклые поверхности без необходимости создавать множество вершин. Мы посмотрим на этот прием в следующих уроках.
+</p>
+<p>
+<a style="float: right;" href="/webgl-урок-16-рендеринг-в-текстуру/">Урок 16 >></a>
+<a href="/webgl-урок-14-блики-и-загрузка-json-модели/"><< Урок 14</a>
+</p>
+   </div>
+
+   </article>
+                  
+<div id="comments" class="comments-area">
+
+   
+   
+   
+   	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Добавить комментарий <small><a rel="nofollow" id="cancel-comment-reply-link" href="/webgl-%D1%83%D1%80%D0%BE%D0%BA-15-%D0%BA%D0%B0%D1%80%D1%82%D0%B0-%D0%BE%D1%82%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B9/#respond" style="display:none;">Отменить ответ</a></small></h3>			<form action="https://devburn.ru/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+				<p class="comment-notes"><span id="email-notes">Ваш e-mail не будет опубликован.</span> Обязательные поля помечены <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Комментарий</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Имя <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">E-mail <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Сайт</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Отправить комментарий" /> <input type='hidden' name='comment_post_ID' value='110' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="54cdbd2ec0" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="170"/></p>			</form>
+			</div><!-- #respond -->
+	</div><!-- #comments -->                           </div>
+                     </div>
+
+         
+<div id="secondary" class="sidebar">
+   <section id="search-2" class="widget widget_search">
+<form action="https://devburn.ru/" class="search-form searchform clearfix" method="get">
+   <div class="search-wrap">
+      <input type="text" placeholder="Поиск" class="s field" name="s">
+      <button class="search-icon" type="submit"></button>
+   </div>
+</form><!-- .searchform --></section>		<section id="recent-posts-2" class="widget widget_recent_entries">		<h3 class="widget-title">Свежие записи</h3>		<ul>
+											<li>
+					<a href="https://devburn.ru/2018/04/01/%d1%81%d0%b8%d1%81%d1%82%d0%b5%d0%bc%d0%b0-%d1%87%d0%b0%d1%81%d1%82%d0%b8%d1%86/">Система частиц</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2017/04/22/%d0%be%d1%81%d0%bd%d0%be%d0%b2%d1%8b-webgl-%d0%bd%d0%b0-%d1%80%d1%83%d1%81%d1%81%d0%ba%d0%be%d0%bc/">Основы WebGL</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2016/09/18/%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8f-%d0%bf%d0%be%d0%bb%d0%b8%d0%b3%d0%be%d0%bd%d0%be%d0%b2-sld/">Символизация полигонов SLD</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2016/09/10/%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8f-%d0%bb%d0%b8%d0%bd%d0%b8%d0%b9-sld/">Символизация линий SLD</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2016/09/03/%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8f-%d1%82%d0%be%d1%87%d0%b5%d0%ba-sld/">Символизация точек SLD</a>
+									</li>
+					</ul>
+		</section><section id="archives-2" class="widget widget_archive"><h3 class="widget-title">Архивы</h3>		<ul>
+			<li><a href='https://devburn.ru/2018/04/'>Апрель 2018</a></li>
+	<li><a href='https://devburn.ru/2017/04/'>Апрель 2017</a></li>
+	<li><a href='https://devburn.ru/2016/09/'>Сентябрь 2016</a></li>
+	<li><a href='https://devburn.ru/2016/06/'>Июнь 2016</a></li>
+	<li><a href='https://devburn.ru/2016/04/'>Апрель 2016</a></li>
+	<li><a href='https://devburn.ru/2016/03/'>Март 2016</a></li>
+	<li><a href='https://devburn.ru/2016/02/'>Февраль 2016</a></li>
+	<li><a href='https://devburn.ru/2016/01/'>Январь 2016</a></li>
+	<li><a href='https://devburn.ru/2015/12/'>Декабрь 2015</a></li>
+	<li><a href='https://devburn.ru/2015/10/'>Октябрь 2015</a></li>
+	<li><a href='https://devburn.ru/2015/09/'>Сентябрь 2015</a></li>
+	<li><a href='https://devburn.ru/2015/08/'>Август 2015</a></li>
+	<li><a href='https://devburn.ru/2015/07/'>Июль 2015</a></li>
+	<li><a href='https://devburn.ru/2015/05/'>Май 2015</a></li>
+	<li><a href='https://devburn.ru/2015/04/'>Апрель 2015</a></li>
+	<li><a href='https://devburn.ru/2015/03/'>Март 2015</a></li>
+		</ul>
+		</section><section id="categories-2" class="widget widget_categories"><h3 class="widget-title">Рубрики</h3>		<ul>
+	<li class="cat-item cat-item-10"><a href="https://devburn.ru/category/threejs/" >threejs</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="https://devburn.ru/category/webgl/" >WebGL</a>
+</li>
+	<li class="cat-item cat-item-11"><a href="https://devburn.ru/category/%d0%b3%d0%b8%d1%81/" >ГИС</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="https://devburn.ru/category/%d0%b8%d0%bd%d1%84%d0%be/" >Инфо</a>
+</li>
+		</ul>
+</section><section id="text-2" class="widget widget_text"><h3 class="widget-title">Мои друзья</h3>			<div class="textwidget"><a target="_blank" href="http://pro-joomla.ru/">Бесплатные уроки Joomla!</a>
+<br />
+<a target="_blank" href="http://1centerprise8.blogspot.ru/">Полезные советы по 1С</a></div>
+		</section></div>      </div><!-- .inner-wrap -->
+   </div><!-- .single-page -->
+
+         </div><!-- .main-wrapper -->
+
+      <footer id="colophon">
+         <div class="inner-wrap">
+            
+
+            <div class="footer-bottom clearfix">
+               <div class="copyright-info">
+                  <div class="copyright">Copyright &copy; 2020 <a href="https://devburn.ru/" title="DevBurn" ><span>DevBurn</span></a>. Powered by <a href="http://wordpress.org" target="_blank" title="WordPress"><span>WordPress</span></a>. Theme: Ample by <a href="http://themegrill.com/themes/ample" target="_blank" title="ThemeGrill" rel="designer"><span>ThemeGrill</span></a>.</div>               </div>
+
+               <div class="footer-nav">
+                              </div>
+            </div>
+         </div>
+      </footer>
+      <a href="#masthead" id="scroll-up"><i class="fa fa-angle-up"></i></a>
+   </div><!-- #page -->
+   <script type='text/javascript' src='https://devburn.ru/wp-includes/js/comment-reply.min.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-content/themes/ample/js/theme-custom.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-content/themes/ample/js/navigation.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-includes/js/wp-embed.min.js?ver=4.9.3'></script>
+<script async="async" type='text/javascript' src='https://devburn.ru/wp-content/plugins/akismet/_inc/form.js?ver=4.0.3'></script>
+   <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-65619247-1', 'auto');
+      ga('send', 'pageview');
+    
+    </script>
+</body>
+</html>

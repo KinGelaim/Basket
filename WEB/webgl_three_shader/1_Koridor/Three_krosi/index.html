@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Pol potolok</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div id="canvas"></div>
+		<script id="2d-vertex-shader" type="x-shader/x-vertex">
+			varying vec2 textureCoordinates;
+			
+			void main() {
+				textureCoordinates = uv;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+			}
+		</script>
+		<script id="2d-fragment-shader" type="x-shader/x-fragment">
+			varying vec2 textureCoordinates;
+			uniform sampler2D texture;
+			
+			void main() {
+				vec4 textureFragment = texture2D(texture, textureCoordinates);
+				gl_FragColor = textureFragment;
+			}
+		</script>
+		<script src="three.min.js"></script>
+		<script src="script.js"></script>
+	</body>
+</html>

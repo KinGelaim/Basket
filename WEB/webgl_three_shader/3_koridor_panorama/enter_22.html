@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<title>22</title>
+		
+		<link rel="stylesheet" href="css/enter22_style.css" />
+	</head>
+	<body onload='webGLStart()'>
+		<canvas id="canvas" width="800" height="600">
+			Your browser does not support HTML5
+		</canvas>
+		
+		<a href='index.html?x=-9&z=-2.5&yaw=0'>Выйти</a>
+		
+		<br/>
+		<script type="text/javascript" src="external/glMatrix-0.9.5.min.js"></script>
+		<script type="text/javascript" src="external/webgl-utils.js"></script>
+		
+		<script id="shader-fs" type="x-shader/x-fragment">
+			precision mediump float;
+
+			varying vec2 vTextureCoord;
+
+			uniform sampler2D uSampler;
+
+			void main(void) {
+				vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+				gl_FragColor = vec4(textureColor.rgb *  vec3(1.0, 1.0, 1.0), textureColor.a);
+			}
+		</script>
+		<script id="shader-vs" type="x-shader/x-vertex">
+			attribute vec3 aVertexPosition;
+			attribute vec3 aVertexNormal;
+			attribute vec2 aTextureCoord;
+
+			uniform mat4 uMVMatrix;
+			uniform mat4 uPMatrix;
+			uniform mat3 uNMatrix;
+
+			varying vec2 vTextureCoord;
+			
+			void main(void) {
+				gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+				vTextureCoord = aTextureCoord;
+			}
+		</script>
+		<script src="enter22.js"></script>
+	</body>
+</html>

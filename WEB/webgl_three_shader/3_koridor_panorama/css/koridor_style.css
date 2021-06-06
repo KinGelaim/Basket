@@ -1,0 +1,33 @@
+#loadingtext {
+	position:absolute;
+	top:250px;
+	left:150px;
+	font-size:2em;
+	color: white;
+}
+
+#enter22, #enterExit {
+	position: absolute;
+	left: 372px;
+	top: 580px;
+	display: none;
+	text-decoration: none;
+	color: black;
+	background-color: white;
+	border: 1px solid black;
+	padding: 2px;
+	cursor: pointer;
+}
+
+#enterIT {
+	position: absolute;
+	left: 372px;
+	top: 545px;
+	display: none;
+	text-decoration: none;
+	color: black;
+	background-color: white;
+	border: 1px solid black;
+	padding: 2px;
+	cursor: pointer;
+}

@@ -1,0 +1,720 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU" prefix="og: http://ogp.me/ns#">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="https://devburn.ru/xmlrpc.php">
+
+<link rel='stylesheet' href='/wp-includes/css/prism.css' type='text/css' media='all' />
+<script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=D1BQbxESmZVyrTpbJAQWBg-EvrWCCa6YRdvHcJhlVy9KLMWE4LEFfGcrxBYuFVKh512LY5XJ-fA8Qa6fR57l-6YmxJnHXNnzaUWnjdntzYs7l0T8mv8bI12ZmO7MTVjklKOqG0OWlrhHhyUomS-uMm3uHPGWj66rWv_cGQJfgRuU-eopmP2mHA_uWB6aT50MguRLuvUxlBD4P3lR_trHx4yCbriF9KqBHyWoQL1nt-sQwGg1o5PD1qbUVGfLGirq" charset="UTF-8"></script><script type='text/javascript' src='/wp-includes/js/prism.js'></script>
+
+<title>WebGL Урок 16 - Рендеринг в текстуру - DevBurn</title>
+
+<!-- This site is optimized with the Yoast SEO plugin v7.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-16-%d1%80%d0%b5%d0%bd%d0%b4%d0%b5%d1%80%d0%b8%d0%bd%d0%b3-%d0%b2-%d1%82%d0%b5%d0%ba%d1%81%d1%82%d1%83%d1%80%d1%83/" />
+<meta property="og:locale" content="ru_RU" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="WebGL Урок 16 - Рендеринг в текстуру - DevBurn" />
+<meta property="og:url" content="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-16-%d1%80%d0%b5%d0%bd%d0%b4%d0%b5%d1%80%d0%b8%d0%bd%d0%b3-%d0%b2-%d1%82%d0%b5%d0%ba%d1%81%d1%82%d1%83%d1%80%d1%83/" />
+<meta property="og:site_name" content="DevBurn" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="WebGL Урок 16 - Рендеринг в текстуру - DevBurn" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="DevBurn &raquo; Лента" href="https://devburn.ru/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DevBurn &raquo; Лента комментариев" href="https://devburn.ru/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DevBurn &raquo; Лента комментариев к &laquo;WebGL Урок 16 &#8212; Рендеринг в текстуру&raquo;" href="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-16-%d1%80%d0%b5%d0%bd%d0%b4%d0%b5%d1%80%d0%b8%d0%bd%d0%b3-%d0%b2-%d1%82%d0%b5%d0%ba%d1%81%d1%82%d1%83%d1%80%d1%83/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/devburn.ru\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.3"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56692,8205,9792,65039],[55357,56692,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='ample-bxslider-css'  href='https://devburn.ru/wp-content/themes/ample/js/jquery.bxslider/jquery.bxslider.css?ver=4.0' type='text/css' media='all' />
+<link rel='stylesheet' id='ample-google-fonts-css'  href='//fonts.googleapis.com/css?family=Roboto%3A400%2C300&#038;ver=4.9.3' type='text/css' media='all' />
+<link rel='stylesheet' id='ample-fontawesome-css'  href='https://devburn.ru/wp-content/themes/ample/font-awesome/css/font-awesome.min.css?ver=4.2.0' type='text/css' media='all' />
+<link rel='stylesheet' id='ample-style-css'  href='https://devburn.ru/wp-content/themes/ample/style.css?ver=4.9.3' type='text/css' media='all' />
+<script type='text/javascript' src='https://devburn.ru/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='https://devburn.ru/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://devburn.ru/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://devburn.ru/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.9.3" />
+<link rel='shortlink' href='https://devburn.ru/?p=113' />
+<link rel="alternate" type="application/json+oembed" href="https://devburn.ru/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fdevburn.ru%2Fwebgl-%25d1%2583%25d1%2580%25d0%25be%25d0%25ba-16-%25d1%2580%25d0%25b5%25d0%25bd%25d0%25b4%25d0%25b5%25d1%2580%25d0%25b8%25d0%25bd%25d0%25b3-%25d0%25b2-%25d1%2582%25d0%25b5%25d0%25ba%25d1%2581%25d1%2582%25d1%2583%25d1%2580%25d1%2583%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://devburn.ru/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fdevburn.ru%2Fwebgl-%25d1%2583%25d1%2580%25d0%25be%25d0%25ba-16-%25d1%2580%25d0%25b5%25d0%25bd%25d0%25b4%25d0%25b5%25d1%2580%25d0%25b8%25d0%25bd%25d0%25b3-%25d0%25b2-%25d1%2582%25d0%25b5%25d0%25ba%25d1%2581%25d1%2582%25d1%2583%25d1%2580%25d1%2583%2F&#038;format=xml" />
+		<style type="text/css" id="wp-custom-css">
+			/*
+Здесь можно добавить ваши CSS-стили.
+
+Нажмите на значок помощи выше, чтобы узнать больше.
+*/
+
+.webglFundArticle {
+	float: left;
+	width:100%;
+}
+
+.webglFundArticle img {
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	float: left;
+	margin-right: 1em;
+}
+
+.webglFundArticle p {
+	text-align: justify;
+	margin-top: 1.5em;
+}
+
+.webglFundSection {
+	float: left;
+	margin-top: 2em;
+	width:100%;
+}
+
+.webglFundSection h2 {
+	padding: 0;
+}		</style>
+	</head>
+
+<body class="page-template page-template-page-templates page-template-template-webgl-lesson page-template-page-templatestemplate-webgl-lesson-php page page-id-113  wide">
+   <div id="page" class="hfeed site">
+   <header id="masthead" class="site-header" role="banner">
+      <div class="header">
+         
+         <div class="main-head-wrap inner-wrap clearfix">
+            <div id="header-left-section">
+                                 <div id="header-text">
+                     <h1 id="site-title">
+                        <a href="https://devburn.ru/" title="DevBurn" rel="home">DevBurn</a>
+                     </h1>
+                     <h2 id="site-description">О разработке и не только&#8230;</h2>
+                  </div>
+                           </div>
+
+            <div id="header-right-section">
+               <nav id="site-navigation" class="main-navigation" role="navigation">
+                  <h3 class="menu-toggle"></h3>
+                  <div class="menu-%d0%b3%d0%bb%d0%b0%d0%b2%d0%bd%d0%be%d0%b5-%d0%bc%d0%b5%d0%bd%d1%8e-container"><ul id="menu-%d0%b3%d0%bb%d0%b0%d0%b2%d0%bd%d0%be%d0%b5-%d0%bc%d0%b5%d0%bd%d1%8e" class="menu menu-primary-container"><li id="menu-item-808" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-808"><a href="https://devburn.ru/2017/04/22/%d0%be%d1%81%d0%bd%d0%be%d0%b2%d1%8b-webgl-%d0%bd%d0%b0-%d1%80%d1%83%d1%81%d1%81%d0%ba%d0%be%d0%bc/">Основы WebGL</a></li>
+<li id="menu-item-153" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-153"><a href="https://devburn.ru/%d1%83%d1%80%d0%be%d0%ba%d0%b8-webgl/">Уроки WebGL</a></li>
+</ul></div>               </nav>
+               <i class="fa fa-search search-top"></i>
+               <div class="search-form-top">
+                  
+<form action="https://devburn.ru/" class="search-form searchform clearfix" method="get">
+   <div class="search-wrap">
+      <input type="text" placeholder="Поиск" class="s field" name="s">
+      <button class="search-icon" type="submit"></button>
+   </div>
+</form><!-- .searchform -->               </div>
+   	      </div>
+   	   </div><!-- .main-head-wrap -->
+           	   </div><!-- .header -->
+	</header><!-- end of header -->
+   <div class="main-wrapper">
+
+               <div class="header-post-title-container clearfix">
+            <div class="inner-wrap">
+               <div class="post-title-wrapper">
+                  <h1 class="header-post-title-class entry-title">WebGL Урок 16 &#8212; Рендеринг в текстуру</h1>
+               </div>
+                           </div>
+         </div>
+     
+   <div class="single-page clearfix">
+      <div class="inner-wrap">
+         <div id="primary">
+            <div id="content">
+
+               
+                  
+<article id="post-113" class="post-113 page type-page status-publish hentry">
+   
+   <div class="entry-content">
+      <p>
+<a href="/webgl-урок-15-карта-отражений/"><< Урок 15</a>
+</p>
+<p>
+Материал в оригинале можно найти <a href="http://learningwebgl.com/blog/?p=1786">здесь</a>
+</p>
+<p>
+Добро пожаловать на мой шестнадцатый урок по WebGL! В нем мы познакомимся с очень полезной техникой: рендеринг 3D-сцены в текстуру, которая в дальнейшем может использоваться при отрисовке другой сцены. Это позволяет не только иметь сцену внутри другой сцены, как на онлайн-демонстрации к этому уроку, но и является основанием для таких возможностей как отбор (выбор 3D-объектов с помощью мыши), тени, отражение и множество других 3D-эффектов.
+</p>
+<p>
+Вот как выглядит результат урока в браузере с поддержкой WebGL:
+</p>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/avFT1om0mmU" frameborder="0" allowfullscreen></iframe>
+<p>
+<a href="/webgl-урок-16-демо/">Здесь</a> можно посмотреть онлайн-демонстрацию, если ваш браузер поддерживает WebGL. <a href="/урок-0-приступаем-к-работе-с-webgl/">Здесь</a> можно узнать, что делать, если браузер не поддерживает WebGL. Вы увидите модель белого ноутбука со всевозможными эффектами освещения, который мы разбирали в предыдущих уроках (включая блики на экране). Но более интересно то, что на экране ноутбука вы увидите еще одну 3D-сцену &#8212; вращающуюся Луну и ящик из <a href="/webgl-урок-13-попиксельное-освещение-и-неск/">тринадцатого урока</a>. Я думаю, что вы поймете, что мы отрисовали сцену из тринадцатого урока в текстуру и затем использовали эту текстуру для экрана ноутбука.
+</p>
+<p>
+Как же это все работает? Читайте дальше и узнаете.
+</p>
+<p>
+Уже обычное предупреждение: эти уроки ориентированы на людей с некоторым знанием программирования, но без опыта работы с 3D-графикой. С хорошим пониманием того, что происходит в коде, вы быстро начнете писать собственные 3D веб-страницы. Если вы не прочитали предыдущие уроки, возможно, вам следует сделать это перед чтением урока, где я буду объяснять лишь новые вещи. Урок основан на <a href="/webgl-урок-13-попиксельное-освещение-и-неск/">тринадцатом</a> и <a href="/webgl-урок-14-блики-и-загрузка-json-модели/">четырнадцатом уроке</a>, поэтому вы должны хорошо понимать происходившие там вещи.
+</p>
+<p>
+Как и прежде здесь могут быть ошибки. Однако, благодаря помощи Marco Di Benedetto, создателя <a href="http://spidergl.org/">SpiderGL</a> и <a href="http://www.paulbrunt.co.uk/#/">Paul Brunt</a>, известному по <a href="http://www.glge.org/">GLGE</a>, а так же легиону тестеров (в частности, Stephen White), в этом уроке содержится гораздо меньше ошибок, чем могло бы быть. Конечно же, все ошибки на моей совести, поэтому прошу вас без сомнений сообщать мне о них :).
+</p>
+<p>
+Вы можете посмотреть код этого примера двумя способами: посмотреть исходный код страницы с демонстрацией или, если вы используете GitHub, вы можете копировать урок (и другие уроки) из <a href="https://github.com/gpjt/webgl-lessons">репозитория</a>.
+</p>
+<p>
+Когда вы скопируете код, откройте index.html в текстовом редакторе. По сравнению с предыдущими уроками файл содержит довольно мало изменений, поэтому давайте начнем с самого низа страницы и будем продвигаться вверх. Для начала webGLStart. Как и обычно, новые части выделены красным:
+</p>
+<pre data-line="5">
+<code class="language-javascript">
+  function webGLStart() {
+    var canvas = document.getElementById("lesson16-canvas");
+    initGL(canvas);
+    initTextureFramebuffer();
+    initShaders();
+    initBuffers();
+    initTextures();
+    loadLaptop();
+
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.enable(gl.DEPTH_TEST);
+
+    tick();
+  }
+</code>
+</pre>
+<p>
+Это наша обычная инициализация WebGL, где загружаются шедеры, создаются буферы вершин, загружаются текстуры (Луна и ящик) и выполняется запрос на загрузку JSON-модели ноутбука, как это было в <a href="/webgl-урок-14-блики-и-загрузка-json-модели/">четырнадцатом уроке</a>, когда мы загружали чайник. Есть здесь и новое интересное изменение &#8212; создание фреймбуфера для текстуры. Перед разбором кода разберемся, что такое фреймбуфер.
+</p>
+<p>
+Когда вы что-то отрисовываете в WebGL, очевидно, что вам понадобится какая-то область памяти на видеокарте для получения результатов рендеринга. И у вас есть контроль над тем, какой тип памяти для этого выделяется. По крайней мере вам понадобится место для хранения цветов пикселей, которые являются результатом рендеринга. Кроме того важно (хотя и не необходимо) иметь буфер глубины, чтобы близкие объекты спрятали более отдаленные (что обсуждалось в <a href="/webgl-урок-8-буфер-глубины-прозрачность-и-с/#depth-buffer">восьмом уроке</a>), и на это тоже нужна память. Есть также и другие полезные буферы &#8212; например, буфер трафарета, который мы рассмотрим в будущих уроках.
+</p>
+<p>
+Фреймбуфер &#8212; это то, куда вы можете отрисовать сцену, и который находится в области памяти. Есть фреймбуфер &#171;по умолчанию&#187;, в который происходил рендеринг все предыдущее время и который отображается на веб-странице. Но ничего вам не мешает создать собственные фреймбуферы и отрисовывать сцену в них. В данном уроке мы создадим фреймбуфер и используем текстуру в качестве той самой области памяти, которая будет хранить цвета при отрисовке. Еще мы выделим немного памяти для вычислений с буфером глубины.
+</p>
+<p>
+Итак, довольно теории, пора приступить к коду. Вы найдете Функцию initTextureFramebuffer где-то в конце первой трети файла.
+</p>
+<pre>
+<code class="language-javascript">
+  var rttFramebuffer;
+  var rttTexture;
+
+  function initTextureFramebuffer() {
+</code>
+</pre>
+<p>
+Перед объявлением функции идут глобальные переменные для хранения фреймбуфера, в который мы собираемся рендерить сцену, которая будет отображаться на экране планшета, и для хранения текстуры, которая будет хранить результаты рендеринга в этот фреймбуфер (к которому нам понадобится доступ при отрисовке ноутбука). Далее по функции:
+</p>
+<pre>
+<code class="language-javascript">
+    rttFramebuffer = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, rttFramebuffer);
+    rttFramebuffer.width = 512;
+    rttFramebuffer.height = 512;
+</code>
+</pre>
+<p>
+Первым делом мы создаем сам фреймбуфер, а затем привычной функцией (аналогично текстурам, буферам и прочим) мы назначаем его текущим &#8212; то есть буфером, с которым далее будут работать функции. Мы также сохраняем ширину и высоту сцены, которая будет отрисована в буфер. Эти атрибуты не являются частью фреймбуфера, мы просто используем возможность JavaScript назначать объекту произвольные свойства, так как они понадобятся нам позже при работе с фреймбуфером. Я выбрал размер 512×512 пикселей. Как вы помните, размер текстуры должен быть степенью двойки, и мне показалось, что 256×256 была слишком угловатой, а 1024×1024 не сильно улучшала вид.
+</p>
+<p>
+Теперь создадим объект текстуры и установим привычные параметры:
+</p>
+<pre>
+<code class="language-javascript">
+    rttTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, rttTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+    gl.generateMipmap(gl.TEXTURE_2D);
+</code>
+</pre>
+<p>
+Но здесь не обошлось без одного отличия: gl.texImage2D имеет другие входные параметры:
+</p>
+<pre>
+<code class="language-javascript">
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, rttFramebuffer.width, rttFramebuffer.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+</code>
+</pre>
+<p>
+Обычно при создании текстур для отображения загруженных в JavaScript изображениймы вызывали gl.texImage2D для связи текстуры и картинки. Теперь, разумеется, никакой загружаемой картинки нет, и нам нужно вызывать другую версию gl.texImage2D, которой указать, что нет никакой картинки, нужно просто выделить определенную часть пустого пространства на видеокарте для нашей текстуры. Строго говоря, последний параметр функции &#8212; массив, который должен копироваться в свежевыделенную память, а через указание null мы сообщаем, что нам не нужно что-либо копировать. (Ранние версии Minefield запрашивали для этого пустой массив определенного размера, но сейчас, похоже, этого больше не требуется).
+</p>
+<p>
+Хорошо, у нас есть пустая текстура, которая может хранить значения цветов нашей отрисованной сцены. Теперь создадим буфер глубины для хранения информации о этой самой глубине:
+</p>
+<pre>
+<code class="language-javascript">
+    var renderbuffer = gl.createRenderbuffer();
+    gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+    gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, rttFramebuffer.width, rttFramebuffer.height);
+</code>
+</pre>
+<p>
+Здесь мы создали объект рендер-буфера. Это тип объектов для резервирования области памяти, которую мы планируем связать с фреймбуфером. Мы устанавливаем его текущим (как и в случае с текстурами, фреймбуфером и всем остальным, WebGL имеет текущий рендер-буфер), и затем вызываем gl.renderbufferStorage, чтобы сказать WebGL, что текущему рендер-буферу требуется достаточно памяти для хранения 16-битных значений глубины по всему буферу с заданной шириной и высотой.
+</p>
+<p>
+Далее:
+</p>
+<pre>
+<code class="language-javascript">
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, rttTexture, 0);
+    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuffer);
+</code>
+</pre>
+<p>
+Мы прикрепляем все к текущему фреймбуферу (вспомните, что мы назначили новый буфер текущим сразу после его создания в начале функции). Затем мы указываем, что наша текстура будет пространством для рендеринга цветов (gl.COLOR_ATTACHMENT0), а созданный буфер глубины будет содержать информацию о глубине (gl.DEPTH_ATTACHMENT).
+</p>
+<p>
+Теперь вся память фреймбуфера настроена и WebGL знает, куда производить рендеринг. После этого мы возвращаем значения текущей текстуры, рендер-буфера и фреймбуфера обратно к значениям по умолчанию:
+</p>
+<pre>
+<code class="language-javascript">
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  }
+</code>
+</pre>
+<p>
+&#8230;и на этом все. Наш фреймбуфер настроен. Теперь, когда он у нас уже есть, как нам с ним работать? Чтобы это понять, взглянем на функцию drawScene, которая находится ближе к концу файла. В ее начале, перед привычным кодом по установке области видимости и очистке canvas, вы увидите кое-что новенькое:
+</p>
+<pre data-line="5-8">
+<code class="language-javascript">
+  var laptopAngle = 0;
+
+  function drawScene() {
+    gl.bindFramebuffer(gl.FRAMEBUFFER, rttFramebuffer);
+    drawSceneOnLaptopScreen();
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+    gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
+    mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+</code>
+</pre>
+<p>
+В свете вышеизложенных объяснений, происходящее здесь должно быть достаточно очевидным: мы переключаемся с исходного фреймбуфера, который отрисовывает сцену на страницу HTML, на фреймбуфер, который отрисовывает в текстуру и который мы создали в initTextureFramebuffer. Далее мы вызываем функцию drawSceneOnLaptopScreen для отрисовки сцены на экран ноутбука (точнее, отрисовка в RTT-фреймбуфер [RTT &#8212; render-to-texture, рендеринг в текстуру]), а после этого мы переключаемся обратно на исходный фреймбуфер. Перед дальнейшим разбором drawScene стоит уделить внимание функции drawSceneOnLaptopScreen. Я не буду дублировать ее здесь, потому что она совсем не сложная &#8212; это просто урезанная версия функции drawScene из тринадцатого урока! Дело в том, что код отрисовки до текущего момента времени не имел представления, куда он выполняет рендеринг. Он просто отрисовывал в текущий фреймбуфер. Небольшие отличия заключаются в упрощении &#8212; например, мы убрали подвижный источник света и другие вещи из тринадцатого урока, которые несущественны для текущего урока.
+</p>
+<p>
+Итак, когда первые три строчки кода функции drawScene выполнены, мы получаем сцену из тринадцатого урока, отрисованную в текстуру. Оставшаяся часть drawScene просто отрисовывает ноутбук и использует эту готовую текстуру для экрана. Начинаем мы с обычного кода по настройке матрицы модель-вид и повороту ноутбука на угол laptopAngle (который, как и в других уроках, изменяется в функции animate, которая вызывается при каждой отрисовке, что и заставляет ноутбук вращаться):
+</p>
+<pre>
+<code class="language-javascript">
+    mat4.identity(mvMatrix);
+
+    mvPushMatrix();
+
+    mat4.translate(mvMatrix, [0, -0.4, -2.2]);
+    mat4.rotate(mvMatrix, degToRad(laptopAngle), [0, 1, 0]);
+    mat4.rotate(mvMatrix, degToRad(-90), [1, 0, 0]);
+</code>
+</pre>
+<p>
+Теперь мы передаем цвета и координаты наших источников освещения в видеокарту, все как обычно:
+</p>
+<pre>
+<code class="language-javascript">
+    gl.uniform1i(shaderProgram.showSpecularHighlightsUniform, true);
+    gl.uniform3f(shaderProgram.pointLightingLocationUniform, -1, 2, -1);
+
+    gl.uniform3f(shaderProgram.ambientLightingColorUniform, 0.2, 0.2, 0.2);
+    gl.uniform3f(shaderProgram.pointLightingDiffuseColorUniform, 0.8, 0.8, 0.8);
+    gl.uniform3f(shaderProgram.pointLightingSpecularColorUniform, 0.8, 0.8, 0.8);
+</code>
+</pre>
+<p>
+Затем мы передаем видеокарте информацию о параметрах освещения корпуса ноутбука, который мы собираемся отрисовать первым. Здесь есть кое-что новое, что не относится непосредственно к рендерингу в текстуру. Возможно, вы вспомните из <a href="/webgl-урок-7-основы-фонового-и-направленног/">седьмого урока</a>, что когда я описывал модель Фонга, я обратил внимание, что материалы имеют разные цвета для каждого типа освещения &#8212; фоновый цвет, рассеянный цвет и цвет бликов. С того момента мы упрощенно считали, что все эти цвета были либо белыми, либо цветом текстуры, в зависимости от того, была ли включена текстура или нет. По некоторым причинам, которые мы вскоре рассмотрим, для текущего урока нам этого не хватает &#8212; нам нужно указать цвета более подробно для экрана ноутбука и для этого мы будем использовать новый тип цвета &#8212; <i>излучательный</i>. Однако, для корпуса ноутбука нам не нужно волноваться об этом &#8212; он просто белый.
+</p>
+<pre>
+<code class="language-javascript">
+    // The laptop body is quite shiny and has no texture.  It reflects lots of specular light
+    gl.uniform3f(shaderProgram.materialAmbientColorUniform, 1.0, 1.0, 1.0);
+    gl.uniform3f(shaderProgram.materialDiffuseColorUniform, 1.0, 1.0, 1.0);
+    gl.uniform3f(shaderProgram.materialSpecularColorUniform, 1.5, 1.5, 1.5);
+    gl.uniform1f(shaderProgram.materialShininessUniform, 5);
+    gl.uniform3f(shaderProgram.materialEmissiveColorUniform, 0.0, 0.0, 0.0);
+    gl.uniform1i(shaderProgram.useTexturesUniform, false);
+</code>
+</pre>
+<p>
+Теперь, если все координаты вершин ноутбука загружены, мы приступаем к отрисовке. Этот код должен выглядеть достаточно знакомым, особенно после четырнадцатого урока (из которого он скопирован)
+</p>
+<pre>
+<code class="language-javascript">
+    if (laptopVertexPositionBuffer) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, laptopVertexPositionBuffer);
+      gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, laptopVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, laptopVertexTextureCoordBuffer);
+      gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, laptopVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, laptopVertexNormalBuffer);
+      gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, laptopVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, laptopVertexIndexBuffer);
+      setMatrixUniforms();
+      gl.drawElements(gl.TRIANGLES, laptopVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+    }
+</code>
+</pre>
+<p>
+И вот у нас отрисован корпус ноутбука. Далее необходимо отрисовать экран. Параметры освещения уже заданы, и теперь нам нужно установить излучательный цвет:
+</p>
+<pre>
+<code class="language-javascript">
+    gl.uniform3f(shaderProgram.materialAmbientColorUniform, 0.0, 0.0, 0.0);
+    gl.uniform3f(shaderProgram.materialDiffuseColorUniform, 0.0, 0.0, 0.0);
+    gl.uniform3f(shaderProgram.materialSpecularColorUniform, 0.5, 0.5, 0.5);
+    gl.uniform1f(shaderProgram.materialShininessUniform, 20);
+    gl.uniform3f(shaderProgram.materialEmissiveColorUniform, 1.5, 1.5, 1.5);
+    gl.uniform1i(shaderProgram.useTexturesUniform, true);
+</code>
+</pre>
+<p>
+Что же такое излучательный цвет? Экраны таких вещей как ноутбуки не просто отражают цвет &#8212; они испускаю его. Мы хотим, чтобы цвет экрана определялся преимущественно цветом текстуры, а не световыми эффектами. Мы могли бы добиться этого эффекта с помощью изменения uniform-переменных, которые отвечают за цвет, чтобы перед отрисовкой сцены точечное освещение было выключено, а фоновое освещение в это время поднято до 100%, а затем восстанавливать старые значения. Но это было бы не совсем правильным: все-таки свечение &#8212; это свойство экрана, а не освещения. В этом конкретном случае мы могли бы просто использовать фоновое освещение, так как оно белого цвета. Поэтому установка фонового цвета в 1.5, 1.5, 1.5 давало бы правильный эффект. Но если бы кто-то в дальнейшем изменил фоновое освещение, то цвет экрана бы тоже изменился, а это уже выглядит странно. Ведь монитор не начинает светить красным, если сидеть с ним в комнате с красной лампой. Поэтому мы используем новую uniform-переменную для излучательного цвета, который управляется небольшим фрагментом кода шейдера (мы рассмотрим его позже).
+</p>
+<p>
+(Замечание: стоит помнить, что излучательный цвет объекта сцены не влияет на другие объекты вокруг &#8212; то есть излучательный цвет не превращает объект в источник освещения. Это просто подход, при котором объект имеет цвет, который не зависит от освещения сцены.)
+</p>
+<p>
+Условие для излучательного цвета также объясняет, почему нам необходимо отделить другие параметры цвета материала в рамках этого урока. Наш экран ноутбука имеет излучательный цвет, определенный его текстурой, но это не должно влиять на цвет его бликов &#8212; ведь объекты на экране вашего ноутбука не меняют цвет отраженного в нем окна, находящегося позади вас. Поэтому цвет должен оставаться белым.
+</p>
+<p>
+Хорошо, двигаемся дальше. Мы привязываем буферы, которые определяют атрибуты вершин экрана ноутбука:
+</p>
+<pre>
+<code class="language-javascript">
+    gl.bindBuffer(gl.ARRAY_BUFFER, laptopScreenVertexPositionBuffer);
+    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, laptopScreenVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, laptopScreenVertexNormalBuffer);
+    gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, laptopScreenVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, laptopScreenVertexTextureCoordBuffer);
+    gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, laptopScreenVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+</code>
+</pre>
+<p>
+Далее мы указываем, что мы будем использовать текстуру, на которую мы отрисовали сцену ранее:
+</p>
+<pre>
+<code class="language-javascript">
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, rttTexture);
+    gl.uniform1i(shaderProgram.samplerUniform, 0);
+</code>
+</pre>
+<p>
+И последним делом отрисовываем экран:
+</p>
+<pre>
+<code class="language-javascript">
+    setMatrixUniforms();
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, laptopScreenVertexPositionBuffer.numItems);
+
+    mvPopMatrix();
+  }
+</code>
+</pre>
+<p>
+Теперь можно немного расслабиться ;). Все необходимое для рендеринга сцены в текстуру и дальнейшего использования этой текстуры было сделано.
+</p>
+<p>
+Теперь давайте быстро пройдемся по другим отличиям от предыдущих уроков. Пара функций loadLaptop и handleLoadedLaptop загружают JSON-модель ноутбука. Концептуально здесь ничего не поменялось по сравнению с кодом для загрузки чайника из четырнадцатого урока. Есть также кусочек кода в конце функции initBuffers для инициализации буфера вершин для экрана ноутбука. Это немного некрасиво и будет улучшено в следующих версиях этого урока (значения должны загружаться из JSON, но сейчас находятся в коде).
+</p>
+<p>
+Наконец, новый фрагментный шейдер, который управляет цветом материала в зависимости от типа освещения, как альтернатива цвету текстуры. Все это должно быть достаточно легким для понимания в свете объяснений предыдущих шейдеров. Единственная вещь, которая действительно новая, &#8212; это излучательное освещение, которое добавляется к заключительному цвету фрагмента прямо в конце функции. Вот код:
+</p>
+<pre>
+<code class="language-javascript">
+  precision mediump float;
+
+  varying vec2 vTextureCoord;
+  varying vec3 vTransformedNormal;
+  varying vec4 vPosition;
+
+  uniform vec3 uMaterialAmbientColor;
+  uniform vec3 uMaterialDiffuseColor;
+  uniform vec3 uMaterialSpecularColor;
+  uniform float uMaterialShininess;
+  uniform vec3 uMaterialEmissiveColor;
+
+  uniform bool uShowSpecularHighlights;
+  uniform bool uUseTextures;
+
+  uniform vec3 uAmbientLightingColor;
+
+  uniform vec3 uPointLightingLocation;
+  uniform vec3 uPointLightingDiffuseColor;
+  uniform vec3 uPointLightingSpecularColor;
+
+  uniform sampler2D uSampler;
+
+  void main(void) {
+    vec3 ambientLightWeighting = uAmbientLightingColor;
+
+    vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
+    vec3 normal = normalize(vTransformedNormal);
+
+    vec3 specularLightWeighting = vec3(0.0, 0.0, 0.0);
+    if (uShowSpecularHighlights) {
+      vec3 eyeDirection = normalize(-vPosition.xyz);
+      vec3 reflectionDirection = reflect(-lightDirection, normal);
+
+      float specularLightBrightness = pow(max(dot(reflectionDirection, eyeDirection), 0.0), uMaterialShininess);
+      specularLightWeighting = uPointLightingSpecularColor * specularLightBrightness;
+    }
+
+    float diffuseLightBrightness = max(dot(normal, lightDirection), 0.0);
+    vec3 diffuseLightWeighting = uPointLightingDiffuseColor * diffuseLightBrightness;
+
+    vec3 materialAmbientColor = uMaterialAmbientColor;
+    vec3 materialDiffuseColor = uMaterialDiffuseColor;
+    vec3 materialSpecularColor = uMaterialSpecularColor;
+    vec3 materialEmissiveColor = uMaterialEmissiveColor;
+    float alpha = 1.0;
+    if (uUseTextures) {
+      vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+      materialAmbientColor = materialAmbientColor * textureColor.rgb;
+      materialDiffuseColor = materialDiffuseColor * textureColor.rgb;
+      materialEmissiveColor = materialEmissiveColor * textureColor.rgb;
+      alpha = textureColor.a;
+    }
+    gl_FragColor = vec4(
+      materialAmbientColor * ambientLightWeighting
+      + materialDiffuseColor * diffuseLightWeighting
+      + materialSpecularColor * specularLightWeighting
+      + materialEmissiveColor,
+      alpha
+    );
+  }
+</code>
+</pre>
+<p>
+И на этом уже действительно все! В этом уроке мы рассмотрели рендеринг сцены в текстуру и использовании ее в другой сцене, а также затронули работу с  цветами материалов. В следующем уроке я покажу, как кое-что действительно полезное с помощью этого: GPU picking, с помощью чего можно моделировать 3D-сцены, с которыми люди могут взаимодействовать через клики мышью на объекты.
+</p>
+<p>
+<a href="/webgl-урок-15-карта-отражений/"><< Урок 15</a>
+</p>
+   </div>
+
+   </article>
+                  
+<div id="comments" class="comments-area">
+
+   
+         <h2 class="comments-title">
+         5 thoughts on &ldquo;<span>WebGL Урок 16 &#8212; Рендеринг в текстуру</span>&rdquo;      </h2>
+
+      
+      <ul class="comment-list">
+            <li class="comment even thread-even depth-1" id="li-comment-2711">
+      <article id="comment-2711" class="comment">
+         <header class="comment-meta comment-author vcard">
+            <img alt='' src='https://secure.gravatar.com/avatar/8d8339549a3124b0edc2eac4299157e1?s=74&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/8d8339549a3124b0edc2eac4299157e1?s=148&#038;d=mm&#038;r=g 2x' class='avatar avatar-74 photo' height='74' width='74' /><div class="comment-author-link"><i class="fa fa-user"></i>shuhray</div><div class="comment-date-time"><i class="fa fa-calendar-o"></i>26.08.2017 at 09:53</div><a class="comment-permalink" href="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-16-%d1%80%d0%b5%d0%bd%d0%b4%d0%b5%d1%80%d0%b8%d0%bd%d0%b3-%d0%b2-%d1%82%d0%b5%d0%ba%d1%81%d1%82%d1%83%d1%80%d1%83/#comment-2711"><i class="fa fa-link"></i>Permalink</a>         </header><!-- .comment-meta -->
+
+         
+         <section class="comment-content comment">
+            <p>Скажите, если я нарисовал что-то во фреймбуфер, могу я вывести его на экран какой-нибудь простой командой?</p>
+            <a rel='nofollow' class='comment-reply-link' href='#comment-2711' onclick='return addComment.moveForm( "comment-2711", "2711", "respond", "113" )' aria-label='Комментарий к записи shuhray'>Ответить</a>         </section>
+
+      </article><!-- #comment -->
+   </li><!-- #comment-## -->
+   <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-2714">
+      <article id="comment-2714" class="comment">
+         <header class="comment-meta comment-author vcard">
+            <img alt='' src='https://secure.gravatar.com/avatar/8d8339549a3124b0edc2eac4299157e1?s=74&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/8d8339549a3124b0edc2eac4299157e1?s=148&#038;d=mm&#038;r=g 2x' class='avatar avatar-74 photo' height='74' width='74' /><div class="comment-author-link"><i class="fa fa-user"></i>shuhray</div><div class="comment-date-time"><i class="fa fa-calendar-o"></i>26.08.2017 at 12:54</div><a class="comment-permalink" href="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-16-%d1%80%d0%b5%d0%bd%d0%b4%d0%b5%d1%80%d0%b8%d0%bd%d0%b3-%d0%b2-%d1%82%d0%b5%d0%ba%d1%81%d1%82%d1%83%d1%80%d1%83/#comment-2714"><i class="fa fa-link"></i>Permalink</a>         </header><!-- .comment-meta -->
+
+         
+         <section class="comment-content comment">
+            <p>И ещё вопрос &#8212; можно ли прикрепить к фреймбуферу несколько текстур? Сейчас пытаюсь рисовать полупрозрачные шарики, нашёл алгоритм для OpenGL, где к фреймбуферу приделаны две текстуры и шейдер рисует то в одну, то в другую примерно так<br />
+gl_FragData[0] = &#8230; ;<br />
+gl_FragData[1] = &#8230; ;<br />
+Будет ли это работать в WebGL? Если сделать так<br />
+gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture0, 0);<br />
+gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT1, gl.TEXTURE_2D, texture1, 0);</p>
+            <a rel='nofollow' class='comment-reply-link' href='#comment-2714' onclick='return addComment.moveForm( "comment-2714", "2714", "respond", "113" )' aria-label='Комментарий к записи shuhray'>Ответить</a>         </section>
+
+      </article><!-- #comment -->
+   <ul class="children">
+   <li class="comment even depth-2" id="li-comment-3227">
+      <article id="comment-3227" class="comment">
+         <header class="comment-meta comment-author vcard">
+            <img alt='' src='https://secure.gravatar.com/avatar/1806e54791342ec18bc60e21819a4326?s=74&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/1806e54791342ec18bc60e21819a4326?s=148&#038;d=mm&#038;r=g 2x' class='avatar avatar-74 photo' height='74' width='74' /><div class="comment-author-link"><i class="fa fa-user"></i>Алексей</div><div class="comment-date-time"><i class="fa fa-calendar-o"></i>18.10.2017 at 09:43</div><a class="comment-permalink" href="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-16-%d1%80%d0%b5%d0%bd%d0%b4%d0%b5%d1%80%d0%b8%d0%bd%d0%b3-%d0%b2-%d1%82%d0%b5%d0%ba%d1%81%d1%82%d1%83%d1%80%d1%83/#comment-3227"><i class="fa fa-link"></i>Permalink</a>         </header><!-- .comment-meta -->
+
+         
+         <section class="comment-content comment">
+            <p>конечно будет. Только надо, что бы шейдере первая строка была:</p>
+<p>#extension GL_EXT_draw_buffers : require<br />
+&#8230;.</p>
+<p>А в инициализации webgl:<br />
+gl = canvas.getContext(&#8216;experimental-webgl&#8217;, {&#8230;});<br />
+&#8230;<br />
+extMRT = this.gl.getExtension(&#8216;WEBGL_draw_buffers&#8217;);</p>
+<p>&#8230;</p>
+<p>fb = gl.createFramebuffer();<br />
+gl.bindFramebuffer(gl.FRAMEBUFFER, fb);<br />
+gl.framebufferTexture2D(gl.FRAMEBUFFER, extMRT.COLOR_ATTACHMENT0_WEBGL, gl.TEXTURE_2D, targetTexture1, 0);<br />
+gl.framebufferTexture2D(gl.FRAMEBUFFER, extMRT.COLOR_ATTACHMENT1_WEBGL, gl.TEXTURE_2D, targetTexture2, 0);</p>
+<p>extMRT.drawBuffersWEBGL([<br />
+  extMRT.COLOR_ATTACHMENT0_WEBGL,<br />
+  extMRT.COLOR_ATTACHMENT1_WEBGL<br />
+]);</p>
+            <a rel='nofollow' class='comment-reply-link' href='#comment-3227' onclick='return addComment.moveForm( "comment-3227", "3227", "respond", "113" )' aria-label='Комментарий к записи Алексей'>Ответить</a>         </section>
+
+      </article><!-- #comment -->
+   </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+   <li class="comment odd alt thread-even depth-1" id="li-comment-2727">
+      <article id="comment-2727" class="comment">
+         <header class="comment-meta comment-author vcard">
+            <img alt='' src='https://secure.gravatar.com/avatar/8d8339549a3124b0edc2eac4299157e1?s=74&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/8d8339549a3124b0edc2eac4299157e1?s=148&#038;d=mm&#038;r=g 2x' class='avatar avatar-74 photo' height='74' width='74' /><div class="comment-author-link"><i class="fa fa-user"></i>shuhray</div><div class="comment-date-time"><i class="fa fa-calendar-o"></i>27.08.2017 at 13:47</div><a class="comment-permalink" href="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-16-%d1%80%d0%b5%d0%bd%d0%b4%d0%b5%d1%80%d0%b8%d0%bd%d0%b3-%d0%b2-%d1%82%d0%b5%d0%ba%d1%81%d1%82%d1%83%d1%80%d1%83/#comment-2727"><i class="fa fa-link"></i>Permalink</a>         </header><!-- .comment-meta -->
+
+         
+         <section class="comment-content comment">
+            <p>И ещё один вопрос, если не трудно. Допустим, у меня есть картинка, нарисованная в текстуру. Как мне применить к ней (целиком) некоторый фрагментный шейдер? Допустим, я хочу сделать все цвета бледнее или ещё что-то в этом роде. Нужен ли какой-то вершинный шейдер, нужна ли какая-то команда draw?</p>
+            <a rel='nofollow' class='comment-reply-link' href='#comment-2727' onclick='return addComment.moveForm( "comment-2727", "2727", "respond", "113" )' aria-label='Комментарий к записи shuhray'>Ответить</a>         </section>
+
+      </article><!-- #comment -->
+   <ul class="children">
+   <li class="comment byuser comment-author-sergey bypostauthor even depth-2" id="li-comment-2733">
+      <article id="comment-2733" class="comment">
+         <header class="comment-meta comment-author vcard">
+            <img alt='' src='https://secure.gravatar.com/avatar/5879497b89d3faebfea88ab70764f659?s=74&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/5879497b89d3faebfea88ab70764f659?s=148&#038;d=mm&#038;r=g 2x' class='avatar avatar-74 photo' height='74' width='74' /><div class="comment-author-link"><i class="fa fa-user"></i>sergey<span>Автор</span></div><div class="comment-date-time"><i class="fa fa-calendar-o"></i>27.08.2017 at 14:48</div><a class="comment-permalink" href="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-16-%d1%80%d0%b5%d0%bd%d0%b4%d0%b5%d1%80%d0%b8%d0%bd%d0%b3-%d0%b2-%d1%82%d0%b5%d0%ba%d1%81%d1%82%d1%83%d1%80%d1%83/#comment-2733"><i class="fa fa-link"></i>Permalink</a>         </header><!-- .comment-meta -->
+
+         
+         <section class="comment-content comment">
+            <p>Скорей всего, ответы на все вопросы найдутся в статье <a href="https://webglfundamentals.org/webgl/lessons/ru/webgl-image-processing-continued.html" rel="nofollow">https://webglfundamentals.org/webgl/lessons/ru/webgl-image-processing-continued.html</a> &#8212; здесь есть и эффекты, и несколько фреймбуферов, и рендеринг результата на canvas.</p>
+            <a rel='nofollow' class='comment-reply-link' href='#comment-2733' onclick='return addComment.moveForm( "comment-2733", "2733", "respond", "113" )' aria-label='Комментарий к записи sergey'>Ответить</a>         </section>
+
+      </article><!-- #comment -->
+   </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+      </ul><!-- .comment-list -->
+
+      
+   
+   
+   	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Добавить комментарий <small><a rel="nofollow" id="cancel-comment-reply-link" href="/webgl-%D1%83%D1%80%D0%BE%D0%BA-16-%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B8%D0%BD%D0%B3-%D0%B2-%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%83%D1%80%D1%83/#respond" style="display:none;">Отменить ответ</a></small></h3>			<form action="https://devburn.ru/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+				<p class="comment-notes"><span id="email-notes">Ваш e-mail не будет опубликован.</span> Обязательные поля помечены <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Комментарий</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Имя <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">E-mail <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Сайт</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Отправить комментарий" /> <input type='hidden' name='comment_post_ID' value='113' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="63ceaa2785" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="207"/></p>			</form>
+			</div><!-- #respond -->
+	</div><!-- #comments -->                           </div>
+                     </div>
+
+         
+<div id="secondary" class="sidebar">
+   <section id="search-2" class="widget widget_search">
+<form action="https://devburn.ru/" class="search-form searchform clearfix" method="get">
+   <div class="search-wrap">
+      <input type="text" placeholder="Поиск" class="s field" name="s">
+      <button class="search-icon" type="submit"></button>
+   </div>
+</form><!-- .searchform --></section>		<section id="recent-posts-2" class="widget widget_recent_entries">		<h3 class="widget-title">Свежие записи</h3>		<ul>
+											<li>
+					<a href="https://devburn.ru/2018/04/01/%d1%81%d0%b8%d1%81%d1%82%d0%b5%d0%bc%d0%b0-%d1%87%d0%b0%d1%81%d1%82%d0%b8%d1%86/">Система частиц</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2017/04/22/%d0%be%d1%81%d0%bd%d0%be%d0%b2%d1%8b-webgl-%d0%bd%d0%b0-%d1%80%d1%83%d1%81%d1%81%d0%ba%d0%be%d0%bc/">Основы WebGL</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2016/09/18/%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8f-%d0%bf%d0%be%d0%bb%d0%b8%d0%b3%d0%be%d0%bd%d0%be%d0%b2-sld/">Символизация полигонов SLD</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2016/09/10/%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8f-%d0%bb%d0%b8%d0%bd%d0%b8%d0%b9-sld/">Символизация линий SLD</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2016/09/03/%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8f-%d1%82%d0%be%d1%87%d0%b5%d0%ba-sld/">Символизация точек SLD</a>
+									</li>
+					</ul>
+		</section><section id="archives-2" class="widget widget_archive"><h3 class="widget-title">Архивы</h3>		<ul>
+			<li><a href='https://devburn.ru/2018/04/'>Апрель 2018</a></li>
+	<li><a href='https://devburn.ru/2017/04/'>Апрель 2017</a></li>
+	<li><a href='https://devburn.ru/2016/09/'>Сентябрь 2016</a></li>
+	<li><a href='https://devburn.ru/2016/06/'>Июнь 2016</a></li>
+	<li><a href='https://devburn.ru/2016/04/'>Апрель 2016</a></li>
+	<li><a href='https://devburn.ru/2016/03/'>Март 2016</a></li>
+	<li><a href='https://devburn.ru/2016/02/'>Февраль 2016</a></li>
+	<li><a href='https://devburn.ru/2016/01/'>Январь 2016</a></li>
+	<li><a href='https://devburn.ru/2015/12/'>Декабрь 2015</a></li>
+	<li><a href='https://devburn.ru/2015/10/'>Октябрь 2015</a></li>
+	<li><a href='https://devburn.ru/2015/09/'>Сентябрь 2015</a></li>
+	<li><a href='https://devburn.ru/2015/08/'>Август 2015</a></li>
+	<li><a href='https://devburn.ru/2015/07/'>Июль 2015</a></li>
+	<li><a href='https://devburn.ru/2015/05/'>Май 2015</a></li>
+	<li><a href='https://devburn.ru/2015/04/'>Апрель 2015</a></li>
+	<li><a href='https://devburn.ru/2015/03/'>Март 2015</a></li>
+		</ul>
+		</section><section id="categories-2" class="widget widget_categories"><h3 class="widget-title">Рубрики</h3>		<ul>
+	<li class="cat-item cat-item-10"><a href="https://devburn.ru/category/threejs/" >threejs</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="https://devburn.ru/category/webgl/" >WebGL</a>
+</li>
+	<li class="cat-item cat-item-11"><a href="https://devburn.ru/category/%d0%b3%d0%b8%d1%81/" >ГИС</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="https://devburn.ru/category/%d0%b8%d0%bd%d1%84%d0%be/" >Инфо</a>
+</li>
+		</ul>
+</section><section id="text-2" class="widget widget_text"><h3 class="widget-title">Мои друзья</h3>			<div class="textwidget"><a target="_blank" href="http://pro-joomla.ru/">Бесплатные уроки Joomla!</a>
+<br />
+<a target="_blank" href="http://1centerprise8.blogspot.ru/">Полезные советы по 1С</a></div>
+		</section></div>      </div><!-- .inner-wrap -->
+   </div><!-- .single-page -->
+
+         </div><!-- .main-wrapper -->
+
+      <footer id="colophon">
+         <div class="inner-wrap">
+            
+
+            <div class="footer-bottom clearfix">
+               <div class="copyright-info">
+                  <div class="copyright">Copyright &copy; 2020 <a href="https://devburn.ru/" title="DevBurn" ><span>DevBurn</span></a>. Powered by <a href="http://wordpress.org" target="_blank" title="WordPress"><span>WordPress</span></a>. Theme: Ample by <a href="http://themegrill.com/themes/ample" target="_blank" title="ThemeGrill" rel="designer"><span>ThemeGrill</span></a>.</div>               </div>
+
+               <div class="footer-nav">
+                              </div>
+            </div>
+         </div>
+      </footer>
+      <a href="#masthead" id="scroll-up"><i class="fa fa-angle-up"></i></a>
+   </div><!-- #page -->
+   <script type='text/javascript' src='https://devburn.ru/wp-includes/js/comment-reply.min.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-content/themes/ample/js/theme-custom.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-content/themes/ample/js/navigation.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-includes/js/wp-embed.min.js?ver=4.9.3'></script>
+<script async="async" type='text/javascript' src='https://devburn.ru/wp-content/plugins/akismet/_inc/form.js?ver=4.0.3'></script>
+   <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-65619247-1', 'auto');
+      ga('send', 'pageview');
+    
+    </script>
+</body>
+</html>

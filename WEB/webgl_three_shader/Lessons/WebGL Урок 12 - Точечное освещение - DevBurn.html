@@ -1,0 +1,517 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU" prefix="og: http://ogp.me/ns#">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="https://devburn.ru/xmlrpc.php">
+
+<link rel='stylesheet' href='/wp-includes/css/prism.css' type='text/css' media='all' />
+<script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=UrURYn2rHygK-6jA2J1vc89qtVOB4j9J4Gg1TAN_avPZFiYKvhz714Q3WV3kMY_Q_K1WGVxcPAmdP_BRgYjwaPhEaORcBcT6JJyPyRi1trhoMTBd0wZwrZeBOSwfob-2qNQ4_FBCYOgs28jgDPBbIEvpbEktmx8U5TAbeGFfIRGEqJZeBNm9drNG86-PpnJDwbPXuMDIFfR4E9y-DSBOfESbC0x634-Fv4vJEx6Dn5U" charset="UTF-8"></script><script type='text/javascript' src='/wp-includes/js/prism.js'></script>
+
+<title>WebGL Урок 12 - Точечное освещение - DevBurn</title>
+
+<!-- This site is optimized with the Yoast SEO plugin v7.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-12-%d1%82%d0%be%d1%87%d0%b5%d1%87%d0%bd%d0%be%d0%b5-%d0%be%d1%81%d0%b2%d0%b5%d1%89%d0%b5%d0%bd%d0%b8%d0%b5/" />
+<meta property="og:locale" content="ru_RU" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="WebGL Урок 12 - Точечное освещение - DevBurn" />
+<meta property="og:description" content="Урок 13 &gt;&gt; &gt;" />
+<meta property="og:url" content="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-12-%d1%82%d0%be%d1%87%d0%b5%d1%87%d0%bd%d0%be%d0%b5-%d0%be%d1%81%d0%b2%d0%b5%d1%89%d0%b5%d0%bd%d0%b8%d0%b5/" />
+<meta property="og:site_name" content="DevBurn" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="Урок 13 &gt;&gt; &gt;" />
+<meta name="twitter:title" content="WebGL Урок 12 - Точечное освещение - DevBurn" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="DevBurn &raquo; Лента" href="https://devburn.ru/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DevBurn &raquo; Лента комментариев" href="https://devburn.ru/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DevBurn &raquo; Лента комментариев к &laquo;WebGL Урок 12 &#8212; Точечное освещение&raquo;" href="https://devburn.ru/webgl-%d1%83%d1%80%d0%be%d0%ba-12-%d1%82%d0%be%d1%87%d0%b5%d1%87%d0%bd%d0%be%d0%b5-%d0%be%d1%81%d0%b2%d0%b5%d1%89%d0%b5%d0%bd%d0%b8%d0%b5/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/devburn.ru\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.3"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56692,8205,9792,65039],[55357,56692,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='ample-bxslider-css'  href='https://devburn.ru/wp-content/themes/ample/js/jquery.bxslider/jquery.bxslider.css?ver=4.0' type='text/css' media='all' />
+<link rel='stylesheet' id='ample-google-fonts-css'  href='//fonts.googleapis.com/css?family=Roboto%3A400%2C300&#038;ver=4.9.3' type='text/css' media='all' />
+<link rel='stylesheet' id='ample-fontawesome-css'  href='https://devburn.ru/wp-content/themes/ample/font-awesome/css/font-awesome.min.css?ver=4.2.0' type='text/css' media='all' />
+<link rel='stylesheet' id='ample-style-css'  href='https://devburn.ru/wp-content/themes/ample/style.css?ver=4.9.3' type='text/css' media='all' />
+<script type='text/javascript' src='https://devburn.ru/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='https://devburn.ru/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://devburn.ru/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://devburn.ru/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.9.3" />
+<link rel='shortlink' href='https://devburn.ru/?p=104' />
+<link rel="alternate" type="application/json+oembed" href="https://devburn.ru/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fdevburn.ru%2Fwebgl-%25d1%2583%25d1%2580%25d0%25be%25d0%25ba-12-%25d1%2582%25d0%25be%25d1%2587%25d0%25b5%25d1%2587%25d0%25bd%25d0%25be%25d0%25b5-%25d0%25be%25d1%2581%25d0%25b2%25d0%25b5%25d1%2589%25d0%25b5%25d0%25bd%25d0%25b8%25d0%25b5%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://devburn.ru/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fdevburn.ru%2Fwebgl-%25d1%2583%25d1%2580%25d0%25be%25d0%25ba-12-%25d1%2582%25d0%25be%25d1%2587%25d0%25b5%25d1%2587%25d0%25bd%25d0%25be%25d0%25b5-%25d0%25be%25d1%2581%25d0%25b2%25d0%25b5%25d1%2589%25d0%25b5%25d0%25bd%25d0%25b8%25d0%25b5%2F&#038;format=xml" />
+		<style type="text/css" id="wp-custom-css">
+			/*
+Здесь можно добавить ваши CSS-стили.
+
+Нажмите на значок помощи выше, чтобы узнать больше.
+*/
+
+.webglFundArticle {
+	float: left;
+	width:100%;
+}
+
+.webglFundArticle img {
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	float: left;
+	margin-right: 1em;
+}
+
+.webglFundArticle p {
+	text-align: justify;
+	margin-top: 1.5em;
+}
+
+.webglFundSection {
+	float: left;
+	margin-top: 2em;
+	width:100%;
+}
+
+.webglFundSection h2 {
+	padding: 0;
+}		</style>
+	</head>
+
+<body class="page-template page-template-page-templates page-template-template-webgl-lesson page-template-page-templatestemplate-webgl-lesson-php page page-id-104  wide">
+   <div id="page" class="hfeed site">
+   <header id="masthead" class="site-header" role="banner">
+      <div class="header">
+         
+         <div class="main-head-wrap inner-wrap clearfix">
+            <div id="header-left-section">
+                                 <div id="header-text">
+                     <h1 id="site-title">
+                        <a href="https://devburn.ru/" title="DevBurn" rel="home">DevBurn</a>
+                     </h1>
+                     <h2 id="site-description">О разработке и не только&#8230;</h2>
+                  </div>
+                           </div>
+
+            <div id="header-right-section">
+               <nav id="site-navigation" class="main-navigation" role="navigation">
+                  <h3 class="menu-toggle"></h3>
+                  <div class="menu-%d0%b3%d0%bb%d0%b0%d0%b2%d0%bd%d0%be%d0%b5-%d0%bc%d0%b5%d0%bd%d1%8e-container"><ul id="menu-%d0%b3%d0%bb%d0%b0%d0%b2%d0%bd%d0%be%d0%b5-%d0%bc%d0%b5%d0%bd%d1%8e" class="menu menu-primary-container"><li id="menu-item-808" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-808"><a href="https://devburn.ru/2017/04/22/%d0%be%d1%81%d0%bd%d0%be%d0%b2%d1%8b-webgl-%d0%bd%d0%b0-%d1%80%d1%83%d1%81%d1%81%d0%ba%d0%be%d0%bc/">Основы WebGL</a></li>
+<li id="menu-item-153" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-153"><a href="https://devburn.ru/%d1%83%d1%80%d0%be%d0%ba%d0%b8-webgl/">Уроки WebGL</a></li>
+</ul></div>               </nav>
+               <i class="fa fa-search search-top"></i>
+               <div class="search-form-top">
+                  
+<form action="https://devburn.ru/" class="search-form searchform clearfix" method="get">
+   <div class="search-wrap">
+      <input type="text" placeholder="Поиск" class="s field" name="s">
+      <button class="search-icon" type="submit"></button>
+   </div>
+</form><!-- .searchform -->               </div>
+   	      </div>
+   	   </div><!-- .main-head-wrap -->
+           	   </div><!-- .header -->
+	</header><!-- end of header -->
+   <div class="main-wrapper">
+
+               <div class="header-post-title-container clearfix">
+            <div class="inner-wrap">
+               <div class="post-title-wrapper">
+                  <h1 class="header-post-title-class entry-title">WebGL Урок 12 &#8212; Точечное освещение</h1>
+               </div>
+                           </div>
+         </div>
+     
+   <div class="single-page clearfix">
+      <div class="inner-wrap">
+         <div id="primary">
+            <div id="content">
+
+               
+                  
+<article id="post-104" class="post-104 page type-page status-publish hentry">
+   
+   <div class="entry-content">
+      <p>
+<a style="float: right;" href="/webgl-урок-13-попиксельное-освещение-и-неск/">Урок 13 >></a>
+<a href="/webgl-урок-11-сферы-матрицы-поворотов-и-собы/"><< Урок 11</a>
+</p>
+<p>
+Материал в оригинале можно найти <a href="http://learningwebgl.com/blog/?p=1359">здесь</a>
+</p>
+<p>
+Добро пожаловать на мой двенадцатый урок по WebGL &#8212; второй урок, который не основан на <a href="http://nehe.gamedev.net/">учебнике NeHe по OpenGL</a>. В нем мы рассмотрим точечное освещение, которое довольно простое и в то же время важное и которое приведет нас к интересным вещам позже. Точечное освещение, как вы и могли ожидать, &#8212; это освещение, которое исходит из определенной точки внутри сцены, в отличие от используемого ранее направленного освещения, которое исходит из точки за пределами сцены.
+</p>
+<p>
+Вот как выглядит результат урока в браузере с поддержкой WebGL:
+</p>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/t-JPgkg2itQ" frameborder="0" allowfullscreen></iframe>
+<p>
+<a href="/webgl-урок-12-демо/">Здесь</a> можно посмотреть онлайн-демонстрацию, если ваш браузер поддерживает WebGL. <a href="/урок-0-приступаем-к-работе-с-webgl/">Здесь</a> можно узнать, что делать, если браузер не поддерживает WebGL. Вы увидите вращающиеся сферу и куб. Возможно, что оба этих объекта некоторое время будут белыми, пока текстуры не загрузятся, но после загрузки вы поймете, что сфера &#8212; это на самом деле Луна, а куб (масштаб не соблюден) &#8212; это деревянный ящик. Оба освещаются точечным источником света, расположенным между ними. Если вы хотите изменить положение света, его цвет и прочее, то для этого под элементом canvas есть уже привычные вам поля ввода.
+</p>
+<p>
+Теперь о том, как это все работает&#8230;
+</p>
+<p>
+Уже обычное предупреждение: эти уроки ориентированы на людей с некоторым знанием программирования, но без опыта работы с 3D-графикой. С хорошим пониманием того, что происходит в коде, вы быстро начнете писать собственные 3D веб-страницы. Если вы не прочитали предыдущие уроки, возможно, вам следует сделать это перед чтением урока, где я буду объяснять лишь новые вещи. Урок основан на <a href="/webgl-урок-11-сферы-матрицы-поворотов-и-собы/">одиннадцатом уроке</a>, поэтому вы должны хорошо понимать происходившие там вещи (и прошу оставлять комментарии, если вдруг что-то осталось неясным!).
+</p>
+<p>
+Как и прежде здесь могут быть ошибки. Если встретите что-то некорректное, дайте мне знать и я постараюсь поскорей их исправить.
+</p>
+<p>
+Вы можете посмотреть код этого примера двумя способами: посмотреть исходный код страницы с демонстрацией или, если вы используете GitHub, вы можете копировать урок (и другие уроки) из <a href="https://github.com/gpjt/webgl-lessons">репозитория</a>.
+</p>
+<p>
+Начнем с описание того, что именно мы хотим сделать с точечным освещением. Разница между им и направленным освещением заключается в том, что свет идет из точки внутри сцены. Это означает, что угол, под которым падает свет, отличается для каждой точки сцены. Поэтому очевидным подходом будет вычисление направления источника света в каждой вершине и затем проведение тех же самых расчетов, которые были в случае с направленным освещением. Этим мы и займемся!
+</p>
+<p>
+Возможно, вы подумаете, что лучше бы было рассчитывать направление света не для каждой вершины, а для каждой точки между вершинами &#8212; то есть для каждого фрагмента. И вы будете совершенно правы в этом. Подобная модель более трудоемка для видеокарты, но и выглядит гораздо лучше. А поэтому мы рассмотрим эту тему в следующем уроке :).
+</p>
+<p>
+Итак, мы определились с планом на этот урок. Взглянув снова на <a href="/webgl-урок-12-демо/">онлайн-демонстрацию</a>, мы обнаружим, что в точке, откуда исходит свет, нет никакого объекта сцены. Если вам нужен светящийся объект (например, солнце при моделировании солнечной системы), тогда вам нужно определить источник света и объект отдельно. Создание объекта к настоящему времени является уже довольно простой вещью после всех предыдущих уроков, поэтому здесь я только объясню, как работает точечный источник света. Как вы могли бы ожидать из описания выше, это очень просто. Самой сложной частью по сравнению с <a href="/webgl-урок-11-сферы-матрицы-поворотов-и-собы/">одиннадцатым уроков</a> является отрисовка куба и моделирование вращения куба и сферы&#8230;
+</p>
+<p>
+И снова начнем с низа страницы HTML и будем затем продвигаться вверх, рассматривая отличия от одиннадцатого урока. Первые изменения касаются тела HTML, где вместо полей, задающих направление света, теперь находятся поля, задающие местоположение источника. Эти изменения довольно простые и не стоят заострения внимания, двинемся дальше к webGLStart. Здесь мы увидим, что просто исчез код по управлению мышью и функция initTexture теперь называется initTextures, так как мы будем грузить две текстуры. Не особо захватывающе&#8230;
+</p>
+<p>
+Следующая функция по пути вверх &#8212; tick &#8212; имеет новый вызов к функции animate, чтобы наша сцена изменялась со временем:
+</p>
+<pre data-line="5">
+<code class="language-javascript">
+  function tick() {
+    requestAnimFrame(tick);
+    drawScene();
+    animate();
+  }
+</code>
+</pre>
+<p>
+Далее идет сама функция animate, которая просто изменяет две глобальные переменные, которые описывают, как далеко Луна и куб ушли по своим орбитам, учитывая, что они вращаются со скоростью 50°/секунду:
+</p>
+<pre>
+<code class="language-javascript">
+  var lastTime = 0;
+  function animate() {
+    var timeNow = new Date().getTime();
+    if (lastTime != 0) {
+      var elapsed = timeNow - lastTime;
+
+      moonAngle += 0.05 * elapsed;
+      cubeAngle += 0.05 * elapsed;
+    }
+    lastTime = timeNow;
+  }
+</code>
+</pre>
+<p>
+Следующая функция &#8212; drawScene, которая имеет несколько интересных изменений. Она начинается с привычного кода очистки canvas, установки перспективы. Также идет аналогичная с одиннадцатым уроком проверка установки галочки освещения и передача цвета фонового освещения в видеокарту:
+</p>
+<pre>
+<code class="language-javascript">
+  function drawScene() {
+    gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+
+    var lighting = document.getElementById("lighting").checked;
+    gl.uniform1i(shaderProgram.useLightingUniform, lighting);
+    if (lighting) {
+      gl.uniform3f(
+        shaderProgram.ambientColorUniform,
+        parseFloat(document.getElementById("ambientR").value),
+        parseFloat(document.getElementById("ambientG").value),
+        parseFloat(document.getElementById("ambientB").value)
+      );
+</code>
+</pre>
+<p>
+Теперь мы заносим координаты положения точечного освещения в видеокарту через uniform-переменную. Код похож на тот, который мы использовали в предыдущем уроке для передачи направления освещения. Разница в том, что теперь из кода мы кое-что убрали. При отправлении направления освещения в видеокарту нам нужно было преобразовать ее в единичный вектор (то есть масштабировать вектор до длины, равной единице), а затем изменить его направление на противоположное. Больше ничего подобного нам не требуется: мы просто передаем координаты источника:
+</p>
+<pre>
+<code class="language-javascript">
+      gl.uniform3f(
+        shaderProgram.pointLightingLocationUniform,
+        parseFloat(document.getElementById("lightPositionX").value),
+        parseFloat(document.getElementById("lightPositionY").value),
+        parseFloat(document.getElementById("lightPositionZ").value)
+      );
+</code>
+</pre>
+<p>
+Далее передадим цвета точечного освещения и на этом работа с кодом по освещению в функции drawScene окончена.
+</p>
+<pre>
+<code class="language-javascript">
+      gl.uniform3f(
+        shaderProgram.pointLightingColorUniform,
+        parseFloat(document.getElementById("pointR").value),
+        parseFloat(document.getElementById("pointG").value),
+        parseFloat(document.getElementById("pointB").value)
+      );
+    }
+</code>
+</pre>
+<p>
+Теперь сама отрисовка сферы и куба в соответствующих координатах:
+</p>
+<pre>
+<code class="language-javascript">
+    mat4.identity(mvMatrix);
+
+    mat4.translate(mvMatrix, [0, 0, -20]);
+
+    mvPushMatrix();
+    mat4.rotate(mvMatrix, degToRad(moonAngle), [0, 1, 0]);
+    mat4.translate(mvMatrix, [5, 0, 0]);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, moonTexture);
+    gl.uniform1i(shaderProgram.samplerUniform, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, moonVertexPositionBuffer);
+    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, moonVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, moonVertexTextureCoordBuffer);
+    gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, moonVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, moonVertexNormalBuffer);
+    gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, moonVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, moonVertexIndexBuffer);
+    setMatrixUniforms();
+    gl.drawElements(gl.TRIANGLES, moonVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+    mvPopMatrix();
+
+    mvPushMatrix();
+    mat4.rotate(mvMatrix, degToRad(cubeAngle), [0, 1, 0]);
+    mat4.translate(mvMatrix, [5, 0, 0]);
+    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
+    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexNormalBuffer);
+    gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, cubeVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
+    gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, crateTexture);
+    gl.uniform1i(shaderProgram.samplerUniform, 0);
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+    setMatrixUniforms();
+    gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+    mvPopMatrix();
+  }
+</code>
+</pre>
+<p>
+Это была drawScene. Двигаясь дальше, мы обнаруживаем initBuffers, в котором появился наш стандартный код по созданию буферов для куба, аналогичный коду для сферы, а еще дальше находится функция initTextures, которая теперь загружает две текстуры вместо одной.
+</p>
+<p>
+Следующая и заключительная часть изменений является одновременно и самой важной. Если вы переместитесь вверх, где находится вершинный шейдер, вы увидите несколько небольших изменений, и именно эти изменения составляю основное отличие этого урока. Рассмотрим их, начиная сверху:
+</p>
+<pre data-line="12,13">
+<code class="language-javascript">
+  attribute vec3 aVertexPosition;
+  attribute vec3 aVertexNormal;
+  attribute vec2 aTextureCoord;
+
+  uniform mat4 uMVMatrix;
+  uniform mat4 uPMatrix;
+  uniform mat3 uNMatrix;
+
+  uniform vec3 uAmbientColor;
+
+  uniform vec3 uPointLightingLocation;
+  uniform vec3 uPointLightingColor;
+</code>
+</pre>
+<p>
+Итак, у нас есть uniform-переменные для местоположения и цвета освещения, которые заменили направление освещения и цвет. Далее:
+</p>
+<pre data-line="8,9">
+<code class="language-javascript">
+  uniform bool uUseLighting;
+
+  varying vec2 vTextureCoord;
+  varying vec3 vLightWeighting;
+
+  void main(void) {
+    vec4 mvPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
+    gl_Position = uPMatrix * mvPosition;
+</code>
+</pre>
+<p>
+Здесь мы разделили наш старый код на две части. Во всех предыдущих вершинных шейдерах мы применяли матрицу модель-вид и проекционную матрицу за один проход:
+</p>
+<pre>
+<code class="language-javascript">
+    // код из одиннадцатого урока
+    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+</code>
+</pre>
+<p>
+Теперь же мы храним промежуточное значение &#8212; положение вершины после применения матрицы модель-вид, но до корректировки ее для перспективы. Вот, как это выглядит:
+</p>
+<pre data-line="7">
+<code class="language-javascript">
+    vTextureCoord = aTextureCoord;
+
+    if (!uUseLighting) {
+      vLightWeighting = vec3(1.0, 1.0, 1.0);
+    } else {
+      vec3 lightDirection = normalize(uPointLightingLocation - mvPosition.xyz);
+</code>
+</pre>
+<p>
+Местоположение источника освещения находится в мировых координатах, и координаты вершины после умножения на матрицу модель-вид также находятся в мировых координатах. Нам нужно вычислить направление точечного источника света из текущей вершины в рамках этих координат, и чтобы рассчитать направление от одной точки к другой, нам нужно просто вычесть их. После этого нам нужно нормализовать направление вектора, чтобы (как и в нашей прошлой модели освещения) он имел единичную длину. Теперь все готово к расчету, который происходит подобно тому, что мы выполняли для направленного освещения, лишь с небольшими изменениями в именах переменных:
+</p>
+<pre>
+<code class="language-javascript">
+      vec3 transformedNormal = uNMatrix * aVertexNormal;
+      float directionalLightWeighting = max(dot(transformedNormal, </code><span class="redWord">lightDirection</span><code class="language-javascript">), 0.0);
+      vLightWeighting = uAmbientColor + </code><span class="redWord">uPointLightingColor</span><code class="language-javascript"> * directionalLightWeighting;
+</code>
+</pre>
+<p>
+Готово! Вот вы и знаете, как написать шейдеры для создания точечного источника освещения.
+</p>
+<p>
+На этом все. В следующий раз мы снова рассмотрим освещение и повысим реалистичность сцены за счет попиксельного освещения вместо используемого вершинного освещения.
+</p>
+<p>
+<a style="float: right;" href="/webgl-урок-13-попиксельное-освещение-и-неск/">Урок 13 >></a>
+<a href="/webgl-урок-11-сферы-матрицы-поворотов-и-собы/"><< Урок 11</a>
+</p>
+   </div>
+
+   </article>
+                  
+<div id="comments" class="comments-area">
+
+   
+   
+   
+   	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Добавить комментарий <small><a rel="nofollow" id="cancel-comment-reply-link" href="/webgl-%D1%83%D1%80%D0%BE%D0%BA-12-%D1%82%D0%BE%D1%87%D0%B5%D1%87%D0%BD%D0%BE%D0%B5-%D0%BE%D1%81%D0%B2%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5/#respond" style="display:none;">Отменить ответ</a></small></h3>			<form action="https://devburn.ru/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+				<p class="comment-notes"><span id="email-notes">Ваш e-mail не будет опубликован.</span> Обязательные поля помечены <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Комментарий</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Имя <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">E-mail <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Сайт</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Отправить комментарий" /> <input type='hidden' name='comment_post_ID' value='104' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="13618fa9d5" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="22"/></p>			</form>
+			</div><!-- #respond -->
+	</div><!-- #comments -->                           </div>
+                     </div>
+
+         
+<div id="secondary" class="sidebar">
+   <section id="search-2" class="widget widget_search">
+<form action="https://devburn.ru/" class="search-form searchform clearfix" method="get">
+   <div class="search-wrap">
+      <input type="text" placeholder="Поиск" class="s field" name="s">
+      <button class="search-icon" type="submit"></button>
+   </div>
+</form><!-- .searchform --></section>		<section id="recent-posts-2" class="widget widget_recent_entries">		<h3 class="widget-title">Свежие записи</h3>		<ul>
+											<li>
+					<a href="https://devburn.ru/2018/04/01/%d1%81%d0%b8%d1%81%d1%82%d0%b5%d0%bc%d0%b0-%d1%87%d0%b0%d1%81%d1%82%d0%b8%d1%86/">Система частиц</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2017/04/22/%d0%be%d1%81%d0%bd%d0%be%d0%b2%d1%8b-webgl-%d0%bd%d0%b0-%d1%80%d1%83%d1%81%d1%81%d0%ba%d0%be%d0%bc/">Основы WebGL</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2016/09/18/%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8f-%d0%bf%d0%be%d0%bb%d0%b8%d0%b3%d0%be%d0%bd%d0%be%d0%b2-sld/">Символизация полигонов SLD</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2016/09/10/%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8f-%d0%bb%d0%b8%d0%bd%d0%b8%d0%b9-sld/">Символизация линий SLD</a>
+									</li>
+											<li>
+					<a href="https://devburn.ru/2016/09/03/%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8f-%d1%82%d0%be%d1%87%d0%b5%d0%ba-sld/">Символизация точек SLD</a>
+									</li>
+					</ul>
+		</section><section id="archives-2" class="widget widget_archive"><h3 class="widget-title">Архивы</h3>		<ul>
+			<li><a href='https://devburn.ru/2018/04/'>Апрель 2018</a></li>
+	<li><a href='https://devburn.ru/2017/04/'>Апрель 2017</a></li>
+	<li><a href='https://devburn.ru/2016/09/'>Сентябрь 2016</a></li>
+	<li><a href='https://devburn.ru/2016/06/'>Июнь 2016</a></li>
+	<li><a href='https://devburn.ru/2016/04/'>Апрель 2016</a></li>
+	<li><a href='https://devburn.ru/2016/03/'>Март 2016</a></li>
+	<li><a href='https://devburn.ru/2016/02/'>Февраль 2016</a></li>
+	<li><a href='https://devburn.ru/2016/01/'>Январь 2016</a></li>
+	<li><a href='https://devburn.ru/2015/12/'>Декабрь 2015</a></li>
+	<li><a href='https://devburn.ru/2015/10/'>Октябрь 2015</a></li>
+	<li><a href='https://devburn.ru/2015/09/'>Сентябрь 2015</a></li>
+	<li><a href='https://devburn.ru/2015/08/'>Август 2015</a></li>
+	<li><a href='https://devburn.ru/2015/07/'>Июль 2015</a></li>
+	<li><a href='https://devburn.ru/2015/05/'>Май 2015</a></li>
+	<li><a href='https://devburn.ru/2015/04/'>Апрель 2015</a></li>
+	<li><a href='https://devburn.ru/2015/03/'>Март 2015</a></li>
+		</ul>
+		</section><section id="categories-2" class="widget widget_categories"><h3 class="widget-title">Рубрики</h3>		<ul>
+	<li class="cat-item cat-item-10"><a href="https://devburn.ru/category/threejs/" >threejs</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="https://devburn.ru/category/webgl/" >WebGL</a>
+</li>
+	<li class="cat-item cat-item-11"><a href="https://devburn.ru/category/%d0%b3%d0%b8%d1%81/" >ГИС</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="https://devburn.ru/category/%d0%b8%d0%bd%d1%84%d0%be/" >Инфо</a>
+</li>
+		</ul>
+</section><section id="text-2" class="widget widget_text"><h3 class="widget-title">Мои друзья</h3>			<div class="textwidget"><a target="_blank" href="http://pro-joomla.ru/">Бесплатные уроки Joomla!</a>
+<br />
+<a target="_blank" href="http://1centerprise8.blogspot.ru/">Полезные советы по 1С</a></div>
+		</section></div>      </div><!-- .inner-wrap -->
+   </div><!-- .single-page -->
+
+         </div><!-- .main-wrapper -->
+
+      <footer id="colophon">
+         <div class="inner-wrap">
+            
+
+            <div class="footer-bottom clearfix">
+               <div class="copyright-info">
+                  <div class="copyright">Copyright &copy; 2020 <a href="https://devburn.ru/" title="DevBurn" ><span>DevBurn</span></a>. Powered by <a href="http://wordpress.org" target="_blank" title="WordPress"><span>WordPress</span></a>. Theme: Ample by <a href="http://themegrill.com/themes/ample" target="_blank" title="ThemeGrill" rel="designer"><span>ThemeGrill</span></a>.</div>               </div>
+
+               <div class="footer-nav">
+                              </div>
+            </div>
+         </div>
+      </footer>
+      <a href="#masthead" id="scroll-up"><i class="fa fa-angle-up"></i></a>
+   </div><!-- #page -->
+   <script type='text/javascript' src='https://devburn.ru/wp-includes/js/comment-reply.min.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-content/themes/ample/js/theme-custom.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-content/themes/ample/js/navigation.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://devburn.ru/wp-includes/js/wp-embed.min.js?ver=4.9.3'></script>
+<script async="async" type='text/javascript' src='https://devburn.ru/wp-content/plugins/akismet/_inc/form.js?ver=4.0.3'></script>
+   <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-65619247-1', 'auto');
+      ga('send', 'pageview');
+    
+    </script>
+</body>
+</html>
