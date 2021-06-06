@@ -1,0 +1,11 @@
+a {
+	position: absolute;
+	left: 372px;
+	top: 580px;
+	text-decoration: none;
+	color: black;
+	background-color: white;
+	border: 1px solid black;
+	padding: 2px;
+	cursor: pointer;
+}

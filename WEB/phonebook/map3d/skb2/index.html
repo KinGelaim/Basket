@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<title>Коридор СКБ (Этаж 2)</title>
+		
+		<link rel="stylesheet" href="css/koridor_style.css" />
+	</head>
+	<body onload='webGLStart()'>
+		<div>
+			<canvas id="canvas" width="800" height="600">
+				Your browser does not support HTML5
+			</canvas>
+
+			<div id="loadingtext">Loading world...</div>
+			<a id='enterExit' href='exit_panorama.html'>Выйти</a>
+			<a id='enter22' href='enter_22.html'>Войти в 22</a>
+			<a id='enterIT' href='enter_IT.html'>Войти в IT</a>
+		</div>
+		
+		<br/>
+		Используйте стрелки или WASD для бега, and <code>Page Up</code>/<code>Page Down</code>
+		чтобы смотреть вверх и вниз.
+		
+		<br/>
+		<script type="text/javascript" src="external/glMatrix-0.9.5.min.js"></script>
+		<script type="text/javascript" src="external/webgl-utils.js"></script>
+		
+		<script id="shader-fs" type="x-shader/x-fragment">
+			precision mediump float;
+
+			varying vec2 vTextureCoord;
+
+			uniform sampler2D uSampler;
+
+			void main(void) {
+				gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			}
+		</script>
+		<script id="shader-vs" type="x-shader/x-vertex">
+			attribute vec3 aVertexPosition;
+			attribute vec2 aTextureCoord;
+
+			uniform mat4 uMVMatrix;
+			uniform mat4 uPMatrix;
+
+			varying vec2 vTextureCoord;
+
+			void main(void) {
+				gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+				vTextureCoord = aTextureCoord;
+			}
+		</script>
+		<script src="koridor.js"></script>
+	</body>
+</html>

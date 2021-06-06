@@ -1,0 +1,39 @@
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+#container {
+	position: relative;
+	margin: 0px auto;
+	overflow: hidden;
+	width: 700px;
+	border: 20px solid #414141;	
+}
+
+#panorama {
+	background-image: url(../panorama_image/panoramka.jpg);
+	height: 512px;
+	cursor: move;
+}
+
+#exit {
+	border: 2px solid white;
+	filter: alpha(opacity=20);
+	opacity: .2;
+	background: black;
+	font-size: 100%;
+	cursor: pointer;
+	text-decoration: none;
+	color: white;
+	text-align: right;
+	
+	position: absolute;
+	top: 167px;
+	width: 186px;
+	height: 183px;
+}
+
+#exit:hover {
+	background: #ff7e00;
+}
