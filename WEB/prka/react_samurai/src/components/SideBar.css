@@ -1,0 +1,21 @@
+.nav {
+	grid-area: sidebar;
+	background-color: gray;
+	margin-left: 10px;
+	margin-right: 10px;
+	text-align: center;
+	font-size: 27px;
+}
+
+.nav__item {
+	margin-top: 5px;
+}
+
+.nav__item a {
+	color: white;
+	text-decoration: none;
+}
+
+.nav__item a.active {
+	color: blue;
+}

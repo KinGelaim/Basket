@@ -1,0 +1,15 @@
+.content {
+	grid-area: content;
+}
+
+.block-image {
+	text-align: center;
+}
+
+.block-image__img {
+	width: 97%;
+}
+
+.block-information {
+	padding: 10px;
+}

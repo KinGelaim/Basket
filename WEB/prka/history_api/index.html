@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<title>History API</title>
+		<meta name='viewport' content='width=device-width' />
+		
+		<link rel='stylesheet' href='style.css'/>
+	</head>
+	<body>
+		<h1>History API!!!</h1>
+		<div id='output'>
+			
+		</div>
+		<script src='history.js'></script>
+		
+		<div class='boxes'>
+			<div class='box' id='box-1'>one</div>
+			<div class='box' id='box-2'>two</div>
+			<div class='box' id='box-3'>three</div>
+			<div class='box' id='box-4'>four</div>
+		</div>
+		<div>
+			<button onClick='history.back()'>Back</button>
+			<button onClick='history.forward()'>Forward</button>
+		</div>
+		<div>
+			<button onClick='history.go(-3)'>Go -3</button>
+			<button onClick='history.go(0)'>Go 0 (refresh)</button>
+			<button onClick='history.go(3)'>Go 3</button>
+		</div>
+		<script src='history_boxes.js'></script>
+	</body>
+</html>
