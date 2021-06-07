@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ReportsOnGOZ.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="name" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ФКП &amp;quot;НТИИМ&amp;quot;</Value>
+    </Setting>
+    <Setting Name="INN" Type="System.String" Scope="User">
+      <Value Profile="(Default)">6668000472</Value>
+    </Setting>
+    <Setting Name="KPP" Type="System.String" Scope="User">
+      <Value Profile="(Default)">662301001</Value>
+    </Setting>
+    <Setting Name="nameSign" Type="System.String" Scope="User">
+      <Value Profile="(Default)">НТИИМ</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
