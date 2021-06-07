@@ -1,0 +1,11 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:WPF="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF" x:Class="BallisticWind.ModelingWindow"
+        Title="Моделирование" Height="520" Width="690" MouseWheel="Window_MouseWheel" FontSize="24" WindowStartupLocation="CenterScreen" KeyUp="Window_KeyUp">
+    <Grid>
+        <WPF:OpenGLControl x:Name="openGLControl1" Margin="0,0,0,0" DrawFPS="True" OpenGLDraw="OpenGLControl_OpenGLDraw" MouseDown="openGLControl1_MouseDown" MouseMove="openGLControl1_MouseMove" MouseUp="openGLControl1_MouseUp">
+        </WPF:OpenGLControl>
+        <Button x:Name="btnPrint" Content="Печать" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="174" Height="41" Click="btnPrint_Click"/>
+    </Grid>
+</Window>
