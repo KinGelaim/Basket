@@ -1,0 +1,69 @@
+﻿<Window x:Class="ParentControlOfTheInternetOnALocalNetwork.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Parent Control Of The Internet On A Local Network" Height="463.85" Width="555" WindowStartupLocation="CenterScreen" Icon="parent.ico" FontSize="14">
+    <Grid>
+        <Grid Name="LoginContainer" Visibility="Visible">
+            <Menu Height="25" VerticalAlignment="Top">
+                <MenuItem Header="Файл">
+                    <MenuItem Header="Выход" Click="MenuItemExitBtn_Click"/>
+                </MenuItem>
+                <MenuItem Header="О программе" Click="MenuItemAboutTheProgramm_Click">
+                </MenuItem>
+            </Menu>
+            <GroupBox Header="Авторизация" Height="270" Width="446" Margin="40,40,40,40">
+                <Grid>
+                    <Label Content="Логин" HorizontalAlignment="Right" Width="262" Margin="0,39,107,172"/>
+                    <TextBox x:Name="textBoxLogin" Margin="65,77,93,144" TextWrapping="Wrap"/>
+                    <Label Content="Пароль" HorizontalAlignment="Left" Margin="65,105,0,0" VerticalAlignment="Top"/>
+                    <PasswordBox x:Name="textBoxPassword" HorizontalAlignment="Left" Margin="65,139,0,0" VerticalAlignment="Top" Width="276"/>
+                    <Button Name="btnAuth" Content="Войти" HorizontalAlignment="Left" Margin="349,209,0,0" VerticalAlignment="Top" Width="75" Click="btnAuth_Click"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <Grid Name="MainContainer" Visibility="Hidden" ShowGridLines="True">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Menu Height="25" VerticalAlignment="Top">
+                <MenuItem Header="Файл">
+                    <MenuItem Name="MenuItemNewProject" Header="Новый проект" Click="MenuItemNewProject_Click"/>
+                    <MenuItem Name="MenuItemOpenProject" Header="Открыть проект" Click="MenuItemOpenProject_Click"/>
+                    <MenuItem Name="MenuItemSaveProject" Header="Сохранить проект" Click="MenuItemSaveProject_Click"/>
+                    <MenuItem Name="MenuItemExitBtn" Header="Выход" Click="MenuItemExitBtn_Click"/>
+                </MenuItem>
+                <MenuItem Name="MenuItemSettings" Header="Настройки" Click="MenuItemSettings_Click">
+                </MenuItem>
+                <MenuItem Name="MenuItemAboutTheProgramm" Header="О программе" Click="MenuItemAboutTheProgramm_Click">
+                </MenuItem>
+            </Menu>
+            <Image Name="ImageMainComputer" HorizontalAlignment="Left" Height="100" Margin="10,30,0,0" VerticalAlignment="Top" Width="100" Source="Resources/comp.png"/>
+            <Expander Header="Основной компьютер" HorizontalAlignment="Left" Margin="115,30,0,0" VerticalAlignment="Top">
+                <Grid Background="#FFE5E5E5">
+                    <Label Name="lblMainCompName" Margin="0,0,0,0" Content=""></Label>
+                    <Label Name="lblMainCompIP" Margin="0,30,0,0" Content="IP: "></Label>
+                </Grid>
+            </Expander>
+            <GroupBox Header="Рабочая область" Margin="10,150,10,10">
+                <Grid Name="WorkContainer" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Name="FirstWorkStackPanel"/>
+                    <StackPanel Name="SecondWorkStackPanel" Grid.ColumnSpan="1" Grid.Column="1"/>
+                    <StackPanel Name="ThirdWorkStackPanel" Grid.ColumnSpan="1" Grid.Column="2"/>
+                </Grid>
+            </GroupBox>
+            <Button Name="btnSettingMainComputer" Content="Настроить основной компьютер" HorizontalAlignment="Right" Margin="0,29,10,0" VerticalAlignment="Top" Width="226" Click="btnSettingMainComputer_Click"/>
+            <Button Name="btnAddNewWorkComputer" Content="Добавить рабочий компьютер" HorizontalAlignment="Right" Margin="0,59,10,0" VerticalAlignment="Top" Width="226" Click="btnAddNewWorkComputer_Click"/>
+            <Button Name="btnCheckAllComputers" Content="Проверить" Margin="0,114,327,0" Height="31" VerticalAlignment="Top" HorizontalAlignment="Right" Width="105" Click="btnCheckAllComputers_Click"/>
+            <Button Name="btnOnAllComputres" Content="Включить все" Margin="0,114,170,0" Height="31" VerticalAlignment="Top" HorizontalAlignment="Right" Width="121" Click="btnOnAllComputres_Click"/>
+            <Button Name="btnOffAllComputres" Content="Отключить все" Margin="0,114,10,0" Height="31" VerticalAlignment="Top" HorizontalAlignment="Right" Width="126" Click="btnOffAllComputres_Click"/>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,15 @@
+﻿<Window x:Class="ParentControlOfTheInternetOnALocalNetwork.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Настройки" Height="368" Width="427" WindowStartupLocation="CenterScreen" FontSize="14" ResizeMode="NoResize">
+    <Grid>
+        <Grid Name="MainGrid" Visibility="Visible">
+            <Button Name="ChangePathOfDirectory" Content="Выбрать директорию проектов" HorizontalAlignment="Left" Margin="80,67,0,0" VerticalAlignment="Top" Width="269" Click="ChangePathOfDirectory_Click"/>
+            <Button Content="Смена логина и пароля" HorizontalAlignment="Left" Margin="80,138,0,0" VerticalAlignment="Top" Width="269"/>
+            <Button Name="CreateConsole" Content="Отобразить вспомогательную консоль" HorizontalAlignment="Left" Margin="80,216,0,0" VerticalAlignment="Top" Width="269" Click="CreateConsole_Click"/>
+        </Grid>
+        <Grid Name="LoginAndPasswordGrid" Visibility="Hidden">
+            
+        </Grid>
+    </Grid>
+</Window>
