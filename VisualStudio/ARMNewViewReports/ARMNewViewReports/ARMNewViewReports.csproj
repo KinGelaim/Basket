@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C907BDC6-DC27-4F7A-B1EE-8944E859E2CE}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ARMNewViewReports</RootNamespace>
+    <AssemblyName>ARMNewViewReports</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>asu.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataBaseSNS.cs" />
+    <Compile Include="DataSNS.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAboutBox.Designer.cs">
+      <DependentUpon>FormAboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormChoseMespl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChoseMespl.Designer.cs">
+      <DependentUpon>FormChoseMespl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormChoseRashMCH.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChoseRashMCH.Designer.cs">
+      <DependentUpon>FormChoseRashMCH.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormChoseRashPreg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChoseRashPreg.Designer.cs">
+      <DependentUpon>FormChoseRashPreg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormChoseUchAndCount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChoseUchAndCount.Designer.cs">
+      <DependentUpon>FormChoseUchAndCount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormChoseUchYearCount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChoseUchYearCount.Designer.cs">
+      <DependentUpon>FormChoseUchYearCount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormChoseUgolok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChoseUgolok.Designer.cs">
+      <DependentUpon>FormChoseUgolok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormHistoryDocument.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHistoryDocument.Designer.cs">
+      <DependentUpon>FormHistoryDocument.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSettings.Designer.cs">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSNS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSNS.Designer.cs">
+      <DependentUpon>FormSNS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSNSEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSNSEdit.Designer.cs">
+      <DependentUpon>FormSNSEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IElement.cs" />
+    <Compile Include="KontrolPlanIsp.cs" />
+    <Compile Include="MaterKE.cs" />
+    <Compile Include="MaterSO.cs" />
+    <Compile Include="MesplKE.cs" />
+    <Compile Include="MesplPlanIsp.cs" />
+    <Compile Include="MesplPlanIspG.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RashGodKE.cs" />
+    <Compile Include="RashGodKresh.cs" />
+    <Compile Include="RashGodMCH.cs" />
+    <Compile Include="RashGodPlanIsp.cs" />
+    <Compile Include="RashGodPreg.cs" />
+    <Compile Include="RashGodSO.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAboutBox.resx">
+      <DependentUpon>FormAboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormChoseMespl.resx">
+      <DependentUpon>FormChoseMespl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormChoseRashMCH.resx">
+      <DependentUpon>FormChoseRashMCH.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormChoseRashPreg.resx">
+      <DependentUpon>FormChoseRashPreg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormChoseUchAndCount.resx">
+      <DependentUpon>FormChoseUchAndCount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormChoseUchYearCount.resx">
+      <DependentUpon>FormChoseUchYearCount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormChoseUgolok.resx">
+      <DependentUpon>FormChoseUgolok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHistoryDocument.resx">
+      <DependentUpon>FormHistoryDocument.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSettings.resx">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSNS.resx">
+      <DependentUpon>FormSNS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSNSEdit.resx">
+      <DependentUpon>FormSNSEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="asu.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

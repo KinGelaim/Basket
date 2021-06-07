@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ArrayOfDataSNS xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DataSNS>
+    <code>123</code>
+    <name>32</name>
+  </DataSNS>
+  <DataSNS>
+    <code>12341234</code>
+    <name>34</name>
+  </DataSNS>
+  <DataSNS>
+    <code>12</code>
+    <name>2</name>
+  </DataSNS>
+</ArrayOfDataSNS>

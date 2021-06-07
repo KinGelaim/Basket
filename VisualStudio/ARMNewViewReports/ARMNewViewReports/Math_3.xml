@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Math_3</name>
+  </assembly>
+  <members>
+    <member name="M:Math_3.Math_3.Add(System.Double,System.Double,System.Double@)">
+      <summary></summary>
+      <returns>Void</returns>
+    </member>
+    <member name="M:Math_3.Math_3.Substruct(System.Double,System.Double,System.Double@)">
+      <summary></summary>
+      <returns>Void</returns>
+    </member>
+  </members>
+</doc>
