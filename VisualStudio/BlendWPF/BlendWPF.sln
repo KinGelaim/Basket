@@ -1,0 +1,17 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendWPF", "BlendWPF\BlendWPF.csproj", "{CC234599-4FAD-4E33-A991-259286892485}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC234599-4FAD-4E33-A991-259286892485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC234599-4FAD-4E33-A991-259286892485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC234599-4FAD-4E33-A991-259286892485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC234599-4FAD-4E33-A991-259286892485}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
