@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators", "Operators\Operators.csproj", "{A3422B4E-05AD-482F-87CA-48ED302B0D1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecondOperators", "SecondOperators\SecondOperators.csproj", "{BC7B924A-87E3-4A8E-93D2-7D1A92B2B2C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3422B4E-05AD-482F-87CA-48ED302B0D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3422B4E-05AD-482F-87CA-48ED302B0D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3422B4E-05AD-482F-87CA-48ED302B0D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3422B4E-05AD-482F-87CA-48ED302B0D1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC7B924A-87E3-4A8E-93D2-7D1A92B2B2C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC7B924A-87E3-4A8E-93D2-7D1A92B2B2C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC7B924A-87E3-4A8E-93D2-7D1A92B2B2C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC7B924A-87E3-4A8E-93D2-7D1A92B2B2C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
