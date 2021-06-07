@@ -1,0 +1,48 @@
+﻿<Window x:Class="InfiniteMilitaryService_v1._0.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:InfiniteMilitaryService_v1._0"
+        Title="Бесконечная служба" Height="500" Width="900" WindowStartupLocation="CenterScreen" WindowState="Maximized" Loaded="Window_Loaded" FontSize="18">
+    <Window.Resources>
+        <local:WindowWidthToSizeTextConverter x:Key="myTextConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid x:Name="MainMenu" Visibility="Hidden">
+            <Label x:Name="lblMainName" Content="БЕСКОНЕЧНАЯ СЛУЖБА" Margin="277,31,120,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" FontFamily="Segoe Script" FontSize="{Binding ActualWidth, ElementName=MainMenu, Mode=OneWay, Converter={StaticResource myTextConverter}}" RenderTransformOrigin="0.5,0.5"/>
+
+            <Button x:Name="MainMenuContinueGame" Content="Продолжить" HorizontalAlignment="Left" Margin="45,0,0,172" VerticalAlignment="Bottom" Width="163"/>
+            <Button x:Name="MainMenuNewGame" Content="Новая игра" HorizontalAlignment="Left" Margin="45,0,0,137" VerticalAlignment="Bottom" Width="163"/>
+            <Button x:Name="MainMenuSettingsGame" Content="Настройки" HorizontalAlignment="Left" Margin="45,0,0,102" VerticalAlignment="Bottom" Width="163"/>
+            <Button x:Name="MainMenuAuthorsGame" Content="Авторы" HorizontalAlignment="Left" Margin="45,0,0,67" VerticalAlignment="Bottom" Width="163"/>
+            <Button x:Name="MainMenuExitGame" Content="Выход" HorizontalAlignment="Left" Margin="45,0,0,32" Width="163" Height="30" VerticalAlignment="Bottom"/>
+        </Grid>
+        <Grid x:Name="TreeGame" Visibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <ScrollViewer HorizontalScrollBarVisibility="Visible">
+                <Grid x:Name="TreeGameContainer" ShowGridLines="True">
+                    <Grid.Resources>
+                        <Style TargetType="{x:Type Panel}">
+                            <Setter Property="Margin" Value="0,0,0,6"></Setter>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="BtnTreeGameBack" Content="Назад" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
+
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+        <Grid x:Name="MainContainer" Visibility="Hidden" Background="Black">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="181*"/>
+                <RowDefinition Height="54*"/>
+            </Grid.RowDefinitions>
+            <Label x:Name="lblCenterScreen" Content="" Margin="412,137,428,191" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White"/>
+            <Image x:Name="imgMainImage" Margin="10,10,10,20"/>
+            <TextBox x:Name="txtMainText" Margin="10" Grid.Row="1" TextWrapping="Wrap" Text="" IsReadOnly="True" Background="Black" Foreground="White"/>
+            <Button x:Name="btnMainForward" Content="Вперёд" Margin="0,0,10,10" Visibility="Hidden" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75"/>
+            <Button x:Name="btnMainYes" Content="Да" HorizontalAlignment="Left" Margin="254,0,0,32" Visibility="Hidden" VerticalAlignment="Bottom" Width="75"/>
+            <Button x:Name="btnMainNo" Content="Нет" HorizontalAlignment="Right" Margin="0,0,256,32" Visibility="Hidden" VerticalAlignment="Bottom" Width="75"/>
+        </Grid>
+    </Grid>
+</Window>
