@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<infoArray>
+  <info data="hel22o" expected="4"/>
+  <info data="programm" expected="0"/>
+  <info data="1256" expected="14"/>
+  <info data="intel01" expected="1"/>
+  <info data="" expected="0"/>
+</infoArray>
