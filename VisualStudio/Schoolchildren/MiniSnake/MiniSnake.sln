@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniSnake", "MiniSnake\MiniSnake.csproj", "{A96B38EA-8695-4BB5-9BA6-8F596F8B94B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniSnake_v2.0", "MiniSnake_v2.0\MiniSnake_v2.0.csproj", "{3AE679C1-2A68-43CC-9932-CA790B0063E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniSnake_v2.1", "MiniSnake_v2.1\MiniSnake_v2.1.csproj", "{3B15D57F-E33B-4891-BC80-490A59D589CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniSnake_v3.0", "MiniSnake_v3.0\MiniSnake_v3.0.csproj", "{784AEC8B-A119-48EA-A1D0-1FF0113E3B6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniSnake_v4.0", "MiniSnake_v4.0\MiniSnake_v4.0.csproj", "{E42BECC3-C311-419C-A2A2-FCD792A4C167}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniSnake_v5.0", "MiniSnake_v5.0\MiniSnake_v5.0.csproj", "{5C7D95C7-104B-495F-B58C-C7ED38C3C412}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A96B38EA-8695-4BB5-9BA6-8F596F8B94B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A96B38EA-8695-4BB5-9BA6-8F596F8B94B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A96B38EA-8695-4BB5-9BA6-8F596F8B94B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A96B38EA-8695-4BB5-9BA6-8F596F8B94B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AE679C1-2A68-43CC-9932-CA790B0063E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AE679C1-2A68-43CC-9932-CA790B0063E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AE679C1-2A68-43CC-9932-CA790B0063E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AE679C1-2A68-43CC-9932-CA790B0063E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B15D57F-E33B-4891-BC80-490A59D589CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B15D57F-E33B-4891-BC80-490A59D589CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B15D57F-E33B-4891-BC80-490A59D589CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B15D57F-E33B-4891-BC80-490A59D589CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{784AEC8B-A119-48EA-A1D0-1FF0113E3B6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{784AEC8B-A119-48EA-A1D0-1FF0113E3B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{784AEC8B-A119-48EA-A1D0-1FF0113E3B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{784AEC8B-A119-48EA-A1D0-1FF0113E3B6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E42BECC3-C311-419C-A2A2-FCD792A4C167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E42BECC3-C311-419C-A2A2-FCD792A4C167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E42BECC3-C311-419C-A2A2-FCD792A4C167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E42BECC3-C311-419C-A2A2-FCD792A4C167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C7D95C7-104B-495F-B58C-C7ED38C3C412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C7D95C7-104B-495F-B58C-C7ED38C3C412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C7D95C7-104B-495F-B58C-C7ED38C3C412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C7D95C7-104B-495F-B58C-C7ED38C3C412}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
