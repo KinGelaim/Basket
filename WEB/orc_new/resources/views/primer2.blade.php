@@ -19,6 +19,34 @@
 					</div>
 				</div>
 			</div>
+			<div class='row'>
+				<div class='col-md-3'>
+					<label>{{mt_rand()}}</label>
+				</div>
+				<div class='col-md-3'>
+					<label>{{mt_rand()}}</label>
+				</div>
+				<div class='col-md-3'>
+					<label>{{uniqid(mt_rand(), true)}}</label>
+				</div>
+				<div class='col-md-3'>
+					<label>{{uniqid(mt_rand(), true)}}</label>
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col-md-3'>
+					<label>{{mt_rand()}}</label>
+				</div>
+				<div class='col-md-3'>
+					<label>{{mt_rand()}}</label>
+				</div>
+				<div class='col-md-3'>
+					<label>{{uniqid(mt_rand(), false)}}</label>
+				</div>
+				<div class='col-md-3'>
+					<label>{{uniqid(mt_rand(), false)}}</label>
+				</div>
+			</div>
 			<script>
 				var k = true;
 				$('#tezis-open').on('click', function(){

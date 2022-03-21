@@ -254,6 +254,10 @@
 														@endif
 													</div>
 												</div>
+												<div class="col-md-8">
+													<label>Доп. информация</label>
+													<input class='form-control' name='add_information' type='text' value="{{old('add_information') ? old('add_information') : $second_department_tours->add_information}}"/>
+												</div>
 											</div>
 											<div class='row'>
 												<div class="col-md-2">
@@ -423,6 +427,12 @@
 													@if($errors->has('id_unit'))
 														<label class='msgError'>{{$errors->first('id_unit')}}</label>
 													@endif
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													<label>Дополнительная информация</label>
+													<input class='form-control' name='add_information' type='text' value="{{old('add_information')}}"/>
 												</div>
 											</div>
 											<div class='row'>

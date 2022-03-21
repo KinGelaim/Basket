@@ -86,7 +86,19 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-1">
+								<div class="form-group">
+									<label for="sel5">Вид</label>
+									<select class="form-control" id="sel5" name='goz_work'>
+										<option value="">Все виды</option>
+										<option value="ГОЗ" {{ $goz_work == 'ГОЗ' ? 'selected' : ''}}>ГОЗ</option>
+										<option value="Экспорт" {{ $goz_work == 'Экспорт' ? 'selected' : ''}}>Экспорт</option>
+										<option value="Межзаводские" {{ $goz_work == 'Межзаводские' ? 'selected' : ''}}>Межзаводские</option>
+										<option value="Иные" {{ $goz_work == 'Иные' ? 'selected' : ''}}>Иные</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-1">
 								<button id='refreshContract' class="btn btn-primary" type="button" href="{{ $is_sip_contract == 1 ? route('department.ekonomic.sip') : route('department.ekonomic') }}" style="margin-top: 26px;">Обновить список</button>
 							</div>
 							<div class="col-md-4">
@@ -119,7 +131,7 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-2">
+							<div class="col-md-3">
 								<div class="form-group">
 									<label for="selSearch">Выберите поле для поиска</label>
 									<select class="form-control" id="selSearch" name='search_name'>
@@ -132,12 +144,19 @@
 										<option value='number_counterpartie_contract_reestr' <?php if($search_name == 'number_counterpartie_contract_reestr') echo 'selected'; ?>>№ дог. контрагента</option>
 										<option value='igk_reestr' <?php if($search_name == 'igk_reestr') echo 'selected'; ?>>ИГК</option>
 										<option value='name_work_contract' <?php if($search_name == 'name_work_contract') echo 'selected'; ?>>Цель</option>
+										<option value='executor_contract_reestr' <?php if($search_name == 'executor_contract_reestr') echo 'selected'; ?>>Исполнитель</option>
+										<option value='amount_reestr' <?php if($search_name == 'amount_reestr') echo 'selected'; ?>>Сумма</option>
 									</select>
 								</div>
 							</div>
 							<div class="col-md-2">
 								<label >Поиск</label>
-								<input class='form-control' type='text' value='{{$search_value}}' name='search_value'/>
+								<input id='searchValueInput' class='form-control' type='text' value='{{$search_value}}' name='search_value' style='display: block;'/>
+								<select class="form-control" id="selectNameViewWorkSearch" style='display: none;'>
+									@foreach($all_view_contracts as $in_view_contracts)
+										<option>{{$in_view_contracts->name_view_contract}}</option>
+									@endforeach
+								</select>
 							</div>
 							<div class="col-md-1">
 								<button class="btn btn-primary" type="submit" href="" style="margin-top: 26px;">Поиск</button>
@@ -208,9 +227,9 @@
 									<thead>
 										<tr>
 											@if($is_sip_contract != 1)
-												<th class='cursorPointer btn-href' href='{{ route("department.ekonomic") }}?sorting=cast_number_pp&sort_p={{$re_sort}}'>Номер договора<span>{{ $sort == 'cast_number_pp' ? $sort_span : ''}}</th>
+												<th class='cursorPointer btn-href' href='{{ route("department.ekonomic") }}?{{$link}}&sorting=cast_number_pp&sort_p={{$re_sort}}'>Номер договора<span>{{ $sort == 'cast_number_pp' ? $sort_span : ''}}</th>
 											@else
-												<th class='cursorPointer btn-href' href='{{ route("department.ekonomic.sip") }}?sorting=cast_number_pp&sort_p={{$re_sort}}'>Номер договора<span>{{ $sort == 'cast_number_pp' ? $sort_span : ''}}</th>
+												<th class='cursorPointer btn-href' href='{{ route("department.ekonomic.sip") }}?{{$link}}&sorting=cast_number_pp&sort_p={{$re_sort}}'>Номер договора<span>{{ $sort == 'cast_number_pp' ? $sort_span : ''}}</th>
 											@endif											
 											<th>ГОЗ,<br/>межзаводские,<br/>экспорт</th>
 											<th>№ исх. Заявки</th>

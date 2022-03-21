@@ -7,7 +7,7 @@
 @section('content')
 	<div class="flex-center position-ref full-height">
 		@if (Auth::User())
-			@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Второй отдел' OR Auth::User()->hasRole()->role == 'Планово-экономический отдел' OR Auth::User()->hasRole()->role == 'Администрация' OR Auth::User()->surname == 'Бастрыкова' OR Auth::User()->surname == 'Гуринова')
+			@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Второй отдел' OR Auth::User()->hasRole()->role == 'Второй отдел (просмотр)' OR Auth::User()->hasRole()->role == 'Планово-экономический отдел' OR Auth::User()->hasRole()->role == 'Администрация' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
 				@if (Route::has('login'))
 					<div class="top-right links">
 						
@@ -19,20 +19,20 @@
 						<div class="row">
 							<div class="col-md-2">
 								<div class="form-group">
-									<label for='numberContract1'>Номер договора</label>
+									<label for='numberContract1' style='font-size: 11px;'>Номер Д/К ф-л "НТИИМ"(ФКП "НТИИМ")</label>
 									<input id='numberContract1' class='form-control' type='text' value='{{old("number_contract") ? old("number_contract") : $contract->number_contract}}' readonly />
 								</div>
 							</div>
-							<div class="col-md-4">
+							<div class="col-md-3">
 								<div class="form-group">
-									<label for='numberContract2'>Номер контракта</label>
+									<label for='numberContract2'>Номер Д/К Контрагента</label>
 									<input id='numberContract2' class='form-control' type='text' value='{{old("number_counterpartie_contract_reestr") ? old("number_counterpartie_contract_reestr") : $contract->number_counterpartie_contract_reestr}}' readonly />
 								</div>
 							</div>
 							@if(Auth::User()->hasRole()->role != 'Планово-экономический отдел')
-								<div class="col-md-1">
+								<div class="col-md-2">
 									<div class='row'>
-										<div class="col-md-12" style='padding: 0px;'>
+										<div class="col-md-6" style='padding: 0px;'>
 											<div class='form-check'>
 												@if($contract->name_works_goz == "ГОЗ")
 													<input class='form-check-input' type="checkbox" checked disabled />
@@ -42,9 +42,7 @@
 												<label class='form-check-label' for='gozCheck'>ГОЗ</label>
 											</div>
 										</div>
-									</div>
-									<div class='row'>
-										<div class="col-md-12" style='padding: 0px;'>
+										<div class="col-md-6" style='padding: 0px;'>
 											<div class='form-check'>
 												@if($contract->name_works_goz == "Экспорт")
 													<input class='form-check-input' type="checkbox" checked disabled />
@@ -56,14 +54,24 @@
 										</div>
 									</div>
 									<div class='row'>
-										<div class="col-md-12" style='padding: 0px;'>
+										<div class="col-md-6" style='padding: 0px;'>
 											<div class='form-check'>
 												@if($contract->name_works_goz == "Межзаводские")
 													<input class='form-check-input' type="checkbox" checked disabled />
 												@else
 													<input class='form-check-input' type="checkbox" disabled />
 												@endif
-												<label class='form-check-label' for='otherCheck'>Межзавод.</label>
+												<label class='form-check-label' for='interfactoryCheck'>Межзавод.</label>
+											</div>
+										</div>
+										<div class="col-md-6" style='padding: 0px;'>
+											<div class='form-check'>
+												@if($contract->name_works_goz == "Иные")
+													<input class='form-check-input' type="checkbox" checked disabled />
+												@else
+													<input class='form-check-input' type="checkbox" disabled />
+												@endif
+												<label class='form-check-label' for='otherCheck'>Иные</label>
 											</div>
 										</div>
 									</div>
@@ -77,7 +85,7 @@
 									</div>
 								</div>
 								<div class="col-md-2">
-									<label >Ответственный исполнитель</span></label>
+									<label class='small-text'>Ответственный исполнитель</span></label>
 									<input class='form-control' type='text' value='{{$contract->name_executor ? $contract->name_executor : $contract->executor_contract_reestr}}' disabled />
 								</div>
 								<div class="col-md-1" style='text-align: right; margin-top: 25px;'>
@@ -86,96 +94,173 @@
 							@endif
 						</div>
 						<div class="row">
-							<div class="col-md-3">
+							<div class="col-md-2">
+								<label>Дата Дог./Контр. на 1 л.</label>
+							</div>
+							<div class="col-md-5">
 								<label for='sel2'>Название предприятия</label>
+							</div>
+							<div class="col-md-3">
+								<label>ИГК</label>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-2">
+								<input name='date_contract_on_first_reestr' class='form-control' type='text' value="{{$contract->date_contract_on_first_reestr}}" readonly />
+							</div>
+							<div class="col-md-5">
 								<div class="form-group">
 									<select class="form-control" id="sel2" disabled>
 										<option>{{ $contract->name_counterpartie_contract }}</option>
 									</select>
 								</div>
 							</div>
+							<div class="col-md-3">
+								<input name='igk_reestr' class='form-control' type='text' value="{{$contract->igk_reestr}}" readonly />
+							</div>
+							<div class="col-md-2">
+								<div class='form-check'>
+									@if(count($states) > 0)
+										@if($states[count($states) - 1]->name_state == "Заключен" OR $states[count($states) - 1]->name_state == "Заключён")
+											<input id='completeContract' class='form-check-input completeCheck' type="checkbox" checked disabled />
+										@else
+											<input id='completeContract' class='form-check-input completeCheck' type="checkbox" disabled />
+										@endif
+									@else
+										<input id='completeContract' class='form-check-input completeCheck' type="checkbox" disabled />
+									@endif
+									<label class='form-check-label' for='completeContract'>Заключен</label>
+								</div>
+							</div>
 						</div>
 						@if(Auth::User()->hasRole()->role != 'Планово-экономический отдел')
 							<div class="row">
-								<div class="col-md-3">
+								<div class="col-md-10">
+									<div class="row">
+										<div class="col-md-2">
+											<div class="row">
+												<div class="col-md-12">
+													<div class='form-group'>
+														<label for='nameWork1'>Предмет</label>
+														<textarea id='nameWork1' class='form-control' type="text" style="width: 100%;" rows='5' disabled>{{$contract->item_contract}}</textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="row">
+												<div class="col-md-12">
+													<div class='form-group'>
+														<label for='nameWork1'>Цель</label>
+														<textarea id='nameWork1' class='form-control' type="text" style="width: 100%;" rows='5' disabled>{{$contract->name_work_contract}}</textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label>Срок исполнения</label>
+														<input class='form-control' type='text' value="{{$contract->date_maturity_reestr}}" readonly />
+														<label for='date_test'>До</label>
+														<input class='form-control' type='text' value="{{$contract->date_e_maturity_reestr}}" readonly />
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-5">
+											<div class="row">
+												<div class="col-md-6">
+													<label class='small-text'>Цена при заключении Д/К</label>
+													<input class='form-control' type='text' value="{{is_numeric($contract->amount_begin_reestr) ? number_format($contract->amount_begin_reestr, 2, '.', ' ') : $contract->amount_begin_reestr}}" readonly />
+												</div>
+												<div class="col-md-6">
+													<div class="row">
+														<div class="col-md-12">
+															@if($contract->approximate_amount_begin_reestr)
+																<input id='approximate_amount_begin_reestr' class='form-check-input' type="checkbox" checked disabled />
+																<label for='approximate_amount_begin_reestr'>Ориентировочная</label>
+															@elseif($contract->fixed_amount_begin_reestr)
+																<input id='fixed_amount_begin_reestr' class='form-check-input' type="checkbox" checked disabled />
+																<label for='fixed_amount_begin_reestr'>Фиксированная</label>
+															@endif
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-md-12">
+															@if($contract->vat_begin_reestr)
+																<input id='vat_begin_reestr' class='form-check-input' type="checkbox" checked disabled />
+															@else
+																<input id='vat_begin_reestr' class='form-check-input' type="checkbox" disabled />
+															@endif
+															<label for='vat_begin_reestr'>НДС</label>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<label>Сумма Д/К</label>
+													<input class='form-control' type='text' value="{{is_numeric($contract->amount_reestr) ? number_format($contract->amount_reestr, 2, '.', ' ') : $contract->amount_reestr}}" readonly />
+												</div>
+												<div class="col-md-6">
+													<div class="row">
+														<div class="col-md-12">
+															@if($contract->approximate_amount_reestr)
+																<input id='approximate_amount_reestr' class='form-check-input' type="checkbox" checked disabled />
+																<label for='approximate_amount_reestr'>Ориентировочная</label>
+															@elseif($contract->fixed_amount_reestr)
+																<input id='fixed_amount_reestr' class='form-check-input' type="checkbox" checked disabled />
+																<label for='fixed_amount_reestr'>Фиксированная</label>
+															@endif
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-md-12">
+															@if($contract->vat_reestr)
+																<input id='vat_reestr' class='form-check-input' type="checkbox" checked disabled />
+															@else
+																<input id='vat_reestr' class='form-check-input' type="checkbox" disabled />
+															@endif
+															<label for='vat_reestr'>НДС</label>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="row">
 										<div class="col-md-12">
-											<div class='form-group'>
-												<label for='nameWork1'>Наименование работ</label>
-												<textarea id='nameWork1' class='form-control' type="text" style="width: 100%;" rows='5' disabled>{{$contract->item_contract}}</textarea>
+											<div class="row">
+												<div class="col-md-3">
+													<label for='date_b_contract_reestr'>Срок действия ДК с</label>
+												</div>
+												<div class="col-md-3">
+													<label for='date_e_contract_reestr'>по</label>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-3">
+													<input class='form-control' type='text' value="{{$contract->date_b_contract_reestr}}" readonly />
+												</div>
+												<div class="col-md-3">
+													<input class='form-control' type='text' value="{{$contract->date_e_contract_reestr}}" readonly />
+												</div>
+												<div class="col-md-6">
+													<input class='form-control' type='text' value="{{$contract->date_contract_reestr}}" readonly />
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="col-md-2">
-									<div class="row">
-										<div class="col-md-10">
-											<div class="form-group">
-												<label>Срок исполнения</label>
-												<input class='form-control' type='text' value="{{$contract->date_maturity_date_reestr}}" readonly />
-												@if($contract->date_maturity_date_reestr)
-													<input id='date_test' class='form-check-input' type="checkbox" checked disabled />
-												@else
-													<input id='date_test' class='form-check-input' type="checkbox" disabled />
-												@endif
-												<label for='date_test'>Не определен</label>
-												@if($contract->date_maturity_date_reestr)
-													<textarea id='date_textarea' class='form-control' type="text" style="width: 100%;" rows='2' readonly>{{$contract->date_maturity_reestr}}</textarea>
-												@else
-													<textarea id='date_textarea' class='form-control' type="text" style="width: 100%;" rows='2' readonly>{{$contract->date_maturity_reestr}}</textarea>
-												@endif
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="row">
-										<div class="col-md-12">
-											<label>Сумма начальная</label>
-											<input class='form-control' type='text' value="{{is_numeric($contract->amount_reestr) ? number_format($contract->amount_reestr, 2, '.', ' ') : $contract->amount_reestr}}" readonly />
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-12">
-											<label>Сумма (окончательная)</label>
-											<input class='form-control' type='text' value="{{is_numeric($contract->amount_contract_reestr) ? number_format($contract->amount_contract_reestr, 2, '.', ' ') : $contract->amount_contract_reestr}}" readonly />
-										</div>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="row">
-										<div class="col-md-12">
-											@if($contract->fix_amount_contract_reestr)
-												<input id='fix_amount_contract_reestr' class='form-check-input' type="checkbox" checked disabled />
-											@else
-												<input id='fix_amount_contract_reestr' class='form-check-input' type="checkbox" disabled />
-											@endif
-											<label for='fix_amount_contract_reestr'>Фиксированная сумма</label>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-12">
-											@if($contract->vat_reestr)
-												<input id='vat_reestr' class='form-check-input' type="checkbox" checked disabled />
-											@else
-												<input id='vat_reestr' class='form-check-input' type="checkbox" disabled />
-											@endif
-											<label for='vat_reestr'>НДС</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<label>Дата Дог./Контр. на 1 л.</label>
-									<input name='date_contract_on_first_reestr' class='form-control' type='text' value="{{$contract->date_contract_on_first_reestr}}" readonly />
-								</div>
-								<div class="col-md-1">
 									<div class="row">
 										<div class="col-md-12" style='text-align: right;'>
-											<button class='btn btn-primary' data-toggle="modal" data-target="#invoice" type='button' style='width: 150px; float: right;'>Взаиморасчеты</button>
+											<button class='btn btn-primary' data-toggle="modal" data-target="#history_states" type='button' style='width: 150px; float: right;'>История Д/К</button>
+										</div>
+										<div class="col-md-12" style='text-align: right;'>
+											<button class='btn btn-primary' data-toggle="modal" data-target="#invoice" type='button' style='width: 150px; float: right; margin-top: 5px;'>Расчёты по Д/К</button>
 										</div>
 										<div class="col-md-12" style='text-align: right;'>
 											<button type='button' class="btn btn-primary" style="float: right; width: 150px; margin-top: 5px;" data-toggle="modal" data-target="#work_states">Выполнение работ</button>
@@ -439,7 +524,7 @@
 										@endif
 										<div class='row'>
 											<div class="col-md-12">
-												@if(trim($contract->name_view_contract) != 'Сборка' AND trim($contract->name_view_contract) != 'Услуги ГН' AND trim($contract->name_view_contract) != 'Услуги ВН')
+												@if(trim($contract->name_view_contract) != 'Сборка' AND trim($contract->name_view_contract) != 'Услуги ГН' AND trim($contract->name_view_contract) != 'Услуги ВН' AND trim($contract->name_view_contract) != 'Испытания опытные')
 													@if($secondDepartmentTours)
 														<table class='table' style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
 															<thead>
@@ -453,6 +538,7 @@
 																	<th colspan='5' style='text-align: center;'>Отработано</th>
 																	<th rowspan='2'>Дата отработки</th>
 																	<th rowspan='2'>Результат</th>
+																	<th rowspan='2'>Доп. инф.</th>
 																	<th colspan='2' style='text-align: center;'>Телеграмма</th>
 																	<th colspan='2' style='text-align: center;'>Отчет</th>
 																	<th colspan='3' style='text-align: center;'>Акт</th>
@@ -528,6 +614,9 @@
 																		</td>
 																		<td>
 																			{{ $isp->name_result }}
+																		</td>
+																		<td>
+																			{{ $isp->add_information }}
 																		</td>
 																		<td>
 																			{{ $isp->number_telegram }}
@@ -629,6 +718,87 @@
 																		</td>
 																		<td>
 																			{{ is_numeric($isp->amount_acts_sb) ? number_format($isp->amount_acts_sb, 2, ',', ' ') : $isp->amount_acts_sb }}
+																		</td>
+																	</tr>
+																@endforeach
+															</tbody>
+														</table>
+													@endif
+												@elseif(trim($contract->name_view_contract) == 'Испытания опытные')
+													@if($secondDepartmentTours)
+														<table class='table' style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
+															<thead>
+																<tr>
+																	<th rowspan='2'>№ наряда</th>
+																	<th rowspan='2'>Изделие (тема)</th>
+																	<th rowspan='2'>Дата начала работы</th>
+																	<th rowspan='2'>Количество</th>
+																	<th colspan='5' style='text-align: center;'>Отработано</th>
+																	<th rowspan='2'>Дата отработки</th>
+																	<th rowspan='2'>Документ о выполнении работ</th>
+																	<th colspan='3' style='text-align: center;'>Акт</th>
+																</tr>
+																<tr>
+																	<th>Сч.</th>
+																	<th>Пристр.</th>
+																	<th>Прогр.</th>
+																	<th>Несч.</th>
+																	<th>Отказ</th>
+																	<th style='text-align: center;'>№</th>
+																	<th style='text-align: center;'>Дата</th>
+																	<th style='text-align: center;'>Сумма</th>
+																</tr>
+															</thead>
+															<tbody>
+																@foreach($secondDepartmentTours as $isp)
+																	@if(Auth::User()->hasRole()->role == 'Администратор')
+																		<tr class="rowsContract cursorPointer" data-toggle="modal" data-target="#modalChose" onclick="$('#updateNaryad').attr('href','{{route('department.second.edit_tour_of_duty_exp',$isp->id)}}');$('#acts').attr('href','{{route('department.second.show_all_acts',$isp->id)}}');$('#btnModalActs').attr('acts','{{$isp->acts}}');$('#btnModalActs').attr('amount_acts','{{$isp->amount_acts}}');$('#btnModalActs').attr('new_act_href','{{ route('department.second.store_act', $isp->id) }}');">
+																	@elseif(Auth::User()->hasRole()->role == 'Планово-экономический отдел' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+																		<tr class="rowsContract cursorPointer modalActsBTN" acts="{{$isp->acts}}" amount_acts="{{$isp->amount_acts}}" new_act_href="{{ route('department.second.store_act', $isp->id) }}">
+																	@elseif(Auth::User()->hasRole()->role == 'Второй отдел')
+																		<tr class="rowsContract cursorPointer rowsUpdateIsp btn-href" href="{{route('department.second.edit_tour_of_duty_exp', $isp->id)}}">
+																	@endif
+																		<td>
+																			{{ $isp->number_duty }}
+																		</td>
+																		<td>
+																			{{ $isp->theme_exp }}
+																		</td>
+																		<td>
+																			{{ $isp->date_incoming }}
+																		</td>
+																		<td>
+																			{{ $isp->count_elements == '0' ? '' : $isp->count_elements . ' ' . $isp->name_unit }}
+																		</td>
+																		<td>
+																			{{ $isp->countable }}
+																		</td>
+																		<td>
+																			{{ $isp->targeting }}
+																		</td>
+																		<td>
+																			{{ $isp->warm }}
+																		</td>
+																		<td>
+																			{{ $isp->uncountable }}
+																		</td>
+																		<td>
+																			{{ $isp->renouncement }}
+																		</td>
+																		<td>
+																			{{ $isp->date_worked ? date('d.m.Y', strtotime($isp->date_worked)) : '' }}
+																		</td>
+																		<td>
+																			{{ $isp->result_document_exp }}
+																		</td>
+																		<td>
+																			{{ $isp->act['number_act'] }}
+																		</td>
+																		<td>
+																			{{ $isp->act['date_act'] }}
+																		</td>
+																		<td>
+																			{{ is_numeric($isp->amount_acts) ? number_format($isp->amount_acts, 2, ',', ' ') : $isp->amount_acts }}
 																		</td>
 																	</tr>
 																@endforeach
@@ -1634,7 +1804,7 @@
 												</div>
 											</div>
 											<div class='col-md-12'>
-												@if(Auth::User()->hasRole()->role != 'Администрация' AND Auth::User()->surname != 'Бастрыкова' AND Auth::User()->surname != 'Гуринова')
+												@if(Auth::User()->hasRole()->role != 'Администрация' AND Auth::User()->surname != 'Бастрыкова' AND Auth::User()->surname != 'Гуринова' AND Auth::User()->hasRole()->role != 'Второй отдел (просмотр)')
 													<button id='btn_add_state' class='btn btn-secondary' type='button' clear_date='{{date("d.m.Y", time())}}' action_state='{{ route("department.ekonomic.new_state",$contract->id)}}' style='margin-top: 10px;'>Добавить стадию выполнения</button>
 												@endif
 											</div>
@@ -1643,6 +1813,84 @@
 									<div class="modal-footer">
 										<button id='btn_add_new_history' type="submit" class="btn btn-primary" style='display: none;'>Добавить</button>
 										<button id='btn_destroy_state' type="submit" class="btn btn-danger" style='display: none;'>Удалить</button>
+										<button id='btn_close_new_history_states' type="button" class="btn btn-secondary" style='display: none;'>Закрыть</button>
+										<button id='btn_close_new_history' type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<!-- Модальное окно история состояний -->
+					<div class="modal fade" id="history_states" tabindex="-1" role="dialog" aria-labelledby="historyStatesModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<form method='POST' action="{{ route('department.ekonomic.new_state',$contract->id)}}">
+									{{csrf_field()}}
+									<div class="modal-header">
+										<h5 class="modal-title" id="historyStatesModalLabel">История состояний договора</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<div class='row'>
+											@if(count($states) > 0)
+												<div id='table_history_states' class='col-md-12'>
+													<table class="table" style='margin: 0 auto;'>
+														<thead>
+															<tr>
+																<th>Наименование</th>
+																<th>Дата</th>
+																<th>Автор</th>
+															</tr>
+														</thead>
+														<tbody>
+															@foreach($states as $state)
+																<tr class='rowsContract' id_state='{{$state->id}}' 
+																													name_state='{{$state->name_state}}' 
+																													date_state='{{$state->date_state}}' 
+																													action_state='{{ route("department.ekonomic.update_state",$contract->id)}}'
+																													destroy_state='{{ route("department.ekonomic.destroy_state",$state->id)}}'>
+																	<td>{{$state->name_state}}<br/>{{$state->comment_state}}</td>
+																	<td>{{$state->date_state}}</td>
+																	<td>{{$state->surname . ' ' . mb_substr($state->name, 0, 1) . '.' . mb_substr($state->patronymic, 0, 1) . '.'}}</td>
+																</tr>
+															@endforeach
+														</tbody>
+													</table>
+												</div>
+											@endif
+											<div id='add_history_states' class='col-md-12' style='display: none;'>
+												<div class='form-group row col-md-12'>
+													<input id='id_state' class='form-control' type='text' name='id_state' style='display: none;'/>
+												</div>
+												<div class='form-group row col-md-12'>
+													<label for='new_name_state' class='col-md-3 col-form-label'>Наименование</label>
+													<div class='col-md-9'>
+														<input id='new_name_state' class='form-control {{$errors->has("new_name_state") ? print("inputError ") : print("")}}' type='text' name='new_name_state'/>
+														@if($errors->has('new_name_state'))
+															<label class='msgError'>{{$errors->first('new_name_state')}}</label>
+														@endif
+													</div>
+												</div>
+												<div class='form-group row col-md-12'>
+													<label for='date_state' class='col-md-3 col-form-label'>Дата</label>
+													<div class='col-md-9'>
+														<input id='date_state' class='form-control {{$errors->has("date_state") ? print("inputError ") : print("")}}' name='date_state' value='{{date("d.m.Y", time())}}' readonly />
+														@if($errors->has('date_state'))
+															<label class='msgError'>{{$errors->first('date_state')}}</label>
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class='col-md-12'>
+												<!--<button id='btn_add_state' class='btn btn-secondary' type='button' clear_date='{{date("d.m.Y", time())}}' action_state='{{ route("department.ekonomic.new_state",$contract->id)}}'>Добавить состояние</button>-->
+											</div>
+										</div>									
+									</div>
+									<div class="modal-footer">
+										<button id='btn_add_new_history' type="submit" class="btn btn-primary" style='display: none;'>Добавить</button>
+										<button id='btn_destroy_state' type="submit" class="btn btn-primary" style='display: none;'>Удалить</button>
 										<button id='btn_close_new_history_states' type="button" class="btn btn-secondary" style='display: none;'>Закрыть</button>
 										<button id='btn_close_new_history' type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
 									</div>
@@ -1751,12 +1999,12 @@
 														<th rowspan='7' style='text-align: center; vertical-align: middle; max-width: 94px;'>Оплата и исполнение договора</th>
 													</tr>
 													<tr>
-														<th  colspan='2'>Аванс</th>
-														<th>{{number_format($amount_prepayments, 2, ',', ' ')}} р.</th>
+														<th  colspan='2'>Выполнение</th>
+														<th>{{number_format($amount_invoices, 2, ',', ' ')}} р.</th>
 													</tr>
 													<tr>
-														<th  colspan='2'>Оказано услуг</th>
-														<th>{{number_format($amount_invoices, 2, ',', ' ')}} р.</th>
+														<th  colspan='2'>Аванс</th>
+														<th>{{number_format($amount_prepayments, 2, ',', ' ')}} р.</th>
 													</tr>
 													<tr>
 														<th  colspan='2'>Окончательный расчет</th>
@@ -1777,37 +2025,6 @@
 									</div>
 									<div class='row'>
 										<div class="col-md-6">
-											@if($scores)
-												<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
-													<thead>
-														<tr>
-															<th colspan='3' style='text-align: center;'>СЧЕТ НА ОПЛАТУ</th>
-														</tr>
-														<tr>
-															<th>№ сч</th>
-															<th>Дата</th>
-															<th>Сумма</th>
-														</tr>
-													</thead>
-													<tbody>
-														@foreach($scores as $score)
-															<tr class="rowsContract">
-																<td>
-																	{{ $score->number_invoice }}
-																</td>
-																<td>
-																	{{ $score->date_invoice ? date('d.m.Y', strtotime($score->date_invoice)) : '' }}
-																</td>
-																<td>
-																	{{ is_numeric($score->amount_p_invoice) ? number_format($score->amount_p_invoice, 2, ',', ' ') : $score->amount_p_invoice }}
-																</td>
-															</tr>
-														@endforeach
-													</tbody>
-												</table>
-											@endif
-										</div>
-										<div class="col-md-6">
 											@if($prepayments)
 												<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
 													<thead>
@@ -1821,6 +2038,7 @@
 														</tr>
 													</thead>
 													<tbody>
+														<?php $pr_amount = 0; ?>
 														@foreach($prepayments as $prepayment)
 															<tr class="rowsContract">
 																<td>
@@ -1830,10 +2048,136 @@
 																	{{ $prepayment->date_invoice ? date('d.m.Y', strtotime($prepayment->date_invoice)) : '' }}
 																</td>
 																<td>
-																	{{ is_numeric($prepayment->amount_p_invoice) ? number_format($prepayment->amount_p_invoice, 2, ',', ' ') : $prepayment->amount_p_invoice }}
+																	{{ $prepayment->amount_p_invoice }}
 																</td>
 															</tr>
+															<?php $pr_amount += $prepayment->amount_p_invoice; ?>
 														@endforeach
+														<tr>
+															<td>
+															<td><b>Итого:</b></td>
+															<td>{{$pr_amount}}</td>
+														</tr>
+													</tbody>
+												</table>
+											@endif
+										</div>
+										<div class="col-md-6">
+											@if($payments)
+												<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
+													<thead>
+														<tr>
+															<th colspan='3' style='text-align: center;'>ОПЛАТА АВАНСА</th>
+														</tr>
+														<tr>
+															<th>№ п/п</th>
+															<th>Дата</th>
+															<th>Сумма</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?php $pr_amount = 0; ?>
+														@foreach($payments as $payment)
+															@if($payment->is_prepayment_invoice)
+																<tr class="rowsContract">
+																	<td>
+																		{{ $payment->number_invoice }}
+																	</td>
+																	<td>
+																		{{ $payment->date_invoice ? date('d.m.Y', strtotime($payment->date_invoice)) : '' }}
+																	</td>
+																	<td>
+																		{{ $payment->amount_p_invoice }}
+																	</td>
+																</tr>
+																<?php $pr_amount += $payment->amount_p_invoice; ?>
+															@endif
+														@endforeach
+														<tr>
+															<td>
+															<td><b>Итого:</b></td>
+															<td>{{$pr_amount}}</td>
+														</tr>
+													</tbody>
+												</table>
+											@endif
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-6">
+											@if($scores)
+												<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
+													<thead>
+														<tr>
+															<th colspan='3' style='text-align: center;'>СЧЕТ НА ОПЛАТУ</th>
+														</tr>
+														<tr>
+															<th>№ сч</th>
+															<th>Дата</th>
+															<th>Сумма</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?php $pr_amount = 0; ?>
+														@foreach($scores as $score)
+															<tr class="rowsContract">
+																<td>
+																	{{ $score->number_invoice }}
+																</td>
+																<td>
+																	{{ $score->date_invoice ? date('d.m.Y', strtotime($score->date_invoice)) : '' }}
+																</td>
+																<td>
+																	{{ $score->amount_p_invoice }}
+																</td>
+															</tr>
+															<?php $pr_amount += $score->amount_p_invoice; ?>
+														@endforeach
+														<tr>
+															<td>
+															<td><b>Итого:</b></td>
+															<td>{{$pr_amount}}</td>
+														</tr>
+													</tbody>
+												</table>
+											@endif
+										</div>
+										<div class="col-md-6">
+											@if($payments)
+												<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
+													<thead>
+														<tr>
+															<th colspan='3' style='text-align: center;'>ОПЛАТА ТОВАРА, РАБОТ, УСЛУГ</th>
+														</tr>
+														<tr>
+															<th>№ п/п</th>
+															<th>Дата</th>
+															<th>Сумма</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?php $pr_amount = 0; ?>
+														@foreach($payments as $payment)
+															@if(!$payment->is_prepayment_invoice)
+																<tr class="rowsContract">
+																	<td>
+																		{{ $payment->number_invoice }}
+																	</td>
+																	<td>
+																		{{ $payment->date_invoice ? date('d.m.Y', strtotime($payment->date_invoice)) : '' }}
+																	</td>
+																	<td>
+																		{{ $payment->amount_p_invoice }}
+																	</td>
+																</tr>
+																<?php $pr_amount += $payment->amount_p_invoice; ?>
+															@endif
+														@endforeach
+														<tr>
+															<td>
+															<td><b>Итого:</b></td>
+															<td>{{$pr_amount}}</td>
+														</tr>
 													</tbody>
 												</table>
 											@endif
@@ -1854,6 +2198,7 @@
 														</tr>
 													</thead>
 													<tbody>
+														<?php $pr_amount = 0; ?>
 														@foreach($invoices as $invoice)
 															<tr class="rowsContract">
 																<td>
@@ -1863,20 +2208,26 @@
 																	{{ $invoice->date_invoice ? date('d.m.Y', strtotime($invoice->date_invoice)) : '' }}
 																</td>
 																<td>
-																	{{ is_numeric($invoice->amount_p_invoice) ? number_format($invoice->amount_p_invoice, 2, ',', ' ') : $invoice->amount_p_invoice }}
+																	{{ $invoice->amount_p_invoice }}
 																</td>
 															</tr>
+															<?php $pr_amount += $invoice->amount_p_invoice; ?>
 														@endforeach
+														<tr>
+															<td>
+															<td><b>Итого:</b></td>
+															<td>{{$pr_amount}}</td>
+														</tr>
 													</tbody>
 												</table>
 											@endif
 										</div>
 										<div class="col-md-6">
-											@if($payments)
+											@if($returns)
 												<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
 													<thead>
 														<tr>
-															<th colspan='3' style='text-align: center;'>ОПЛАТА ОКАЗАННЫХ УСЛУГ</th>
+															<th colspan='3' style='text-align: center;'>ВОЗВРАТ</th>
 														</tr>
 														<tr>
 															<th>№ п/п</th>
@@ -1885,19 +2236,26 @@
 														</tr>
 													</thead>
 													<tbody>
-														@foreach($payments as $payment)
+														<?php $pr_amount = 0; ?>
+														@foreach($returns as $return)
 															<tr class="rowsContract">
 																<td>
-																	{{ $payment->number_invoice }}
+																	{{ $return->number_invoice }}
 																</td>
 																<td>
-																	{{ $payment->date_invoice ? date('d.m.Y', strtotime($payment->date_invoice)) : '' }}
+																	{{ $return->date_invoice ? date('d.m.Y', strtotime($return->date_invoice)) : '' }}
 																</td>
 																<td>
-																	{{ is_numeric($payment->amount_p_invoice) ? number_format($payment->amount_p_invoice, 2, ',', ' ') : $payment->amount_p_invoice }}
+																	{{ $return->amount_p_invoice }}
 																</td>
 															</tr>
+															<?php $pr_amount += $return->amount_p_invoice; ?>
 														@endforeach
+														<tr>
+															<td>
+															<td><b>Итого:</b></td>
+															<td>{{$pr_amount}}</td>
+														</tr>
 													</tbody>
 												</table>
 											@endif
@@ -1928,6 +2286,10 @@
 													<tr>
 														<th>Номер акта</th>
 														<th>Дата акта</th>
+														<th>Исх. № акта</th>
+														<th>Дата исх.</th>
+														<th>Вх. № акта</th>
+														<th>Дата вх.</th>
 														<th>Сумма с НДС, руб.</th>
 														<th>Редактировать</th>
 													</tr>
@@ -1952,13 +2314,29 @@
 													<input class='datepicker form-control' type='text' value='' name='date_act' />
 												</div>
 												<div class="form-group">
+													<label>Исх. № акта</label>
+													<input class='form-control' type='text' value='' name='number_outgoing_act' />
+												</div>
+												<div class="form-group">
+													<label>Дата исх.</label>
+													<input class='datepicker form-control' type='text' value='' name='date_outgoing_act' />
+												</div>
+												<div class="form-group">
+													<label>Вх. № акта</label>
+													<input class='form-control' type='text' value='' name='number_incoming_act' />
+												</div>
+												<div class="form-group">
+													<label>Дата вх.</label>
+													<input class='datepicker form-control' type='text' value='' name='date_incoming_act' />
+												</div>
+												<div class="form-group">
 													<label>Сумма акта</label>
 													<input class='form-control check-number' type='text' value='' name='amount_act' required />
 												</div>
 											</div>
 											<div class='col-md-8 col-md-offset-2'>
 												<div class='col-md-6'>
-													<button type="button" class="btn btn-primary steps" first_step='#newAct' second_step='#allActs'>Назад</button>
+													<button type="button" class="btn btn-secondary steps" first_step='#newAct' second_step='#allActs'>Назад</button>
 												</div>
 												<div class='col-md-6'>
 													@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Планово-экономический отдел')
@@ -1981,13 +2359,29 @@
 													<input id='edit_date_act' class='datepicker form-control' type='text' value='' name='date_act' />
 												</div>
 												<div class="form-group">
+													<label>Исх. № акта</label>
+													<input id='edit_number_outgoing_act' class='form-control' type='text' value='' name='number_outgoing_act' />
+												</div>
+												<div class="form-group">
+													<label>Дата исх.</label>
+													<input id='edit_date_outgoing_act' class='datepicker form-control' type='text' value='' name='date_outgoing_act' />
+												</div>
+												<div class="form-group">
+													<label>Вх. № акта</label>
+													<input id='edit_number_incoming_act' class='form-control' type='text' value='' name='number_incoming_act' />
+												</div>
+												<div class="form-group">
+													<label>Дата вх.</label>
+													<input id='edit_date_incoming_act' class='datepicker form-control' type='text' value='' name='date_incoming_act' />
+												</div>
+												<div class="form-group">
 													<label>Сумма акта</label>
 													<input id='edit_amount_act' class='form-control check-number' type='text' value='' name='amount_act' readonly required />
 												</div>
 											</div>
 											<div class='col-md-8 col-md-offset-2'>
 												<div class='col-md-6'>
-													<button type="button" class="btn btn-primary steps" first_step='#editAct' second_step='#allActs'>Назад</button>
+													<button type="button" class="btn btn-secondary steps" first_step='#editAct' second_step='#allActs'>Назад</button>
 												</div>
 												<div class='col-md-6'>
 													@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Планово-экономический отдел')

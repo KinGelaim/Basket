@@ -67,6 +67,10 @@
 	border: 1px solid black;
 }
 
+.small-text{
+	font-size: 12px;
+}
+
 textarea {
 	resize: none;
 }

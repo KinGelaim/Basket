@@ -25,6 +25,7 @@ use App\Department;
 use App\ViewContract;
 use App\State;
 use App\Protocol;
+use App\NewApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -277,6 +278,110 @@ class ReconciliationController extends Controller
 		]);
 	}
 	
+	public function new_incoming()
+	{
+		$link = '';
+		$paginate_count = 10;
+		if (isset($_GET["page"])) {
+			$page  = $_GET["page"];
+		} else {
+			$page=1;
+		};
+		
+		$counterparties = Counterpartie::select(['*'])->where('is_sip_counterpartie', 1)->orderBy('name', 'asc')->get();
+		$counterpartie = '';
+		$counerpartie_name = '';
+		$counterpartie_str = "applications.id_counterpartie_application";
+		$counterpartie_equal = ">";
+		if(isset($_GET['counterpartie'])) {
+			if($_GET['counterpartie'] != ''){
+				$counerpartie_name = $_GET['counterpartie'];
+				foreach($counterparties as $counter){
+					if($counter->name == $counerpartie_name){
+						$counterpartie = $counter->id;
+						break;
+					}
+				}
+				$counterpartie_str = "id_counterpartie_application";
+				$counterpartie_equal = "=";
+				$link .= "&counterpartie=" . $_GET['counterpartie'];
+			}
+		} else
+			$counterpartie = '';
+		if(isset($_GET['search_name'])) {
+			$search_name = $_GET['search_name'];
+			$link .= "&search_name=" . $_GET['search_name'];
+		} else
+			$search_name = '';
+		if(isset($_GET['search_value'])) {
+			$search_value = $_GET['search_value'];
+			$link .= "&search_value=" . $_GET['search_value'];
+		} else
+			$search_value = '';
+		$start = ($page-1) * $paginate_count;
+		if(isset($_GET['search_value']) && isset($_GET['search_name']) && $search_name != '' && $search_value != '')
+			$applications = Application::select(['*','applications.id'])->leftJoin('documents','applications.id','documents.id_application_document')
+											//->where('applications.id_contract_application', null)
+											//->where('applications.id_document_application', null)
+											//->where('documents.id_application_document', null)
+											->where($counterpartie_str, $counterpartie_equal, $counterpartie)
+											->where('applications.' . $search_name, 'like', '%' . $search_value . '%')
+											->orderBy('applications.id', 'desc')
+											->offset($start)
+											->limit($paginate_count)
+											->get();
+		else
+			$applications = Application::select(['*','applications.id'])->leftJoin('documents','applications.id','documents.id_application_document')
+											->where($counterpartie_str, $counterpartie_equal, $counterpartie)
+											->orderBy('applications.id', 'desc')
+											->offset($start)
+											->limit($paginate_count)
+											->get();
+
+		//dd($applications);
+		if(isset($_GET['search_value']) && isset($_GET['search_name']) && $search_name != '' && $search_value != '')
+			$application_count = Application::select(['*'])
+									->leftJoin('documents','applications.id','documents.id_application_document')
+									->where('id_contract_application', null)
+									->where('id_document_application', null)
+									->where('documents.id_application_document', null)
+									->where($counterpartie_str, $counterpartie_equal, $counterpartie)
+									->where('applications.' . $search_name, 'like', '%' . $search_value . '%')
+									->count();
+		else
+			$application_count = Application::select(['*'])
+									->leftJoin('documents','applications.id','documents.id_application_document')
+									->where('id_contract_application', null)
+									->where('id_document_application', null)
+									->where('documents.id_application_document', null)
+									->where($counterpartie_str, $counterpartie_equal, $counterpartie)
+									->count();
+		$prev_page = $page - 1 > 0 ? (int)($page-1) : '';
+		$next_page = $page + 1 <= (int)ceil($application_count/$paginate_count) ? (int)($page+1) : '';
+		
+		$view_works = ViewWork::all();
+		if(isset($_GET['view'])) {
+			$view_work = ($_GET['view']);
+			$link .= "&view=" . $_GET['view'];
+		} else
+			$view_work = '';
+		//dump($applications);
+		return view('reconciliation.new_incoming', [
+								'applications'=>$applications,
+								'counterpartie'=>$counterpartie,
+								'counterparties'=>$counterparties,
+								'viewWork'=>$view_work,
+								'viewWorks'=>$view_works,
+								'search_name' => $search_name,
+								'search_value' => $search_value,
+								'count_paginate' => (int)ceil($application_count/$paginate_count),
+								'prev_page' => $prev_page,
+								'next_page' => $next_page,
+								'page' => $page,
+								'link' => $link
+		]);
+	}
+	
 	public function document($number_application)
 	{
 		$documents = Document::select(['documents.id',
@@ -487,6 +592,44 @@ class ReconciliationController extends Controller
 		$application->id_document_application = null;
 		$application->save();
         return redirect()->route('department.reconciliation');
+    }
+	
+	public function create_new_application($id_application)
+    {
+		if (isset($_GET['method']))
+		{
+			$application = Application::find($id_application);
+			
+			if (($application->is_contract_new_application == null || $application->is_contract_new_application == 0) && ($application->is_rkm_new_application == null || $application->is_rkm_new_application == 0))
+			{
+				$new_application = new NewApplication();
+				$new_application->id_counterpartie_new_application = $application->id_counterpartie_application;
+				$new_application->date_registration_new_application = date('d.m.Y', time());
+				if ($_GET['method'] == 'dk')
+				{
+					$new_application->is_contract_new_application = 1;
+					$new_application->save();
+					$new_application->number_pp_new_application = $new_application->id;
+					$new_application->item_new_application = $application->theme_application;
+					$new_application->number_outgoing_new_application = $application->number_outgoing;
+					$new_application->number_incoming_new_application = $application->number_incoming;
+					$new_application->save();
+					return redirect()->route('new_applications.index');
+				}
+				else if ($_GET['method'] == 'rkm')
+				{
+					$new_application->is_rkm_new_application = 1;
+					$new_application->save();
+					$new_application->number_pp_new_application = $new_application->id;
+					$new_application->item_new_application = $application->theme_application;
+					$new_application->number_outgoing_new_application = $application->number_outgoing;
+					$new_application->number_incoming_new_application = $application->number_incoming;
+					$new_application->save();
+					return redirect()->route('new_applications.index');
+				}
+			}
+		}
+		return redirect()->back()->with('error','Ошибка!');
     }
 	
     /**

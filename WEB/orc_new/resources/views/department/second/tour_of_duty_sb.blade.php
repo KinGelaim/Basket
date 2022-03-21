@@ -47,7 +47,7 @@
 														<select class='form-control {{$errors->has("id_view_work_elements") ? print("inputError ") : print("")}}' id="selView" name='id_view_work_elements' required >
 															<option></option>
 															@foreach($view_work_elements as $view)
-																@if($view->name_view_work_elements == 'сборка' || $view->name_view_work_elements == 'заливка' || $view->name_view_work_elements == 'изготовление')
+																@if($view->name_view_work_elements == 'сборка' || $view->name_view_work_elements == 'заливка' || $view->name_view_work_elements == 'изготовление' || $view->name_view_work_elements == 'сборка, заливка' || $view->name_view_work_elements == 'усиление')
 																	@if(old('id_view_work_elements'))
 																		@if(old('id_view_work_elements') == $view->id)
 																			<option value='{{$view->id}}' selected>{{$view->name_view_work_elements}}</option>
@@ -221,7 +221,7 @@
 														<select class='form-control {{$errors->has("id_view_work_elements") ? print("inputError ") : print("")}}' id="selView" name='id_view_work_elements' required >
 															<option></option>
 															@foreach($view_work_elements as $view)
-																@if($view->name_view_work_elements == 'сборка' || $view->name_view_work_elements == 'заливка' || $view->name_view_work_elements == 'изготовление' || $view->name_view_work_elements == 'сборка, заливка')
+																@if($view->name_view_work_elements == 'сборка' || $view->name_view_work_elements == 'заливка' || $view->name_view_work_elements == 'изготовление' || $view->name_view_work_elements == 'сборка, заливка' || $view->name_view_work_elements == 'усиление')
 																	@if(old('id_view_work_elements'))
 																		@if(old('id_view_work_elements') == $view->id)
 																			<option value='{{$view->id}}' selected>{{$view->name_view_work_elements}}</option>

@@ -13,116 +13,125 @@
 						
 					</div>
 				@endif
-				
+				<style>
+					.row{
+						margin-top: 0px;
+					}
+				</style>
 				<div class="content">
-					<div class="content">
-						<div class="row">
-							<div class="col-md-2">
-								<div class="form-group">
-									<label>Нащ номер контракта</label>
-									<input class='form-control' type='text' value='{{ $contract->number_contract }}' readonly />
-								</div>
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>Номер договора (контракта)</label>
+								<input class='form-control' type='text' value='{{ $contract->number_contract }}' readonly />
 							</div>
-							<div class="col-md-2">
-								<div class="form-group">
-									<label>Номер контракта контрагента</label>
-									<input class='form-control' type='text' value='{{ $contract->number_counterpartie_contract_reestr}}' readonly />
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="sel1">Вид Контракта</span></label>
-									<select class="form-control" id="sel1" disabled>
-										<option>{{$contract->name_view_work}}</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-md-2">
-								<div class="form-group">
-									<label>Исполнитель отдела/цеха</label>
-									<input class='form-control' type='text' value='{{ $contract->executor_contract_reestr}}' readonly />
-								</div>
-							</div>
-							<div class="col-md-2">
-								<label for="sel4">Исполнитель ОУД</span></label>
-								<select class="form-control" id="sel4" disabled>
-									<option>{{$contract->name_executor}}</option>
+						</div>
+						<div class="col-md-4">
+							<label for='sel2'>Сокращенное наименование предприятия</label>
+							<div class="form-group">
+								<select class="form-control" id="sel2" disabled>
+									<option>{{ $contract->name_counterpartie_contract }}</option>
 								</select>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-md-4">
-								<label for='sel2'>Сокращенное наименование предприятия</label>
-								<div class="form-group">
-									<select class="form-control" id="sel2" disabled>
-										<option>{{ $contract->name_counterpartie_contract }}</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class='form-group'>
-									<label for='nameWork1'>Цель заключения Дог./Контр.</label>
-									<textarea id='nameWork1' class='form-control' type="text" style="width: 100%;" rows='1' disabled>{{$contract->name_work_contract}}</textarea>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label>Срок исполнения обязательств</label>
-									<input class='form-control' type='text' value='{{ $contract->date_maturity_reestr}}' readonly />
-								</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Срок исполнения обязательств</label>
+								<input class='form-control' type='text' value='{{ $contract->date_maturity_reestr}}' readonly />
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-md-2">
-								<div class="row">
-									<div class="col-md-9">
-										<div class="form-group">
-											<label>Сумма начальная</label>
-											<input class='form-control' type='text' value='{{ $contract->amount_reestr}}' readonly />
-										</div>
-									</div>
-									<div class="col-md-3">
-										@if($contract->vat_reestr)
-											<input class='form-check-input' name='vat_reestr' style='margin-top: 30px;' type="checkbox" checked disabled />
-										@else
-											<input class='form-check-input' name='vat_reestr' style='margin-top: 30px;' type="checkbox" disabled />
-										@endif
-										<label>НДС</label>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label>Сумма окончательная</label>
-											<input class='form-control' type='text' value='{{ $contract->amount_contract_reestr}}' readonly />
-										</div>
-									</div>
-								</div>
+						<!--
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>Номер контракта контрагента</label>
+								<input class='form-control' type='text' value='{{ $contract->number_counterpartie_contract_reestr}}' readonly />
 							</div>
-							<div class="col-md-7">
-								<div class='row'>
-									<div class="col-md-6">
-										<label>Аванс</label>
-										<textarea class='form-control' type="text" style="width: 100%;" rows='2' readonly >{{$contract->prepayment_order_reestr}}</textarea>
-									</div>
-									<div class="col-md-6">
-										<label>Окончат. расчет</label>
-										<textarea class='form-control' type="text" style="width: 100%;" rows='2' readonly >{{$contract->score_order_reestr}}</textarea>
-									</div>
-								</div>
-								<div class='row'>
-									<div class="col-md-12">
-										<label>Иное</label>
-										<textarea class='form-control' type="text" style="width: 100%;" rows='2' readonly >{{$contract->payment_order_reestr}}</textarea>
-									</div>
-								</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="sel1">Вид Контракта</span></label>
+								<select class="form-control" id="sel1" disabled>
+									<option>{{$contract->name_view_work}}</option>
+								</select>
 							</div>
-							<div class="col-md-3">
-								<label>Контрольный срок исполнения по контракту</label>
-								<textarea class='form-control' type="text" style="width: 100%;" rows='6' readonly >{{$contract->date_control_signing_contract_reestr}}</textarea>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>Исполнитель отдела/цеха</label>
+								<input class='form-control' type='text' value='{{ $contract->executor_contract_reestr}}' readonly />
+							</div>
+						</div>
+						<div class="col-md-2">
+							<label for="sel4">Исполнитель ОУД</span></label>
+							<select class="form-control" id="sel4" disabled>
+								<option>{{$contract->name_executor}}</option>
+							</select>
+						</div>
+						-->
+					</div>
+					<!--
+					<div class="row">
+						<div class="col-md-4">
+							<div class='form-group'>
+								<label for='nameWork1'>Цель заключения Дог./Контр.</label>
+								<textarea id='nameWork1' class='form-control' type="text" style="width: 100%;" rows='1' disabled>{{$contract->name_work_contract}}</textarea>
 							</div>
 						</div>
 					</div>
+					-->
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>Сумма начальная</label>
+								<input class='form-control' type='text' value='{{ $contract->amount_reestr}}' readonly />
+							</div>
+						</div>
+						<div class="col-md-1">
+							@if($contract->vat_reestr)
+								<input class='form-check-input' name='vat_reestr' style='margin-top: 30px;' type="checkbox" checked disabled />
+							@else
+								<input class='form-check-input' name='vat_reestr' style='margin-top: 30px;' type="checkbox" disabled />
+							@endif
+							<label>НДС</label>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>Сумма окончательная</label>
+								<input class='form-control' type='text' value='{{ $contract->amount_contract_reestr}}' readonly />
+							</div>
+						</div>
+						<div class="col-md-7">
+							<div class="form-group">
+								<label>Срок действия контракта</label>
+								<input class='form-control' value='{{ $contract->date_contract_reestr }}' readonly />
+							</div>
+						</div>
+						<!--
+						<div class="col-md-7">
+							<div class='row'>
+								<div class="col-md-6">
+									<label>Аванс</label>
+									<textarea class='form-control' type="text" style="width: 100%;" rows='2' readonly >{{$contract->prepayment_order_reestr}}</textarea>
+								</div>
+								<div class="col-md-6">
+									<label>Окончат. расчет</label>
+									<textarea class='form-control' type="text" style="width: 100%;" rows='2' readonly >{{$contract->score_order_reestr}}</textarea>
+								</div>
+							</div>
+							<div class='row'>
+								<div class="col-md-12">
+									<label>Иное</label>
+									<textarea class='form-control' type="text" style="width: 100%;" rows='2' readonly >{{$contract->payment_order_reestr}}</textarea>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<label>Контрольный срок исполнения по контракту</label>
+							<textarea class='form-control' type="text" style="width: 100%;" rows='6' readonly >{{$contract->date_control_signing_contract_reestr}}</textarea>
+						</div>
+						-->
+					</div>
+					<!--
 					<div class="row">
 						<div class="col-md-2">
 							<div class="form-group">
@@ -153,20 +162,23 @@
 							</div>
 						</div>
 					</div>
+					-->
 					<!-- РАЗДЕЛИТЕЛЬ -->
 					<div class='row'>
 						<div class="col-md-12">
-							<hr style='border-color: black;'/>
+							<hr style='border-color: black; margin-top: 5px;'/>
 						</div>
 					</div>
 					<!-- ОБЯЗАТЕЛЬСТВА -->
-					@if(Auth::User()->hasRole()->role != 'Администрация')
-						<button id='editMainContent' class='btn btn-primary' style='float: right;' onclick="$('#mainContent').css('display', 'none');$(this).css('display','none');$('#cancelEdit').css('display', 'block');$('#editContent').css('display', 'block');">Изменить исполнение контракта</button>
-						<button id='cancelEdit' class='btn btn-primary' style='float: right; display: none;' onclick="$('#editContent').css('display', 'none');$(this).css('display','none');$('#editMainContent').css('display', 'block');$('#mainContent').css('display', 'block');">Отменить изменения исполнение контракта</button>
-					@endif
 					<div class='row'>
-						<div class="col-md-12">
+						<div class="col-md-10">
 							<h5 style='text-align: center;'><b>Исполнение Контракта</b></h5>
+						</div>
+						<div class="col-md-2">
+							@if(Auth::User()->hasRole()->role != 'Администрация')
+								<button id='editMainContent' class='btn btn-primary' style='float: right;' onclick="$('#mainContent').css('display', 'none');$(this).css('display','none');$('#cancelEdit').css('display', 'block');$('#editContent').css('display', 'block');">Изменить исполнение контракта</button>
+								<button id='cancelEdit' class='btn btn-primary' style='float: right; display: none;' onclick="$('#editContent').css('display', 'none');$(this).css('display','none');$('#editMainContent').css('display', 'block');$('#mainContent').css('display', 'block');">Отменить изменения исполнение контракта</button>
+							@endif
 						</div>
 					</div>
 					<!-- ОБЕСПЕЧЕНИЕ ЗАЯВКИ И ОБЕСПЕЧЕНИЕ ИСПОЛНЕНИЯ -->
@@ -533,6 +545,7 @@
 							<div class="col-md-1">
 							</div>
 							<div class="col-md-3">
+								<!--
 								<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
 									<thead>
 										<tr>
@@ -547,6 +560,7 @@
 										</tr>
 									</tbody>
 								</table>
+								-->
 							</div>
 						</div>
 					</div>
@@ -700,6 +714,7 @@
 								<div class="col-md-1">
 								</div>
 								<div class="col-md-3">
+									<!--
 									<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
 										<thead>
 											<tr>
@@ -714,6 +729,7 @@
 											</tr>
 										</tbody>
 									</table>
+									-->
 								</div>
 							</div>
 							<div class='row'>

@@ -56,6 +56,10 @@ class SecondDepartmentActController extends Controller
 		$act->fill(['id_second_tour' => $id_second_tour,
 					'number_act' => $request['number_act'],
 					'date_act' => $request['date_act'],
+					'number_outgoing_act' => $request['number_outgoing_act'],
+					'date_outgoing_act' => $request['date_outgoing_act'],
+					'number_incoming_act' => $request['number_incoming_act'],
+					'date_incoming_act' => $request['date_incoming_act'],
 					'amount_act' => $request['amount_act']
 		]);
 		if($request['amount_act'])
@@ -76,6 +80,10 @@ class SecondDepartmentActController extends Controller
 		$act->fill(['id_second_sb_tour' => $id_second_tour,
 					'number_act' => $request['number_act'],
 					'date_act' => $request['date_act'],
+					'number_outgoing_act' => $request['number_outgoing_act'],
+					'date_outgoing_act' => $request['date_outgoing_act'],
+					'number_incoming_act' => $request['number_incoming_act'],
+					'date_incoming_act' => $request['date_incoming_act'],
 					'amount_act' => $request['amount_act']
 		]);
 		if($request['amount_act'])
@@ -96,6 +104,10 @@ class SecondDepartmentActController extends Controller
 		$act->fill(['id_second_us_tour' => $id_second_tour,
 					'number_act' => $request['number_act'],
 					'date_act' => $request['date_act'],
+					'number_outgoing_act' => $request['number_outgoing_act'],
+					'date_outgoing_act' => $request['date_outgoing_act'],
+					'number_incoming_act' => $request['number_incoming_act'],
+					'date_incoming_act' => $request['date_incoming_act'],
 					'amount_act' => $request['amount_act']
 		]);
 		if($request['amount_act'])
@@ -116,6 +128,10 @@ class SecondDepartmentActController extends Controller
 		$act->fill(['id_contract' => $id_contract,
 					'number_act' => $request['number_act'],
 					'date_act' => $request['date_act'],
+					'number_outgoing_act' => $request['number_outgoing_act'],
+					'date_outgoing_act' => $request['date_outgoing_act'],
+					'number_incoming_act' => $request['number_incoming_act'],
+					'date_incoming_act' => $request['date_incoming_act'],
 					'amount_act' => $request['amount_act']
 		]);
 		if($request['amount_act'])
@@ -190,6 +206,10 @@ class SecondDepartmentActController extends Controller
 		$act = SecondDepartmentAct::findOrFail($id_second_act);
 		$act->fill(['number_act' => $request['number_act'],
 					'date_act' => $request['date_act'],
+					'number_outgoing_act' => $request['number_outgoing_act'],
+					'date_outgoing_act' => $request['date_outgoing_act'],
+					'number_incoming_act' => $request['number_incoming_act'],
+					'date_incoming_act' => $request['date_incoming_act'],
 					'amount_act' => $request['amount_act'],
 		]);
 		if($request['amount_act'])

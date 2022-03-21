@@ -69,261 +69,236 @@
 						<div class="content">
 							<form method='POST' action="{{route('department.ekonomic.update_reestr', $contract->id)}}">
 								{{csrf_field()}}
-								<div class="row border-top border-bottom border-left border-right">
-									<div class="col-md-2 border-top border-left border-bottom">
-										<label>Контрагент</label>
-										<div class="form-group">
-											<select id="sel4" class='form-control select_counterpartie_reestr {{$errors->has("id_counterpartie_contract") ? print("inputError ") : print("")}}' name='id_counterpartie_contract' required {{$is_disabled}}>
-												@if($is_disabled == '')
-													<option></option>
-												@endif
-												<option value='{{$contract->id_counterpartie_contract}}' full_name='{{$contract->full_name_counterpartie_contract}}' inn='{{$contract->inn_counterpartie_contract}}' selected>{{$contract->name_counterpartie_contract}}</option>
-											</select>
-											@if($errors->has('id_counterpartie_contract'))
-												<label class='msgError'>{{$errors->first('id_counterpartie_contract')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-1 border-top border-bottom">
-										<div class="form-group">
-											<button type='button' data-toggle="modal" data-target="#chose_counterpartie" class="btn btn-primary" style='margin-top: 27px;'>Выбрать</button>
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom">
-										<div class="form-group">
-											<label>Внимание!</label>
-											<input class='form-control' style='color:red; text-align:center;' type='text' value='<?php 
-												if($reestr->date_registration_project_reestr)
-													if(!$reestr->date_signing_contract_reestr){
-														if(time() - strtotime($reestr->date_registration_project_reestr) > 2592000)
-															echo 'Не подписан более 30 дней!';
-													}else
-														if(strtotime($reestr->date_signing_contract_reestr) - strtotime($reestr->date_registration_project_reestr) > 2592000)
-															echo 'Не был подписан более 30 дней!';
-											?>' readonly />
-										</div>
-									</div>
-									<div class="col-md-3 border-top border-bottom border-right">
-										<div class="col-md-7">
-											<div class="form-group">
-												<label for='numberContract'>Номер договора</label>
-												<input id='numberContract' class='form-control {{$errors->has("number_contract") ? print("inputError ") : print("")}}' name='number_contract' type='text' value='{{old("number_contract") ? old("number_contract") : $contract->number_contract}}' readonly />
-												@if($errors->has('number_contract'))
-													<label class='msgError'>{{$errors->first('number_contract')}}</label>
-												@endif
+								<div class="row">
+									<div class='col-md-9 border-top border-bottom border-left border-right'>
+										<div class='row'>
+											<div class="col-md-4">
+												<label>Контрагент</label>
+												<div class="form-group">
+													<select id="sel4" class='form-control select_counterpartie_reestr {{$errors->has("id_counterpartie_contract") ? print("inputError ") : print("")}}' name='id_counterpartie_contract' required {{$is_disabled}}>
+														@if($is_disabled == '')
+															<option></option>
+														@endif
+														<option value='{{$contract->id_counterpartie_contract}}' full_name='{{$contract->full_name_counterpartie_contract}}' inn='{{$contract->inn_counterpartie_contract}}' selected>{{$contract->name_counterpartie_contract}}</option>
+													</select>
+													@if($errors->has('id_counterpartie_contract'))
+														<label class='msgError'>{{$errors->first('id_counterpartie_contract')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class="col-md-1">
+												<div class="form-group">
+													<button type='button' data-toggle="modal" data-target="#chose_counterpartie" class="btn btn-primary" style='margin-top: 27px;'>Выбрать</button>
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label>Внимание!</label>
+													<input class='form-control' style='color:red; text-align:center;' type='text' value='<?php 
+														if($reestr->date_registration_project_reestr)
+															if(!$reestr->date_signing_contract_reestr){
+																if(time() - strtotime($reestr->date_registration_project_reestr) > 2592000)
+																	echo 'Не подписан более 30 дней!';
+															}else
+																if(strtotime($reestr->date_signing_contract_reestr) - strtotime($reestr->date_registration_project_reestr) > 2592000)
+																	echo 'Не был подписан более 30 дней!';
+													?>' readonly />
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="col-md-7">
+													<div class="form-group">
+														<label for='numberContract'>Номер договора</label>
+														<input id='numberContract' class='form-control {{$errors->has("number_contract") ? print("inputError ") : print("")}}' name='number_contract' type='text' value='{{old("number_contract") ? old("number_contract") : $contract->number_contract}}' readonly />
+														@if($errors->has('number_contract'))
+															<label class='msgError'>{{$errors->first('number_contract')}}</label>
+														@endif
+													</div>
+												</div>
+												<div class="col-md-5" style='text-align: center;'>
+													<div class='form-group' style='margin-top: 27px;'>
+														@if(isset($prev_contract))
+															@if(isset($_GET['isSmallPage']))
+																<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}?isSmallPage=true" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+															@else
+																<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+															@endif
+														@else
+															<button class='btn btn-primary' title='Назад' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+														@endif
+														@if(isset($next_contract))
+															@if(isset($_GET['isSmallPage']))
+																<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}?isSmallPage=true" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+															@else
+																<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+															@endif
+														@else
+															<button class='btn btn-primary' title='Вперед' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+														@endif
+													</div>
+												</div>
 											</div>
 										</div>
-										<div class="col-md-5" style='text-align: center;'>
-											<div class='form-group' style='margin-top: 27px;'>
-												@if(isset($prev_contract))
-													@if(isset($_GET['isSmallPage']))
-														<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}?isSmallPage=true" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-													@else
-														<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-													@endif
-												@else
-													<button class='btn btn-primary' title='Назад' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-												@endif
-												@if(isset($next_contract))
-													@if(isset($_GET['isSmallPage']))
-														<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}?isSmallPage=true" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-													@else
-														<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-													@endif
-												@else
-													<button class='btn btn-primary' title='Вперед' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-												@endif
+									</div>
+									<div class='col-md-3 border-bottom border-right border-top'>
+										<div class='row'>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='amount_contract_reestr' class='small-text'>Сумма (окончательная)</label>
+													<input id='amount_contract_reestr' class='form-control check-number' name='amount_contract_reestr' type='text' value='{{old("amount_contract_reestr") ? old("amount_contract_reestr") : $reestr->amount_contract_reestr}}' {{$is_disabled}}/>
+												</div>
 											</div>
-										</div>
-									</div>
-									<div class="col-md-2 border-bottom border-top">
-										<div class="form-group">
-											<label for='amount_contract_reestr'>Сумма (окончательная)</label>
-											<input id='amount_contract_reestr' class='form-control check-number' name='amount_contract_reestr' type='text' value='{{old("amount_contract_reestr") ? old("amount_contract_reestr") : $reestr->amount_contract_reestr}}' {{$is_disabled}}/>
-										</div>
-									</div>
-									<div class="col-md-2 border-bottom border-right border-top">
-										<div class="form-group ">
-											<label for='amount_invoice_reestr'>Сумма по счетам</label>
-											<input id='amount_invoice_reestr' class='form-control check-number' name='amount_invoice_reestr' type='text' value='{{$reestr->amount_invoice_reestr}}' disabled />
-										</div>
-									</div>
-								</div>
-								<div class="row border-right border-left">
-									<div class="col-md-1 border-top border-bottom">
-										<div class="form-group">
-											<label for='number_pp'>№ п/п</label>
-											<input id='number_pp' class='change_contract_number form-control {{$errors->has("number_pp") ? print("inputError ") : print("")}}' name='number_pp' type='text' value='{{old("number_pp") ? old("number_pp") : (strlen($contract->number_contract) > 0 ? explode("‐",$contract->number_contract)[0] : "")}}' required/>
-											@if($errors->has('number_pp'))
-												<label class='msgError'>{{$errors->first('number_pp')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-1 border-top border-bottom">
-										<div class="form-group">
-											<label for='index_dep' style='font-size: 12px;'>Индекс подразд.</label>
-											<select id='index_dep' class='change_contract_number form-control {{$errors->has("index_dep") ? print("inputError ") : print("")}}' name='index_dep' type='text' value='{{old("index_dep")}}' required>
-												@if(old('index_dep'))
-													<option>{{old('index_dep')}}</option>
-												@endif
-												<option></option>
-												@foreach($departments as $department)
-													@if(count(explode("‐",$contract->number_contract))>1)
-														@if(explode("‐",$contract->number_contract)[1] == $department->index_department)
-															<option value='{{$department->index_department}}' selected>{{$department->index_department}} {{$department->name_department}}</option>
-														@else
-															<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
-														@endif
-													@else
-														<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
-													@endif
-												@endforeach
-											</select>
-											@if($errors->has('index_dep'))
-												<label class='msgError'>{{$errors->first('index_dep')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-1 border-right border-top border-bottom">
-										<div class="form-group">
-											<label for='year_contract'>Год</label>
-											<input id='year_contract' class='change_contract_number form-control {{$errors->has("year_contract") ? print("inputError ") : print("")}}' name='year_contract' type='text' value='{{old("year_contract") ? old("year_contract") : $contract->year_contract}}' required />
-											@if($errors->has('year_contract'))
-												<label class='msgError'>{{$errors->first('year_contract')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom">
-										<div class="form-group">
-											<label for='executor_contract_reestr'>Исполнитель по Дог./Контр.</label>
-											<select class='form-control' name='executor_contract_reestr' {{$is_disabled}}>
-												<option></option>
-												@if(old('executor_reestr'))
-													@foreach($curators_sip as $in_curators)
-														@if(old('executor_contract_reestr') == $in_curators->id)
-															<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
-														@else
-															<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
-														@endif
-													@endforeach
-												@else
-													@foreach($curators_sip as $in_curators)
-														@if($reestr->executor_contract_reestr == $in_curators->id)
-															<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
-														@else
-															<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
-														@endif
-													@endforeach
-												@endif
-											</select>
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom">
-										<div class="form-group">
-											<label for='executor_reestr'>Исполнитель ОУД</label>
-											<select class='form-control' name='executor_reestr' {{$is_disabled}}>
-												@if($is_disabled == '')
-													<option></option>
-												@endif
-												@if($is_disabled == '')
-													@if(old('executor_reestr'))
-														@foreach($curators as $in_curators)
-															@if(old('executor_reestr') == $in_curators->id)
-																<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
-															@else
-																<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
-															@endif
-														@endforeach
-													@else
-														@foreach($curators as $in_curators)
-															@if($reestr->executor_reestr == $in_curators->id)
-																<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
-															@else
-																<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
-															@endif
-														@endforeach
-													@endif
-												@else
-													@foreach($curators as $in_curators)
-														@if($reestr->executor_reestr == $in_curators->id)
-															<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
-														@endif
-													@endforeach
-												@endif
-											</select>
-											@if($errors->has('executor_reestr'))
-												<label class='msgError'>{{$errors->first('executor_reestr')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-left border-top border-bottom">
-										<div class="form-group">
-											<label for='date_save_contract_reestr' style='font-size: 12px;'>Дата сдачи Дог./Контр. на хранение</label>
-											<input id='date_save_contract_reestr' class='datepicker form-control {{$errors->has("date_save_contract_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_reestr' value='{{old("date_save_contract_reestr") ? old("date_save_contract_reestr") : $reestr->date_save_contract_reestr}}'/>
-											@if($errors->has('date_save_contract_reestr'))
-												<label class='msgError'>{{$errors->first('date_save_contract_reestr')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-top">
-										<div class="form-group">
-											<label for='place_save_contract_reestr'>Место хранения</label>
-											<input id='place_save_contract_reestr' class='form-control {{$errors->has("place_save_contract_reestr") ? print("inputError ") : print("")}}' name='place_save_contract_reestr' value='{{old("place_save_contract_reestr") ? old("place_save_contract_reestr") : $reestr->place_save_contract_reestr}}'/>
-											@if($errors->has('place_save_contract'))
-												<label class='msgError'>{{$errors->first('place_save_contract')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-1 border-top">
-										<div class="form-group">
-											<label for='sel6' style='font-size: 12px;'>Тип документа</label>
-											<select id="sel6" class='form-control {{$errors->has("type_document_reestr") ? print("inputError ") : print("")}}' name='type_document_reestr'>
-												<option></option>
-												@foreach($type_documents as $type_document)
-													@if(old('type_document_reestr'))
-														@if(old('type_document_reestr') == $type_document->id)
-															<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
-														@else
-															<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
-														@endif
-													@else
-														@if($reestr->type_document_reestr == $type_document->id)
-															<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
-														@else
-															<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
-														@endif
-													@endif
-												@endforeach
-											</select>
+											<div class="col-md-6">
+												<div class="form-group ">
+													<label for='amount_invoice_reestr'>Сумма по счетам</label>
+													<input id='amount_invoice_reestr' class='form-control check-number' name='amount_invoice_reestr' type='text' value='{{$reestr->amount_invoice_reestr}}' disabled />
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 								<div class='row'>
-									<div class="col-md-9">
+									<div class='col-md-7'>
 										<div class='row'>
-											<div class="col-md-9">
+											<div class='col-md-6 border-left border-right border-top border-bottom'>
 												<div class='row'>
-													<div class="col-md-4 border-top border-left">
+													<div class="col-md-4">
+														<div class="form-group">
+															<label for='number_pp'>№ п/п</label>
+															<input id='number_pp' class='change_contract_number form-control {{$errors->has("number_pp") ? print("inputError ") : print("")}}' name='number_pp' type='text' value='{{old("number_pp") ? old("number_pp") : (strlen($contract->number_contract) > 0 ? explode("‐",$contract->number_contract)[0] : "")}}' required/>
+															@if($errors->has('number_pp'))
+																<label class='msgError'>{{$errors->first('number_pp')}}</label>
+															@endif
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group">
+															<label for='index_dep' style='font-size: 12px;'>Индекс подразд.</label>
+															<select id='index_dep' class='change_contract_number form-control {{$errors->has("index_dep") ? print("inputError ") : print("")}}' name='index_dep' type='text' value='{{old("index_dep")}}' required>
+																@if(old('index_dep'))
+																	<option>{{old('index_dep')}}</option>
+																@endif
+																<option></option>
+																@foreach($departments as $department)
+																	@if(count(explode("‐",$contract->number_contract)) > 1)
+																		@if(explode("‐",$contract->number_contract)[1] == $department->index_department)
+																			<option value='{{$department->index_department}}' selected>{{$department->index_department}} {{$department->name_department}}</option>
+																		@else
+																			<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
+																		@endif
+																	@else
+																		<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
+																	@endif
+																@endforeach
+															</select>
+															@if($errors->has('index_dep'))
+																<label class='msgError'>{{$errors->first('index_dep')}}</label>
+															@endif
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group">
+															<label for='year_contract'>Год</label>
+															<input id='year_contract' class='change_contract_number form-control {{$errors->has("year_contract") ? print("inputError ") : print("")}}' name='year_contract' type='text' value='{{old("year_contract") ? old("year_contract") : $contract->year_contract}}' required />
+															@if($errors->has('year_contract'))
+																<label class='msgError'>{{$errors->first('year_contract')}}</label>
+															@endif
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class='col-md-6 border-left border-right border-top border-bottom'>
+												<div class='row'>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for='executor_contract_reestr' class='small-text'>Исполнитель по Дог./Контр.</label>
+															<select class='form-control' name='executor_contract_reestr' {{$is_disabled}}>
+																<option></option>
+																@if(old('executor_reestr'))
+																	@foreach($curators_sip as $in_curators)
+																		@if(old('executor_contract_reestr') == $in_curators->id)
+																			<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
+																		@else
+																			<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
+																		@endif
+																	@endforeach
+																@else
+																	@foreach($curators_sip as $in_curators)
+																		@if($reestr->executor_contract_reestr == $in_curators->id)
+																			<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
+																		@else
+																			<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
+																		@endif
+																	@endforeach
+																@endif
+															</select>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for='executor_reestr'>Исполнитель ОУД</label>
+															<select class='form-control' name='executor_reestr' {{$is_disabled}}>
+																@if($is_disabled == '')
+																	<option></option>
+																@endif
+																@if($is_disabled == '')
+																	@if(old('executor_reestr'))
+																		@foreach($curators as $in_curators)
+																			@if(old('executor_reestr') == $in_curators->id)
+																				<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
+																			@else
+																				<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
+																			@endif
+																		@endforeach
+																	@else
+																		@foreach($curators as $in_curators)
+																			@if($reestr->executor_reestr == $in_curators->id)
+																				<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
+																			@else
+																				<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
+																			@endif
+																		@endforeach
+																	@endif
+																@else
+																	@foreach($curators as $in_curators)
+																		@if($reestr->executor_reestr == $in_curators->id)
+																			<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
+																		@endif
+																	@endforeach
+																@endif
+															</select>
+															@if($errors->has('executor_reestr'))
+																<label class='msgError'>{{$errors->first('executor_reestr')}}</label>
+															@endif
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12 border-left border-top border-right border-bottom'>
+												<div class='row'>
+													<div class="col-md-4">
 														<div class="form-group">
 															<label for='date_contract_on_first_reestr'>Дата Дог./Контр. на 1 л.</label>
-															<input id='date_contract_on_first_reestr' class='form-control {{$errors->has("date_contract_on_first_reestr") ? print("inputError ") : print("")}}' name='date_contract_on_first_reestr' value='{{old("date_contract_on_first_reestr") ? old("date_contract_on_first_reestr") : $reestr->date_contract_on_first_reestr}}'/>
+															<input id='date_contract_on_first_reestr' class='datepicker form-control {{$errors->has("date_contract_on_first_reestr") ? print("inputError ") : print("")}}' name='date_contract_on_first_reestr' value='{{old("date_contract_on_first_reestr") ? old("date_contract_on_first_reestr") : $reestr->date_contract_on_first_reestr}}'/>
 															@if($errors->has('date_contract_on_first_reestr'))
 																<label class='msgError'>{{$errors->first('date_contract_on_first_reestr')}}</label>
 															@endif
 														</div>
 													</div>
-													<div class="col-md-4 border-top">
+													<div class="col-md-4">
 														<div class="form-group">
-															<label for='date_signing_contract_reestr'>Дата подписания ФКП "НТИИМ"</label>
+															<label for='date_signing_contract_reestr' style='font-size: 11px;'>Дата подписания ф-л "НТИИМ"(ФКП "НТИИМ")</label>
 															<input id='date_signing_contract_reestr' class='datepicker form-control {{$errors->has("date_signing_contract_reestr") ? print("inputError ") : print("")}}' name='date_signing_contract_reestr' value='{{old("date_signing_contract_reestr") ? old("date_signing_contract_reestr") : $reestr->date_signing_contract_reestr}}' {{$is_disabled}}/>
 															@if($errors->has('date_signing_contract_reestr'))
 																<label class='msgError'>{{$errors->first('date_signing_contract_reestr')}}</label>
 															@endif
 														</div>
 													</div>
-													<div class="col-md-4 border-top">
+													<div class="col-md-4">
 														<div class="form-group">
-															<label for='date_control_signing_contract_reestr' style='font-size: 12px;'>Контрольный срок подписания Дог./Контр.</label>
+															<label for='date_control_signing_contract_reestr' class='small-text'>Контрольный срок подписания Дог./Контр.</label>
 															<input id='date_control_signing_contract_reestr' class='datepicker form-control {{$errors->has("date_control_signing_contract_reestr") ? print("inputError ") : print("")}}' name='date_control_signing_contract_reestr' value='{{old("date_control_signing_contract_reestr") ? old("date_control_signing_contract_reestr") : $reestr->date_control_signing_contract_reestr}}' {{$is_disabled}}/>
 															@if($errors->has('date_control_signing_contract_reestr'))
 																<label class='msgError'>{{$errors->first('date_control_signing_contract_reestr')}}</label>
@@ -332,7 +307,7 @@
 													</div>
 												</div>
 												<div class='row'>
-													<div class="col-md-4 border-left border-bottom">
+													<div class="col-md-4">
 														<div class="form-group">
 															<label id='label_date_registration_project_reestr' for='date_registration_project_reestr'>Дата регистрации проекта</label>
 															<!--@if(old('application_reestr'))
@@ -351,7 +326,7 @@
 															@endif
 														</div>
 													</div>
-													<div class="col-md-4 border-bottom">
+													<div class="col-md-4">
 														<div class="form-group">
 															<label for='date_signing_contract_counterpartie_reestr'>Дата подписания Контрагентом</label>
 															<input id='date_signing_contract_counterpartie_reestr' class='datepicker form-control {{$errors->has("date_signing_contract_counterpartie_reestr") ? print("inputError ") : print("")}}' name='date_signing_contract_counterpartie_reestr' value='{{old("date_signing_contract_counterpartie_reestr") ? old("date_signing_contract_counterpartie_reestr") : $reestr->date_signing_contract_counterpartie_reestr}}' {{$is_disabled}}/>
@@ -360,7 +335,7 @@
 															@endif
 														</div>
 													</div>
-													<div class="col-md-4 border-bottom">
+													<div class="col-md-4">
 														<div class="form-group">
 															<label for='date_entry_into_force_reestr'>Дата вступления Дог./Контр. в силу</label>
 															<input id='date_entry_into_force_reestr' class='datepicker form-control {{$errors->has("date_entry_into_force_reestr") ? print("inputError ") : print("")}}' name='date_entry_into_force_reestr' value='{{old("date_entry_into_force_reestr") ? old("date_entry_into_force_reestr") : $reestr->date_entry_into_force_reestr}}' {{$is_disabled}}/>
@@ -371,48 +346,71 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-md-3">
-												<div class='row'>
-													<div class="col-md-6 border-top">
-														<div class="form-group">
-															<label for='protocols_reestr'>Протоколы</label>
-															<input id='protocols_reestr' class='form-control {{$errors->has("protocols_reestr") ? print("inputError ") : print("")}}' name='protocols_reestr' value='{{$big_date_protocol != null ? $big_date_protocol : ""}}' readonly />
-														</div>
-													</div>
-													<div class="col-md-6 border-top border-right">
-														<div class="form-group">
-															<label for='add_agreements_reestr'>ДС</label>
-															<input id='add_agreements_reestr' class='form-control {{$errors->has("add_agreements_reestr") ? print("inputError ") : print("")}}' name='add_agreements_reestr' value='{{$big_date_add_agreement != null ? $big_date_add_agreement : ""}}' readonly />
-														</div>
-													</div>
+										</div>
+									</div>
+									<div class='col-md-5 border-left border-top border-right border-bottom'>
+										<div class='row'>
+											<div class="col-md-5">
+												<div class="form-group">
+													<label for='date_save_contract_reestr' style='font-size: 11px;'>Дата сдачи Д/К на хранение оригинала</label>
+													<input id='date_save_contract_reestr' class='datepicker form-control {{$errors->has("date_save_contract_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_reestr' value='{{old("date_save_contract_reestr") ? old("date_save_contract_reestr") : $reestr->date_save_contract_reestr}}'/>
+													@if($errors->has('date_save_contract_reestr'))
+														<label class='msgError'>{{$errors->first('date_save_contract_reestr')}}</label>
+													@endif
 												</div>
-												<div class='row'>
-													<div class="col-md-6 border-bottom">
-														<div class="form-group">
-															<label for='sel9'>Согл./Не согл.</label>
-															<select id="sel9" class='form-control {{$errors->has("reconciliation_protocol_reestr") ? print("inputError ") : print("")}}' name='reconciliation_protocol_reestr' {{$is_disabled != '' ? 'disabled' : ''}}>
-																<option value='0' {{$reestr->reconciliation_protocol_reestr == 0 ? 'selected' : ''}}></option>
-																<option value='1' {{$reestr->reconciliation_protocol_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
-																<option value='2' {{$reestr->reconciliation_protocol_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
-															</select>
-														</div>
-													</div>
-													<div class="col-md-6 border-bottom border-right">
-														<div class="form-group">
-															<label for='sel10'>Согл./Не согл.</label>
-															<select id="sel10" class='form-control {{$errors->has("reconciliation_agreement_reestr") ? print("inputError ") : print("")}}' name='reconciliation_agreement_reestr' {{$is_disabled != '' ? 'disabled' : ''}}>
-																<option value='0' {{$reestr->reconciliation_agreement_reestr == 0 ? 'selected' : ''}}></option>
-																<option value='1' {{$reestr->reconciliation_agreement_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
-																<option value='2' {{$reestr->reconciliation_agreement_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
-															</select>
-														</div>
-													</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for='place_save_contract_reestr'>Место хранения</label>
+													<input id='place_save_contract_reestr' class='form-control {{$errors->has("place_save_contract_reestr") ? print("inputError ") : print("")}}' name='place_save_contract_reestr' value='{{old("place_save_contract_reestr") ? old("place_save_contract_reestr") : $reestr->place_save_contract_reestr}}'/>
+													@if($errors->has('place_save_contract'))
+														<label class='msgError'>{{$errors->first('place_save_contract')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for='sel6' style='font-size: 12px;'>Тип документа</label>
+													<select id="sel6" class='form-control {{$errors->has("type_document_reestr") ? print("inputError ") : print("")}}' name='type_document_reestr'>
+														<option></option>
+														@foreach($type_documents as $type_document)
+															@if(old('type_document_reestr'))
+																@if(old('type_document_reestr') == $type_document->id)
+																	<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
+																@else
+																	<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
+																@endif
+															@else
+																@if($reestr->type_document_reestr == $type_document->id)
+																	<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
+																@else
+																	<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
+																@endif
+															@endif
+														@endforeach
+													</select>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-md-3">
 										<div class='row'>
+											<div class="col-md-5">
+												<div class="form-group">
+													<label for='date_save_contract_el_reestr' style='font-size: 12px;'>Дата сдачи Д/К на хранение скана</label>
+													<input id='date_save_contract_el_reestr' class='datepicker form-control {{$errors->has("date_save_contract_el_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_el_reestr' value='{{old("date_save_contract_el_reestr") ? old("date_save_contract_el_reestr") : $reestr->date_save_contract_el_reestr}}'/>
+													@if($errors->has('date_save_contract_el_reestr'))
+														<label class='msgError'>{{$errors->first('date_save_contract_el_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for='count_save_contract_reestr'>Срок хранения по</label>
+													<input id='count_save_contract_reestr' class='datepicker form-control {{$errors->has("count_save_contract_reestr") ? print("inputError ") : print("")}}' name='count_save_contract_reestr' value='{{old("count_save_contract_reestr") ? old("count_save_contract_reestr") : $reestr->count_save_contract_reestr}}'/>
+													@if($errors->has('count_save_contract_reestr'))
+														<label class='msgError'>{{$errors->first('count_save_contract_reestr')}}</label>
+													@endif
+												</div>
+											</div>
 											<div class="col-md-3">
 												<div class="form-group">
 													<label class='form-check-label' for='break'>ОТКАЗ</label>
@@ -428,38 +426,50 @@
 												</div>
 												<div class="form-group">
 													<label class='form-check-label' for='archive_contract'>АРХИВ</label>
-													@if(old('archive_contract'))
-														<input id='archive_contract' class='form-check-input' name='archive_contract' type="checkbox" checked {{$is_disabled}}/>
-													@else
-														@if($contract->archive_contract == 1)
-															<input id='archive_contract' class='form-check-input' name='archive_contract' type="checkbox" checked {{$is_disabled}}/>
+													@if(Auth::User()->hasRole()->role != 'Планово-экономический отдел')
+														@if(old('archive_contract'))
+															<input id='archive_contract' class='form-check-input' name='archive_contract' type="checkbox" checked {{$is_disabled}} />
 														@else
-															<input id='archive_contract' class='form-check-input' name='archive_contract' type="checkbox" {{$is_disabled}}/>
+															@if($contract->archive_contract == 1)
+																<input id='archive_contract' class='form-check-input' name='archive_contract' type="checkbox" checked {{$is_disabled}} />
+															@else
+																<input id='archive_contract' class='form-check-input' name='archive_contract' type="checkbox" {{$is_disabled}} />
+															@endif
+														@endif
+													@else
+														@if(old('archive_contract'))
+															<input id='archive_contract' class='form-check-input' name='archive_contract' type="checkbox" checked disabled />
+														@else
+															@if($contract->archive_contract == 1)
+																<input id='archive_contract' class='form-check-input' name='archive_contract' type="checkbox" checked disabled />
+															@else
+																<input id='archive_contract' class='form-check-input' name='archive_contract' type="checkbox" disabled />
+															@endif
 														@endif
 													@endif
 												</div>
 											</div>
-											<div class="col-md-9 border-right">
+										</div>
+										<div class='row'>
+											<div class="col-md-5">
 												<div class="form-group">
-													<label for='document_success_renouncement_reestr'>Документ, подтверждающий отказ</label>
+													<label for='document_success_renouncement_reestr' class='small-text'>Документ, подтверждающий отказ</label>
 													<input id='document_success_renouncement_reestr' class='form-control {{$errors->has("document_success_renouncement_reestr") ? print("inputError ") : print("")}}' name='document_success_renouncement_reestr' value='{{old("document_success_renouncement_reestr") ? old("document_success_renouncement_reestr") : $contract->document_success_renouncement_reestr}}' {{$is_disabled}}/>
 													@if($errors->has('document_success_renouncement_reestr'))
 														<label class='msgError'>{{$errors->first('document_success_renouncement_reestr')}}</label>
 													@endif
 												</div>
 											</div>
-										</div>
-										<div class='row'>
-											<div class="col-md-6 border-bottom">
+											<div class="col-md-2">
 												<div class="form-group">
-													<label for='date_renouncement_contract'>Дата отказа</label>
+													<label for='date_renouncement_contract' class='small-text'>Дата отказа</label>
 													<input id='date_renouncement_contract' class='form-control datepicker {{$errors->has("date_renouncement_contract") ? print("inputError ") : print("")}}' name='date_renouncement_contract' value='{{old("date_renouncement_contract") ? old("date_renouncement_contract") : $contract->date_renouncement_contract}}' {{$is_disabled}}/>
 													@if($errors->has('date_renouncement_contract'))
 														<label class='msgError'>{{$errors->first('date_renouncement_contract')}}</label>
 													@endif
 												</div>
 											</div>
-											<div class="col-md-6 border-bottom border-right">
+											<div class="col-md-5">
 												<div class="form-group">
 													<label for='number_aftair_renouncement_reestr'>№ дела</label>
 													<input id='number_aftair_renouncement_reestr' class='form-control {{$errors->has("number_aftair_renouncement_reestr") ? print("inputError ") : print("")}}' name='number_aftair_renouncement_reestr' value='{{old("number_aftair_renouncement_reestr") ? old("number_aftair_renouncement_reestr") : $contract->number_aftair_renouncement_reestr}}' {{$is_disabled}}/>
@@ -471,102 +481,48 @@
 										</div>
 									</div>
 								</div>
-								<div class='row'>
-									<div class="col-md-2 border-bottom border-left border-top">
-										<div class="form-group">
-											<label for="sel3">Вид договора</span></label>
-											<select id="sel3" class='form-control {{$errors->has("id_view_contract") ? print("inputError ") : print("")}}' name='id_view_contract' required {{$is_disabled}}>
-												@if($is_disabled == '')
-													<option></option>
-												@endif
-												@if($viewContracts)
-													@foreach($viewContracts as $viewContract)
-														@if($is_disabled == '')
-															@if(old('id_view_contract'))
-																@if(old('id_view_contract') == $viewContract->id)
-																	<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
-																@else
-																	<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
-																@endif
-															@else
-																@if($reestr->id_view_contract == $viewContract->id)
-																	<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
-																@else
-																	<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
-																@endif
-															@endif
-														@else
-															@if($reestr->id_view_contract == $viewContract->id)
-																<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
-															@endif
-														@endif
-													@endforeach
-												@endif
-											</select>
-											@if($errors->has('id_view_contract'))
-												<label class='msgError'>{{$errors->first('id_view_contract')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom border-left">
-										<div class="form-group">
-											<label for="sel5">Дата регистрации заявки</span></label>
-											<input id='date_registration_application_reestr' class='datepicker form-control {{$errors->has("date_registration_application_reestr") ? print("inputError ") : print("")}}' name='date_registration_application_reestr' value='{{old("date_registration_application_reestr") ? old("date_registration_application_reestr") : $reestr->date_registration_application_reestr}}' {{$is_disabled}}/>
-											@if($errors->has('date_registration_application_reestr'))
-												<label class='msgError'>{{$errors->first('date_registration_application_reestr')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom">
-										<div class="form-group">
-											<label for='app_outgoing_number_reestr'>Заявка исх. №</label>
-											@if($reestr->app_outgoing_number_reestr == null)
-												<input id='app_outgoing_number_reestr' class='form-control {{$errors->has("app_outgoing_number_reestr") ? print("inputError ") : print("")}}' name='app_outgoing_number_reestr' value='{{old("app_outgoing_number_reestr") ? old("app_outgoing_number_reestr") : $reestr->app_outgoing_number_reestr}}' />
-											@else
-												<input id='app_outgoing_number_reestr' class='form-control {{$errors->has("app_outgoing_number_reestr") ? print("inputError ") : print("")}}' value='{{$reestr->app_outgoing_number_reestr}}' readonly />
-											@endif
-											@if($errors->has('app_outgoing_number_reestr'))
-												<label class='msgError'>{{$errors->first('app_outgoing_number_reestr')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom border-right">
-										<div class="form-group">
-											<label for='app_incoming_number_reestr'>Вх. №</label>
-											@if($reestr->app_incoming_number_reestr == null)
-												<input id='app_incoming_number_reestr' class='form-control {{$errors->has("app_incoming_number_reestr") ? print("inputError ") : print("")}}' name='app_incoming_number_reestr' value='{{old("app_incoming_number_reestr") ? old("app_incoming_number_reestr") : $reestr->app_incoming_number_reestr}}' />
-											@else
-												<input id='app_incoming_number_reestr' class='form-control {{$errors->has("app_incoming_number_reestr") ? print("inputError ") : print("")}}' value='{{$reestr->app_incoming_number_reestr}}' readonly />
-											@endif
-											@if($errors->has('app_incoming_number_reestr'))
-												<label class='msgError'>{{$errors->first('app_incoming_number_reestr')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom border-left">
-										<div class="form-group">
-											<label for='result_second_department_date_reestr'>Заключение отдела №2 Дата</label>
-											<input id='result_second_department_date_reestr' class='datepicker form-control {{$errors->has("result_second_department_date_reestr") ? print("inputError ") : print("")}}' name='result_second_department_date_reestr' value='{{old("result_second_department_date_reestr") ? old("result_second_department_date_reestr") : $reestr->result_second_department_date_reestr}}' {{$is_disabled}}/>
-											@if($errors->has('result_second_department_date_reestr'))
-												<label class='msgError'>{{$errors->first('result_second_department_date_reestr')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom border-right">
-										<div class="form-group">
-											<label for='result_second_department_number_reestr'>№</label>
-											<input id='result_second_department_number_reestr' class='form-control {{$errors->has("result_second_department_number_reestr") ? print("inputError ") : print("")}}' name='result_second_department_number_reestr' value='{{old("result_second_department_number_reestr") ? old("result_second_department_number_reestr") : $reestr->result_second_department_number_reestr}}' {{$is_disabled}}/>
-											@if($errors->has('result_second_department_number_reestr'))
-												<label class='msgError'>{{$errors->first('result_second_department_number_reestr')}}</label>
-											@endif
-										</div>
-									</div>
-								</div>
-								<div class='row'>
-									<input id='is_new_reestr' class='form-check-input' name='is_new_reestr' type="checkbox" checked style='display: none;'/>
-									<div class="col-md-5">
+								<div class="row">
+									<div class='col-md-2 border-left border-top border-right border-bottom'>
 										<div class='row'>
-											<div class="col-md-6 border-top border-bottom border-right border-left">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for="sel3">Вид договора</span></label>
+													<select id="sel3" class='form-control {{$errors->has("id_view_contract") ? print("inputError ") : print("")}}' name='id_view_contract' required {{$is_disabled}}>
+														@if($is_disabled == '')
+															<option></option>
+														@endif
+														@if($viewContracts)
+															@foreach($viewContracts as $viewContract)
+																@if($is_disabled == '')
+																	@if(old('id_view_contract'))
+																		@if(old('id_view_contract') == $viewContract->id)
+																			<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
+																		@else
+																			<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
+																		@endif
+																	@else
+																		@if($reestr->id_view_contract == $viewContract->id)
+																			<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
+																		@else
+																			<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
+																		@endif
+																	@endif
+																@else
+																	@if($reestr->id_view_contract == $viewContract->id)
+																		<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
+																	@endif
+																@endif
+															@endforeach
+														@endif
+													</select>
+													@if($errors->has('id_view_contract'))
+														<label class='msgError'>{{$errors->first('id_view_contract')}}</label>
+													@endif
+												</div>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
 												<div class="form-group">
 													<label for="sel5">Отбор поставщика</span></label>
 													<select id="sel5" class='form-control {{$errors->has("selection_supplier_reestr") ? print("inputError ") : print("")}}' name='selection_supplier_reestr' {{$is_disabled != '' ? 'disabled' : ''}}>
@@ -593,249 +549,339 @@
 												</div>
 											</div>
 										</div>
+									</div>
+									<div class='col-md-4 border-left border-top border-right border-bottom'>
 										<div class='row'>
-											<div class="col-md-3 border-top border-bottom border-left">
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('marketing_reestr'))
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for="date_registration_application_reestr">Дата регистрации заявки</span></label>
+													<input id='date_registration_application_reestr' class='datepicker form-control {{$errors->has("date_registration_application_reestr") ? print("inputError ") : print("")}}' name='date_registration_application_reestr' value='{{old("date_registration_application_reestr") ? old("date_registration_application_reestr") : $reestr->date_registration_application_reestr}}' {{$is_disabled}}/>
+													@if($errors->has('date_registration_application_reestr'))
+														<label class='msgError'>{{$errors->first('date_registration_application_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='app_outgoing_number_reestr'>Заявка исх. №</label>
+													@if($reestr->app_outgoing_number_reestr == null OR Auth::User()->hasRole()->role == 'Администратор')
+														<input id='app_outgoing_number_reestr' class='form-control {{$errors->has("app_outgoing_number_reestr") ? print("inputError ") : print("")}}' name='app_outgoing_number_reestr' value='{{old("app_outgoing_number_reestr") ? old("app_outgoing_number_reestr") : $reestr->app_outgoing_number_reestr}}' />
+													@else
+														<input id='app_outgoing_number_reestr' class='form-control {{$errors->has("app_outgoing_number_reestr") ? print("inputError ") : print("")}}' value='{{$reestr->app_outgoing_number_reestr}}' readonly />
+													@endif
+													@if($errors->has('app_outgoing_number_reestr'))
+														<label class='msgError'>{{$errors->first('app_outgoing_number_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='app_incoming_number_reestr'>Вх. №</label>
+													@if($reestr->app_incoming_number_reestr == null OR Auth::User()->hasRole()->role == 'Администратор')
+														<input id='app_incoming_number_reestr' class='form-control {{$errors->has("app_incoming_number_reestr") ? print("inputError ") : print("")}}' name='app_incoming_number_reestr' value='{{old("app_incoming_number_reestr") ? old("app_incoming_number_reestr") : $reestr->app_incoming_number_reestr}}' />
+													@else
+														<input id='app_incoming_number_reestr' class='form-control {{$errors->has("app_incoming_number_reestr") ? print("inputError ") : print("")}}' value='{{$reestr->app_incoming_number_reestr}}' readonly />
+													@endif
+													@if($errors->has('app_incoming_number_reestr'))
+														<label class='msgError'>{{$errors->first('app_incoming_number_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class='col-md-2 border-left border-top border-right border-bottom'>
+										<div class='row'>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='protocols_reestr'>Протоколы</label>
+													<input id='protocols_reestr' class='form-control {{$errors->has("protocols_reestr") ? print("inputError ") : print("")}}' name='protocols_reestr' value='{{$big_date_protocol != null ? $big_date_protocol : ""}}' readonly />
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='add_agreements_reestr'>ДС</label>
+													<input id='add_agreements_reestr' class='form-control {{$errors->has("add_agreements_reestr") ? print("inputError ") : print("")}}' name='add_agreements_reestr' value='{{$big_date_add_agreement != null ? $big_date_add_agreement : ""}}' readonly />
+												</div>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='sel9' class='small-text'>Согл./Не согл.</label>
+													<select id="sel9" class='form-control {{$errors->has("reconciliation_protocol_reestr") ? print("inputError ") : print("")}}' name='reconciliation_protocol_reestr' {{$is_disabled != '' ? 'disabled' : ''}}>
+														<option value='0' {{$reestr->reconciliation_protocol_reestr == 0 ? 'selected' : ''}}></option>
+														<option value='1' {{$reestr->reconciliation_protocol_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
+														<option value='2' {{$reestr->reconciliation_protocol_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
+													</select>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='sel10' class='small-text'>Согл./Не согл.</label>
+													<select id="sel10" class='form-control {{$errors->has("reconciliation_agreement_reestr") ? print("inputError ") : print("")}}' name='reconciliation_agreement_reestr' {{$is_disabled != '' ? 'disabled' : ''}}>
+														<option value='0' {{$reestr->reconciliation_agreement_reestr == 0 ? 'selected' : ''}}></option>
+														<option value='1' {{$reestr->reconciliation_agreement_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
+														<option value='2' {{$reestr->reconciliation_agreement_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class='col-md-2 border-left border-top border-right border-bottom'>
+										<div class='row'>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for='result_second_department_date_reestr'>Заключение отдела №2 Дата</label>
+													<input id='result_second_department_date_reestr' class='datepicker form-control {{$errors->has("result_second_department_date_reestr") ? print("inputError ") : print("")}}' name='result_second_department_date_reestr' value='{{old("result_second_department_date_reestr") ? old("result_second_department_date_reestr") : $reestr->result_second_department_date_reestr}}' {{$is_disabled}}/>
+													@if($errors->has('result_second_department_date_reestr'))
+														<label class='msgError'>{{$errors->first('result_second_department_date_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for='result_second_department_number_reestr'>№</label>
+													<input id='result_second_department_number_reestr' class='form-control {{$errors->has("result_second_department_number_reestr") ? print("inputError ") : print("")}}' name='result_second_department_number_reestr' value='{{old("result_second_department_number_reestr") ? old("result_second_department_number_reestr") : $reestr->result_second_department_number_reestr}}' {{$is_disabled}}/>
+													@if($errors->has('result_second_department_number_reestr'))
+														<label class='msgError'>{{$errors->first('result_second_department_number_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class='col-md-2 border-all'>
+										<div class='row'>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for='date_complete_reestr'>Договор исполнен на</label>
+													<input id='date_complete_reestr' class='datepicker form-control {{$errors->has("date_complete_reestr") ? print("inputError ") : print("")}}' name='date_complete_reestr' value='{{old("date_complete_reestr") ? old("date_complete_reestr") : $reestr->date_complete_reestr}}' {{$is_disabled}}/>
+													@if($errors->has('date_complete_reestr'))
+														<label class='msgError'>{{$errors->first('date_complete_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for='reestr_number_reestr'>Реестровый номер Д/К</label>
+													<input id='reestr_number_reestr' class='form-control {{$errors->has("reestr_number_reestr") ? print("inputError ") : print("")}}' name='reestr_number_reestr' value='{{old("reestr_number_reestr") ? old("reestr_number_reestr") : $reestr->reestr_number_reestr}}' maxlength='30' {{$is_disabled}}/>
+													@if($errors->has('reestr_number_reestr'))
+														<label class='msgError'>{{$errors->first('reestr_number_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='row'>
+									<input id='is_new_reestr' class='form-check-input' name='is_new_reestr' type="checkbox" checked style='display: none;'/>
+								</div>
+								<div class='row'>
+									<div class="col-md-5 border-left border-top border-right border-bottom">
+										<div class="col-md-3">
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('marketing_reestr'))
+														<input id='marketing_reestr' class='form-check-input' name='marketing_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->marketing_reestr)
 															<input id='marketing_reestr' class='form-check-input' name='marketing_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->marketing_reestr)
-																<input id='marketing_reestr' class='form-check-input' name='marketing_reestr' type="checkbox" checked />
-															@else
-																<input id='marketing_reestr' class='form-check-input' name='marketing_reestr' type="checkbox" />
-															@endif
+															<input id='marketing_reestr' class='form-check-input' name='marketing_reestr' type="checkbox" />
 														@endif
-														<label for='marketing_reestr'>Сбыт</label>
-													</div>
+													@endif
+													<label for='marketing_reestr'>Сбыт</label>
 												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('marketing_goz_reestr'))
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('marketing_goz_reestr'))
+														<input id='marketing_goz_reestr' class='form-check-input' name='marketing_goz_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->marketing_goz_reestr)
 															<input id='marketing_goz_reestr' class='form-check-input' name='marketing_goz_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->marketing_goz_reestr)
-																<input id='marketing_goz_reestr' class='form-check-input' name='marketing_goz_reestr' type="checkbox" checked />
-															@else
-																<input id='marketing_goz_reestr' class='form-check-input' name='marketing_goz_reestr' type="checkbox" />
-															@endif
+															<input id='marketing_goz_reestr' class='form-check-input' name='marketing_goz_reestr' type="checkbox" />
 														@endif
-														<label for='marketing_goz_reestr'>ГОЗ</label>
-													</div>
+													@endif
+													<label for='marketing_goz_reestr'>ГОЗ</label>
 												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('participation_reestr'))
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('participation_reestr'))
+														<input id='participation_reestr' class='form-check-input' name='participation_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->participation_reestr)
 															<input id='participation_reestr' class='form-check-input' name='participation_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->participation_reestr)
-																<input id='participation_reestr' class='form-check-input' name='participation_reestr' type="checkbox" checked />
-															@else
-																<input id='participation_reestr' class='form-check-input' name='participation_reestr' type="checkbox" />
-															@endif
+															<input id='participation_reestr' class='form-check-input' name='participation_reestr' type="checkbox" />
 														@endif
-														<label for='participation_reestr'>Участие</label>
-													</div>
+													@endif
+													<label for='participation_reestr'>Участие</label>
 												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('marketing_fz_223_reestr'))
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('marketing_fz_223_reestr'))
+														<input id='marketing_fz_223_reestr' class='form-check-input' name='marketing_fz_223_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->marketing_fz_223_reestr)
 															<input id='marketing_fz_223_reestr' class='form-check-input' name='marketing_fz_223_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->marketing_fz_223_reestr)
-																<input id='marketing_fz_223_reestr' class='form-check-input' name='marketing_fz_223_reestr' type="checkbox" checked />
-															@else
-																<input id='marketing_fz_223_reestr' class='form-check-input' name='marketing_fz_223_reestr' type="checkbox" />
-															@endif
+															<input id='marketing_fz_223_reestr' class='form-check-input' name='marketing_fz_223_reestr' type="checkbox" />
 														@endif
-														<label for='marketing_fz_223_reestr'>223-ФЗ</label>
-													</div>
+													@endif
+													<label for='marketing_fz_223_reestr'>223-ФЗ</label>
 												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('marketing_fz_44_reestr'))
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('marketing_fz_44_reestr'))
+														<input id='marketing_fz_44_reestr' class='form-check-input' name='marketing_fz_44_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->marketing_fz_44_reestr)
 															<input id='marketing_fz_44_reestr' class='form-check-input' name='marketing_fz_44_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->marketing_fz_44_reestr)
-																<input id='marketing_fz_44_reestr' class='form-check-input' name='marketing_fz_44_reestr' type="checkbox" checked />
-															@else
-																<input id='marketing_fz_44_reestr' class='form-check-input' name='marketing_fz_44_reestr' type="checkbox" />
-															@endif
+															<input id='marketing_fz_44_reestr' class='form-check-input' name='marketing_fz_44_reestr' type="checkbox" />
 														@endif
-														<label for='marketing_fz_44_reestr'>44-ФЗ</label>
-													</div>
+													@endif
+													<label for='marketing_fz_44_reestr'>44-ФЗ</label>
 												</div>
 											</div>
-											<div class="col-md-5 border-top border-bottom">
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('procurement_reestr'))
+										</div>
+										<div class="col-md-5">
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('procurement_reestr'))
+														<input id='procurement_reestr' class='form-check-input' name='procurement_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->procurement_reestr)
 															<input id='procurement_reestr' class='form-check-input' name='procurement_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->procurement_reestr)
-																<input id='procurement_reestr' class='form-check-input' name='procurement_reestr' type="checkbox" checked />
-															@else
-																<input id='procurement_reestr' class='form-check-input' name='procurement_reestr' type="checkbox" />
-															@endif
+															<input id='procurement_reestr' class='form-check-input' name='procurement_reestr' type="checkbox" />
 														@endif
-														<label for='procurement_reestr'>Закуп</label>
-													</div>
-												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('single_provider_reestr'))
-															<input id='single_provider_reestr' class='form-check-input' name='single_provider_reestr' type="checkbox" checked />
-														@else
-															@if($reestr->single_provider_reestr)
-																<input id='single_provider_reestr' class='form-check-input' name='single_provider_reestr' type="checkbox" checked />
-															@else
-																<input id='single_provider_reestr' class='form-check-input' name='single_provider_reestr' type="checkbox" />
-															@endif
-														@endif
-														<label for='single_provider_reestr'>Единственный поставщик</label>
-													</div>
-												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('own_funds_reestr'))
-															<input id='own_funds_reestr' class='form-check-input' name='own_funds_reestr' type="checkbox" checked />
-														@else
-															@if($reestr->own_funds_reestr)
-																<input id='own_funds_reestr' class='form-check-input' name='own_funds_reestr' type="checkbox" checked />
-															@else
-																<input id='own_funds_reestr' class='form-check-input' name='own_funds_reestr' type="checkbox" />
-															@endif
-														@endif
-														<label for='own_funds_reestr'>Собственные средства</label>
-													</div>
-												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('investments_reestr'))
-															<input id='investments_reestr' class='form-check-input' name='investments_reestr' type="checkbox" checked />
-														@else
-															@if($reestr->investments_reestr)
-																<input id='investments_reestr' class='form-check-input' name='investments_reestr' type="checkbox" checked />
-															@else
-																<input id='investments_reestr' class='form-check-input' name='investments_reestr' type="checkbox" />
-															@endif
-														@endif
-														<label for='investments_reestr'>Инвестиции</label>
-													</div>
-												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('purchase_reestr'))
-															<input id='purchase_reestr' class='form-check-input' name='purchase_reestr' type="checkbox" checked />
-														@else
-															@if($reestr->purchase_reestr)
-																<input id='purchase_reestr' class='form-check-input' name='purchase_reestr' type="checkbox" checked />
-															@else
-																<input id='purchase_reestr' class='form-check-input' name='purchase_reestr' type="checkbox" />
-															@endif
-														@endif
-														<label for='purchase_reestr'>Закупка у СМСП</label>
-													</div>
+													@endif
+													<label for='procurement_reestr'>Закуп</label>
 												</div>
 											</div>
-											<div class="col-md-4 border-top border-bottom border-right" style='padding-bottom: 33px;'>
-												<!--<div class='row'>
-													<div class="col-md-12">
-														@if(old('procurement_fz_223_reestr'))
-															<input id='procurement_fz_223_reestr' class='form-check-input' name='procurement_fz_223_reestr' type="checkbox" checked />
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('single_provider_reestr'))
+														<input id='single_provider_reestr' class='form-check-input' name='single_provider_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->single_provider_reestr)
+															<input id='single_provider_reestr' class='form-check-input' name='single_provider_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->procurement_fz_223_reestr)
-																<input id='procurement_fz_223_reestr' class='form-check-input' name='procurement_fz_223_reestr' type="checkbox" checked />
-															@else
-																<input id='procurement_fz_223_reestr' class='form-check-input' name='procurement_fz_223_reestr' type="checkbox" />
-															@endif
+															<input id='single_provider_reestr' class='form-check-input' name='single_provider_reestr' type="checkbox" />
 														@endif
-														<label for='procurement_fz_223_reestr'>223-ФЗ</label>
-													</div>
+													@endif
+													<label for='single_provider_reestr'>Единственный поставщик</label>
 												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('procurement_fz_44_reestr'))
-															<input id='procurement_fz_44_reestr' class='form-check-input' name='procurement_fz_44_reestr' type="checkbox" checked />
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('own_funds_reestr'))
+														<input id='own_funds_reestr' class='form-check-input' name='own_funds_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->own_funds_reestr)
+															<input id='own_funds_reestr' class='form-check-input' name='own_funds_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->procurement_fz_44_reestr)
-																<input id='procurement_fz_44_reestr' class='form-check-input' name='procurement_fz_44_reestr' type="checkbox" checked />
-															@else
-																<input id='procurement_fz_44_reestr' class='form-check-input' name='procurement_fz_44_reestr' type="checkbox" />
-															@endif
+															<input id='own_funds_reestr' class='form-check-input' name='own_funds_reestr' type="checkbox" />
 														@endif
-														<label for='procurement_fz_44_reestr'>44-ФЗ</label>
-													</div>
+													@endif
+													<label for='own_funds_reestr'>Собственные средства</label>
 												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('procurement_goz_reestr'))
-															<input id='procurement_goz_reestr' class='form-check-input' name='procurement_goz_reestr' type="checkbox" checked />
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('investments_reestr'))
+														<input id='investments_reestr' class='form-check-input' name='investments_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->investments_reestr)
+															<input id='investments_reestr' class='form-check-input' name='investments_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->procurement_goz_reestr)
-																<input id='procurement_goz_reestr' class='form-check-input' name='procurement_goz_reestr' type="checkbox" checked />
-															@else
-																<input id='procurement_goz_reestr' class='form-check-input' name='procurement_goz_reestr' type="checkbox" />
-															@endif
+															<input id='investments_reestr' class='form-check-input' name='investments_reestr' type="checkbox" />
 														@endif
-														<label for='procurement_goz_reestr'>ГОЗ</label>
-													</div>
-												</div>-->
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('export_reestr'))
+													@endif
+													<label for='investments_reestr'>Инвестиции</label>
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('purchase_reestr'))
+														<input id='purchase_reestr' class='form-check-input' name='purchase_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->purchase_reestr)
+															<input id='purchase_reestr' class='form-check-input' name='purchase_reestr' type="checkbox" checked />
+														@else
+															<input id='purchase_reestr' class='form-check-input' name='purchase_reestr' type="checkbox" />
+														@endif
+													@endif
+													<label for='purchase_reestr'>Закупка у СМСП</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4" style='padding-bottom: 33px;'>
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('export_reestr'))
+														<input id='export_reestr' class='form-check-input' name='export_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->export_reestr)
 															<input id='export_reestr' class='form-check-input' name='export_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->export_reestr)
-																<input id='export_reestr' class='form-check-input' name='export_reestr' type="checkbox" checked />
-															@else
-																<input id='export_reestr' class='form-check-input' name='export_reestr' type="checkbox" />
-															@endif
+															<input id='export_reestr' class='form-check-input' name='export_reestr' type="checkbox" />
 														@endif
-														<label for='export_reestr'>Экспорт</label>
-													</div>
+													@endif
+													<label for='export_reestr'>Экспорт</label>
 												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('interfactory_reestr'))
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('interfactory_reestr'))
+														<input id='interfactory_reestr' class='form-check-input' name='interfactory_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->interfactory_reestr)
 															<input id='interfactory_reestr' class='form-check-input' name='interfactory_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->interfactory_reestr)
-																<input id='interfactory_reestr' class='form-check-input' name='interfactory_reestr' type="checkbox" checked />
-															@else
-																<input id='interfactory_reestr' class='form-check-input' name='interfactory_reestr' type="checkbox" />
-															@endif
+															<input id='interfactory_reestr' class='form-check-input' name='interfactory_reestr' type="checkbox" />
 														@endif
-														<label for='interfactory_reestr'>Межзаводские</label>
-													</div>
+													@endif
+													<label for='interfactory_reestr'>Межзаводские</label>
 												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('other_reestr'))
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('other_reestr'))
+														<input id='other_reestr' class='form-check-input' name='other_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->other_reestr)
 															<input id='other_reestr' class='form-check-input' name='other_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->other_reestr)
-																<input id='other_reestr' class='form-check-input' name='other_reestr' type="checkbox" checked />
-															@else
-																<input id='other_reestr' class='form-check-input' name='other_reestr' type="checkbox" />
-															@endif
+															<input id='other_reestr' class='form-check-input' name='other_reestr' type="checkbox" />
 														@endif
-														<label for='other_reestr'>Иное</label>
-													</div>
+													@endif
+													<label for='other_reestr'>Иное</label>
 												</div>
-												<div class='row'>
-													<div class="col-md-12">
-														@if(old('mob_reestr'))
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													@if(old('mob_reestr'))
+														<input id='mob_reestr' class='form-check-input' name='mob_reestr' type="checkbox" checked />
+													@else
+														@if($reestr->mob_reestr)
 															<input id='mob_reestr' class='form-check-input' name='mob_reestr' type="checkbox" checked />
 														@else
-															@if($reestr->mob_reestr)
-																<input id='mob_reestr' class='form-check-input' name='mob_reestr' type="checkbox" checked />
-															@else
-																<input id='mob_reestr' class='form-check-input' name='mob_reestr' type="checkbox" />
-															@endif
+															<input id='mob_reestr' class='form-check-input' name='mob_reestr' type="checkbox" />
 														@endif
-														<label for='mob_reestr'>МОБ</label>
-													</div>
+													@endif
+													<label for='mob_reestr'>МОБ</label>
 												</div>
 											</div>
 										</div>
@@ -866,7 +912,7 @@
 												@endif
 											</div>
 											<div class="col-md-2">
-												<label for='days_reconciliation_reestr'>Срок действия согласования крупной сделки</label>
+												<label for='days_reconciliation_reestr' class='small-text'>Срок действия согласования крупной сделки</label>
 											</div>
 											<div class="col-md-2">
 												<input id='days_reconciliation_reestr' class='form-control {{$errors->has("days_reconciliation_reestr") ? print("inputError ") : print("")}}' name='days_reconciliation_reestr' value='{{old("days_reconciliation_reestr") ? old("days_reconciliation_reestr") : $reestr->days_reconciliation_reestr}}'/>
@@ -895,7 +941,7 @@
 												@endif
 											</div>
 											<div class="col-md-2">
-												<label for='count_mounth_reestr'>Количество месяцев</label>
+												<label for='count_mounth_reestr' class='small-text'>Количество месяцев</label>
 											</div>
 											<div class="col-md-2">
 												<input id='count_mounth_reestr' class='form-control {{$errors->has("count_mounth_reestr") ? print("inputError ") : print("")}}' name='count_mounth_reestr' value='{{old("count_mounth_reestr") ? old("count_mounth_reestr") : $reestr->count_mounth_reestr}}'/>
@@ -906,29 +952,31 @@
 										</div>
 										<div class="row border-top">
 											<div class="col-md-2">
-												<label>Сроки согласования проекта договора исполнителей</label>
+												<label class='small-text'>Сроки согласования проекта договора исполнителей</label>
 											</div>
 											<div class="col-md-3">
-												<label for='begin_date_reconciliation_reestr'>Начало согласования (дата)</label>
+												<label for='begin_date_reconciliation_reestr' class='small-text'>Начало согласования (дата)</label>
 												<input id='begin_date_reconciliation_reestr' class='datepicker form-control {{$errors->has("begin_date_reconciliation_reestr") ? print("inputError ") : print("")}}' name='begin_date_reconciliation_reestr' value='{{old("begin_date_reconciliation_reestr") ? old("begin_date_reconciliation_reestr") : $reestr->begin_date_reconciliation_reestr}}'/>
 												@if($errors->has('begin_date_reconciliation_reestr'))
 													<label class='msgError'>{{$errors->first('begin_date_reconciliation_reestr')}}</label>
 												@endif
 											</div>
 											<div class="col-md-3">
-												<label for='end_date_reconciliation_reestr'>Окончание согласования (дата)</label>
+												<label for='end_date_reconciliation_reestr' style='font-size: 11px;'>Окончание согласования (дата)</label>
 												<input id='end_date_reconciliation_reestr' class='datepicker form-control {{$errors->has("end_date_reconciliation_reestr") ? print("inputError ") : print("")}}' name='end_date_reconciliation_reestr' value='{{old("end_date_reconciliation_reestr") ? old("end_date_reconciliation_reestr") : $reestr->end_date_reconciliation_reestr}}'/>
 												@if($errors->has('end_date_reconciliation_reestr'))
 													<label class='msgError'>{{$errors->first('end_date_reconciliation_reestr')}}</label>
 												@endif
 											</div>
 											<div class="col-md-4">
-												<label for='count_days_reconciliation_reestr'>Общее количество дней согласования</label>
+												<label for='count_days_reconciliation_reestr' class='small-text'>Общее количество дней согласования</label>
 												<input id='count_days_reconciliation_reestr' class='form-control {{$errors->has("count_days_reconciliation_reestr") ? print("inputError ") : print("")}}' name='count_days_reconciliation_reestr' value='{{old("count_days_reconciliation_reestr") ? old("count_days_reconciliation_reestr") : $reestr->count_days_reconciliation_reestr}}'/>
 												@if($errors->has('count_days_reconciliation_reestr'))
 													<label class='msgError'>{{$errors->first('count_days_reconciliation_reestr')}}</label>
 												@endif
 											</div>
+										</div>
+										<div class='row'>
 										</div>
 									</div>
 								</div>
@@ -1079,39 +1127,58 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-9 border-all">
+									<div class="col-md-7 border-all">
 										<div class="row">
 											<div class="col-md-12">
-												<label>Гарантия банка</label>
+												<label>Обеспечение гарантийных обязательств</label>
 											</div>
-											<div class="col-md-2">
+											<div class="col-md-3">
 												<div class='row'>
-													<div class="col-md-2">
-														<label for='date_bank_reestr'>До</label>
+													<div class="col-md-12">
+														<label for='term_action_reestr'>Срок действия</label>
 													</div>
-													<div class="col-md-10">
+												</div>
+												<div class='row'>
+													<div class="col-md-12">
+														<input id='term_action_reestr' class='form-control {{$errors->has("term_action_reestr") ? print("inputError ") : print("")}}' name='term_action_reestr' value='{{ old("term_action_reestr") ? old("term_action_reestr") : $reestr->term_action_reestr }}' {{$is_disabled}}/>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class='row'>
+													<div class="col-md-12">
+														<label for='date_bank_reestr'>Гарантия банка до</label>
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-12">
 														<input id='date_bank_reestr' class='form-control {{$errors->has("date_bank_reestr") ? print("inputError ") : print("")}}' name='date_bank_reestr' value='{{ old("date_bank_reestr") ? old("date_bank_reestr") : $reestr->date_bank_reestr }}' {{$is_disabled}}/>
 													</div>
 												</div>
 											</div>
-											<div class="col-md-5">
+											<div class="col-md-2">
 												<div class='row'>
-													<div class="col-md-1">
+													<div class="col-md-12">
 														<label for='amount_bank_reestr'>Сумма</label>
 													</div>
-													<div class="col-md-5">
+												</div>
+												<div class='row'>
+													<div class="col-md-12">
 														<input id='amount_bank_reestr' class='form-control check-number {{$errors->has("amount_bank_reestr") ? print("inputError ") : print("")}}' name='amount_bank_reestr' value='{{ old("amount_bank_reestr") ? old("amount_bank_reestr") : $reestr->amount_bank_reestr }}' {{$is_disabled}}/>
-													</div>
-													<div class="col-md-1">
-														<label for='bank_reestr'>Банк</label>
-													</div>
-													<div class="col-md-5">
-														<input id='bank_reestr' class='form-control {{$errors->has("bank_reestr") ? print("inputError ") : print("")}}' name='bank_reestr' value='{{ old("bank_reestr") ? old("bank_reestr") : $reestr->bank_reestr }}' {{$is_disabled}}/>
 													</div>
 												</div>
 											</div>
-											<div class='col-md-5'>
-												<button class='btn btn-primary' data-toggle="modal" data-target="#scan" type='button' style='float: right; width: 184px;'>Сканы</button>
+											<div class='col-md-4'>
+												<div class='row'>
+													<div class="col-md-12">
+														<label for='bank_reestr'>Банк</label>
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-12">
+														<input id='bank_reestr' class='form-control {{$errors->has("bank_reestr") ? print("inputError ") : print("")}}' name='bank_reestr' value='{{ old("bank_reestr") ? old("bank_reestr") : $reestr->bank_reestr }}' {{$is_disabled}}/>
+													</div>
+												</div>
 											</div>
 										</div>
 										<div class="row border-top">
@@ -1122,61 +1189,137 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-md-5">
+											<div class="col-md-6">
 												<div class='row'>
 													<div class="col-md-1">
 														<label for='date_b_contract_reestr'>с</label>
 													</div>
 													<div class="col-md-5">
-														<input id='date_b_contract_reestr' class='form-control {{$errors->has("date_b_contract_reestr") ? print("inputError ") : print("")}}' name='date_b_contract_reestr' value='{{ old("date_b_contract_reestr") ? old("date_b_contract_reestr") : $reestr->date_b_contract_reestr }}' {{$is_disabled}}/>
+														<input id='date_b_contract_reestr' class='datepicker form-control {{$errors->has("date_b_contract_reestr") ? print("inputError ") : print("")}}' name='date_b_contract_reestr' value='{{ old("date_b_contract_reestr") ? old("date_b_contract_reestr") : $reestr->date_b_contract_reestr }}' {{$is_disabled}}/>
 													</div>
 													<div class="col-md-1">
 														<label for='date_e_contract_reestr'>по</label>
 													</div>
 													<div class="col-md-5">
-														<input id='date_e_contract_reestr' class='form-control {{$errors->has("date_e_contract_reestr") ? print("inputError ") : print("")}}' name='date_e_contract_reestr' value='{{ old("date_e_contract_reestr") ? old("date_e_contract_reestr") : $reestr->date_e_contract_reestr }}' {{$is_disabled}}/>
+														<input id='date_e_contract_reestr' class='form-control {{$errors->has("date_e_contract_reestr") ? print("inputError ") : print("")}}' value='{{ old("date_e_contract_reestr") ? old("date_e_contract_reestr") : $reestr->date_e_contract_reestr }}' readonly {{$is_disabled}}/>
 													</div>
 												</div>
-											</div>
-											<div class='col-md-5'>
-												<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.reestr.show_obligation', $contract->id)}}" {{$is_disabled}}>Исполнение Дог./Контр.</button>
 											</div>
 										</div>
 										<div class='row border-bottom'>
-											<div class="col-md-10">
+											<div class="col-md-11">
 												<div class="form-group">
-													<input id='date_contract_reestr' class='form-control {{$errors->has("date_contract_reestr") ? print("inputError ") : print("")}}' name='date_contract_reestr' value='{{ old("date_contract_reestr") ? old("date_contract_reestr") : $reestr->date_contract_reestr }}' {{$is_disabled}} spellcheck='true'/>
+													<input id='date_contract_reestr' class='form-control {{$errors->has("date_contract_reestr") ? print("inputError ") : print("")}}' value='{{ old("date_contract_reestr") ? old("date_contract_reestr") : $reestr->date_contract_reestr }}' readonly {{$is_disabled}} spellcheck='true'/>
 												</div>
 											</div>
-											<div class='col-md-2'>
-												<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.reestr.show_protocols', $contract->id)}}">ПР/ПСР/ПУР</button>
+											<div class='col-md-1'>
+												<button type='button' class='btn btn-primary' data-toggle="modal" data-target="#modal_date_contract_reestr" title='Форма срока действия договора'><!--☼--><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -49px; background-position-y: -179px;'></span></button>
 											</div>
 										</div>
 										<div class="row border-bottom">
-											<div class="col-md-10">
+											<div class='col-md-12'>
 												<div class="form-group">
-													<label for='date_maturity_reestr'>Срок исполнения обязательств</label>
-													<input id='date_maturity_reestr' class='form-control {{$errors->has("date_maturity_reestr") ? print("inputError ") : print("")}}' name='date_maturity_reestr' value='{{ old("date_maturity_reestr") ? old("date_maturity_reestr") : $reestr->date_maturity_reestr }}' spellcheck='true'/>
+													<div class='row'>
+														<div class="col-md-9">
+															<label for='date_maturity_reestr'>Срок исполнения обязательств</label>
+														</div>
+														<div class='col-md-2'>
+															<label for='date_e_maturity_reestr'>До</label>
+														</div>
+													</div>
+													<div class='row'>
+														<div class="col-md-9">
+															<input id='date_maturity_reestr' class='form-control {{$errors->has("date_maturity_reestr") ? print("inputError ") : print("")}}' value='{{ old("date_maturity_reestr") ? old("date_maturity_reestr") : $reestr->date_maturity_reestr }}' readonly spellcheck='true'/>
+														</div>
+														<div class='col-md-2'>
+															<input id='date_e_maturity_reestr' class='form-control {{$errors->has("date_e_maturity_reestr") ? print("inputError ") : print("")}}' value='{{ old("date_e_maturity_reestr") ? old("date_e_maturity_reestr") : $reestr->date_e_maturity_reestr }}' readonly spellcheck='true'/>
+														</div>
+														<div class='col-md-1'>
+															<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal_date_maturity_reestr' title='Форма срока исполнения обязательств'><!--☼--><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -49px; background-position-y: -179px;'></span></button>
+														</div>
+													</div>
 												</div>
-											</div>
-											<div class="col-md-2">
-												<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.reestr.show_additional_agreements', $contract->id)}}">ДС</button>
-											</div>
-											<div class="col-md-2">
-												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_amount_invoice', $contract->id)}}">Сумма по счетам</button>
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-md-10">
+											<div class="col-md-6">
 												<div class='row'>
-													<div class="col-md-1">
-														<label for='amount_reestr'>Сумма</label>
+													<div class="col-md-12">
+														<label for='amount_begin_reestr'>Цена при заключении Д/К</label>
 													</div>
-													<div class="col-md-2">
-														<input id='amount_reestr' class='form-control check-number {{$errors->has("amount_reestr") ? print("inputError ") : print("")}}' name='amount_reestr' value='{{old("amount_reestr") ? old("amount_reestr") : $reestr->amount_reestr}}' {{$is_disabled}}/>
+												</div>
+												<div class='row'>
+													<div class="col-md-4">
+														<input id='amount_begin_reestr' class='form-control check-number {{$errors->has("amount_begin_reestr") ? print("inputError ") : print("")}}' name='amount_begin_reestr' value='{{old("amount_begin_reestr") ? old("amount_begin_reestr") : $reestr->amount_begin_reestr}}' {{$is_disabled}}/>
 													</div>
-													<div class="col-md-2">
-														<select id="sel8" class='form-control {{$errors->has("unit_reestr") ? print("inputError ") : print("")}}' name='unit_reestr' {{$is_disabled != '' ? 'disabled' : ''}}>
+													<div class="col-md-4">
+														<select class='form-control {{$errors->has("unit_begin_reestr") ? print("inputError ") : print("")}}' name='unit_begin_reestr' {{$is_disabled != '' ? 'disabled' : ''}}>
+															<option></option>
+															@foreach($units as $unit)
+																@if(old('unit_begin_reestr'))
+																	<option value='{{$unit->id}}' selected>{{$unit->name_unit}}</option>
+																@else
+																	@if($reestr->unit_begin_reestr == $unit->id)
+																		<option value='{{$unit->id}}' selected>{{$unit->name_unit}}</option>
+																	@else
+																		<option value='{{$unit->id}}'>{{$unit->name_unit}}</option>
+																	@endif
+																@endif
+															@endforeach
+														</select>
+													</div>
+													<div class='col-md-4'>
+														<label for='VAT_BEGIN'>НДС</label>
+														@if(old('vat_begin_reestr'))
+															<input id='VAT_BEGIN' class='form-check-input' name='vat_begin_reestr' type="checkbox" checked {{$is_disabled != '' ? 'disabled' : ''}}/>
+														@else
+															@if($reestr->vat_begin_reestr)
+																<input id='VAT_BEGIN' class='form-check-input' name='vat_begin_reestr' type="checkbox" checked {{$is_disabled != '' ? 'disabled' : ''}}/>
+															@else
+																<input id='VAT_BEGIN' class='form-check-input' name='vat_begin_reestr' type="checkbox" {{$is_disabled != '' ? 'disabled' : ''}}/>
+															@endif
+														@endif
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-6">
+														<label for='approximate_amount_begin_reestr'>Ориентировочная</label>
+														@if(old('approximate_amount_begin_reestr'))
+															<input id='approximate_amount_begin_reestr' class='form-check-input' name='approximate_amount_begin_reestr' type="checkbox" checked {{$is_disabled != '' ? 'disabled' : ''}}/>
+														@else
+															@if($reestr->approximate_amount_begin_reestr)
+																<input id='approximate_amount_begin_reestr' class='form-check-input' name='approximate_amount_begin_reestr' type="checkbox" checked {{$is_disabled != '' ? 'disabled' : ''}}/>
+															@else
+																<input id='approximate_amount_begin_reestr' class='form-check-input' name='approximate_amount_begin_reestr' type="checkbox" {{$is_disabled != '' ? 'disabled' : ''}}/>
+															@endif
+														@endif
+													</div>
+													<div class="col-md-6">
+														<label for='fixed_amount_begin_reestr'>Фиксированная</label>
+														@if(old('fixed_amount_begin_reestr'))
+															<input id='fixed_amount_begin_reestr' class='form-check-input' name='fixed_amount_begin_reestr' type="checkbox" checked {{$is_disabled != '' ? 'disabled' : ''}}/>
+														@else
+															@if($reestr->fixed_amount_begin_reestr)
+																<input id='fixed_amount_begin_reestr' class='form-check-input' name='fixed_amount_begin_reestr' type="checkbox" checked {{$is_disabled != '' ? 'disabled' : ''}}/>
+															@else
+																<input id='fixed_amount_begin_reestr' class='form-check-input' name='fixed_amount_begin_reestr' type="checkbox" {{$is_disabled != '' ? 'disabled' : ''}}/>
+															@endif
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class='col-md-6'>
+												<div class='row'>
+													<div class="col-md-12">
+														<label for='amount_reestr'>Сумма Д/К</label>
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-4">
+														<input id='amount_reestr' class='form-control check-number {{$errors->has("amount_reestr") ? print("inputError ") : print("")}}' value='{{old("amount_reestr") ? old("amount_reestr") : $reestr->amount_reestr}}' readonly {{$is_disabled}}/>
+													</div>
+													<div class="col-md-3">
+														<select id="sel8" class='form-control {{$errors->has("unit_reestr") ? print("inputError ") : print("")}}' disabled {{$is_disabled != '' ? 'disabled' : ''}}>
 															<option></option>
 															@foreach($units as $unit)
 																@if(old('unit_reestr'))
@@ -1191,54 +1334,79 @@
 															@endforeach
 														</select>
 													</div>
-													<div class="col-md-2">
+													<div class="col-md-3">
 														<label for='VAT'>НДС</label>
 														@if(old('vat_reestr'))
-															<input id='VAT' class='form-check-input' name='vat_reestr' type="checkbox" checked {{$is_disabled != '' ? 'disabled' : ''}}/>
+															<input id='VAT' class='form-check-input' type="checkbox" checked disabled {{$is_disabled != '' ? 'disabled' : ''}}/>
 														@else
 															@if($reestr->vat_reestr)
-																<input id='VAT' class='form-check-input' name='vat_reestr' type="checkbox" checked {{$is_disabled != '' ? 'disabled' : ''}}/>
+																<input id='VAT' class='form-check-input' type="checkbox" checked disabled {{$is_disabled != '' ? 'disabled' : ''}}/>
 															@else
-																<input id='VAT' class='form-check-input' name='vat_reestr' type="checkbox" {{$is_disabled != '' ? 'disabled' : ''}}/>
+																<input id='VAT' class='form-check-input' type="checkbox" disabled {{$is_disabled != '' ? 'disabled' : ''}}/>
 															@endif
 														@endif
 													</div>
-													<div class="col-md-3">
+													<div class='col-md-2'>
+														<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal_amount_reestr' title='Форма срока исполнения обязательств'><!--☼--><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -49px; background-position-y: -179px;'></span></button>
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-6">
 														<label for='approximate_amount_reestr'>Ориентировочная</label>
 														@if(old('approximate_amount_reestr'))
-															<input id='approximate_amount_reestr' class='form-check-input' name='approximate_amount_reestr' type="checkbox" checked {{$is_disabled != '' ? 'disabled' : ''}}/>
+															<input id='approximate_amount_reestr' class='form-check-input' type="checkbox" checked disabled {{$is_disabled != '' ? 'disabled' : ''}}/>
 														@else
 															@if($reestr->approximate_amount_reestr)
-																<input id='approximate_amount_reestr' class='form-check-input' name='approximate_amount_reestr' type="checkbox" checked {{$is_disabled != '' ? 'disabled' : ''}}/>
+																<input id='approximate_amount_reestr' class='form-check-input' type="checkbox" checked disabled {{$is_disabled != '' ? 'disabled' : ''}}/>
 															@else
-																<input id='approximate_amount_reestr' class='form-check-input' name='approximate_amount_reestr' type="checkbox" {{$is_disabled != '' ? 'disabled' : ''}}/>
+																<input id='approximate_amount_reestr' class='form-check-input' type="checkbox" disabled {{$is_disabled != '' ? 'disabled' : ''}}/>
+															@endif
+														@endif
+													</div>
+													<div class="col-md-6">
+														<label for='fixed_amount_reestr'>Фиксированная</label>
+														@if(old('fixed_amount_reestr'))
+															<input id='fixed_amount_reestr' class='form-check-input' type="checkbox" checked disabled {{$is_disabled != '' ? 'disabled' : ''}}/>
+														@else
+															@if($reestr->fixed_amount_reestr)
+																<input id='fixed_amount_reestr' class='form-check-input' type="checkbox" checked disabled {{$is_disabled != '' ? 'disabled' : ''}}/>
+															@else
+																<input id='fixed_amount_reestr' class='form-check-input' type="checkbox" disabled {{$is_disabled != '' ? 'disabled' : ''}}/>
 															@endif
 														@endif
 													</div>
 												</div>
 											</div>
-											<div class="col-md-2">
-												<button class='btn btn-primary' style='float: right; width: 184px; margin-top: 5px;' data-toggle="modal" data-target="#invoice" type='button'>Взаиморасчеты</button>
-											</div>
 										</div>
 										<div class='row'>
-											<div class="col-md-10">
+											<div class="col-md-12">
 												<input class='form-control {{$errors->has("amount_comment_reestr") ? print("inputError ") : print("")}}' name='amount_comment_reestr' value='{{old("amount_comment_reestr") ? old("amount_comment_reestr") : $reestr->amount_comment_reestr}}' {{$is_disabled}} spellcheck='true'/>
 											</div>
-											<div class="col-md-2">
-												<button class='btn btn-primary btn-href' href="{{route('ten.show_contract',$contract->id)}}" style='float: right; width: 184px; margin-top: 5px;' type='button'>Комплектация</button>
-											</div>
 										</div>
 										<div class='row'>
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class='row'>
-													<div class="col-md-2">
+													<div class="col-md-12">
+														<label for='end_term_repayment_reestr' class='small-text'>Конечный срок оплаты по Д/К</label>
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-9">
+														<input id='end_term_repayment_reestr' class='datepicker form-control {{$errors->has("end_term_repayment_reestr") ? print("inputError ") : print("")}}' name='end_term_repayment_reestr' value='{{old("end_term_repayment_reestr") ? old("end_term_repayment_reestr") : $reestr->end_term_repayment_reestr}}' {{$is_disabled}} />
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class='row'>
+													<div class="col-md-12">
 														<label for='nmcd_reestr'>НМЦД/НМЦК</label>
 													</div>
-													<div class="col-md-3">
+												</div>
+												<div class='row'>
+													<div class="col-md-7">
 														<input id='nmcd_reestr' class='form-control check-number {{$errors->has("nmcd_reestr") ? print("inputError ") : print("")}}' name='nmcd_reestr' value='{{old("nmcd_reestr") ? old("nmcd_reestr") : $reestr->nmcd_reestr}}' {{$is_disabled}}/>
 													</div>
-													<div class="col-md-3">
+													<div class="col-md-5">
 														<select class='form-control {{$errors->has("nmcd_unit_reestr") ? print("inputError ") : print("")}}' name='nmcd_unit_reestr' {{$is_disabled != '' ? 'disabled' : ''}}>
 															<option></option>
 															@foreach($units as $unit)
@@ -1256,15 +1424,17 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class='row'>
-													<div class="col-md-2">
+													<div class="col-md-12">
 														<label for='economy_reestr'>Экономия</label>
 													</div>
-													<div class="col-md-3">
+												</div>
+												<div class='row'>
+													<div class="col-md-7">
 														<input id='economy_reestr' class='form-control check-number {{$errors->has("economy_reestr") ? print("inputError ") : print("")}}' name='economy_reestr' value='{{old("economy_reestr") ? old("economy_reestr") : $reestr->economy_reestr}}' {{$is_disabled}}/>
 													</div>
-													<div class="col-md-3">
+													<div class="col-md-5">
 														<select class='form-control {{$errors->has("economy_unit_reestr") ? print("inputError ") : print("")}}' name='economy_unit_reestr' {{$is_disabled != '' ? 'disabled' : ''}}>
 															<option></option>
 															@foreach($units as $unit)
@@ -1284,7 +1454,7 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-md-10">
+											<div class="col-md-12">
 												<label>Порядок оплаты</label>
 												<div class='row'>
 													<div class="col-md-6">
@@ -1355,6 +1525,75 @@
 											</div>
 										</div>
 									</div>
+									<div class='col-md-2'>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary' data-toggle="modal" data-target="#scan" type='button' style='float: right; width: 184px; margin-top: 5px;'>Сканы</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.peo.show_additional_documents', $contract->id)}}">Догов. мат</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' type='button'  href="{{route('tree_map.show_contract',$contract->id)}}" style='float: right; width: 184px; margin-top: 5px;'>Граф договора</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' type='button'  href="{{route('journal.contract',$contract->id)}}" style='float: right; width: 184px; margin-top: 5px;'>История изменений</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' type='button'  href="{{route('new_applications.copying', $contract->id_new_application_contract)}}" style='float: right; width: 184px; margin-top: 5px;' {{$contract->id_new_application_contract ? '' : 'disabled'}}>Переписка по заявке</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' type='button'  href="{{route('department.contract_second.show', $contract->id)}}" style='float: right; width: 184px; margin-top: 5px;'>Наряды/Акты</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_obligation', $contract->id)}}" {{$is_disabled}}>Исполнение Д/К</button>
+											</div>
+										</div>
+										<!--
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_protocols', $contract->id)}}" disabled >ПР/ПСР/ПУР</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_additional_agreements', $contract->id)}}" disabled >ДС</button>
+											</div>
+										</div>
+										-->
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_amount_invoice', $contract->id)}}">Сумма по счетам</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_specify', $contract->id)}}">Спецификация</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary' style='float: right; width: 184px; margin-top: 5px;' data-toggle="modal" data-target="#invoice" type='button'>Расчёты по Д/К</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' href="{{route('ten.show_contract',$contract->id)}}" style='float: right; width: 184px; margin-top: 5px;' type='button'>Комплектация</button>
+											</div>
+										</div>
+									</div>
 								</div>
 								<div class="row">
 									<div class="col-md-2">
@@ -1403,12 +1642,12 @@
 															<th rowspan='7' style='text-align: center; vertical-align: middle; max-width: 94px;'>Оплата и исполнение договора</th>
 														</tr>
 														<tr>
-															<th  colspan='2'>Аванс</th>
-															<th>{{$amount_prepayments}} р.</th>
+															<th  colspan='2'>Выполнение</th>
+															<th>{{$amount_invoices}} р.</th>
 														</tr>
 														<tr>
-															<th  colspan='2'>Оказано услуг</th>
-															<th>{{$amount_invoices}} р.</th>
+															<th  colspan='2'>Аванс</th>
+															<th>{{$amount_prepayments}} р.</th>
 														</tr>
 														<tr>
 															<th  colspan='2'>Окончательный расчет</th>
@@ -1429,37 +1668,6 @@
 										</div>
 										<div class='row'>
 											<div class="col-md-6">
-												@if($scores)
-													<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
-														<thead>
-															<tr>
-																<th colspan='3' style='text-align: center;'>СЧЕТ НА ОПЛАТУ</th>
-															</tr>
-															<tr>
-																<th>№ сч</th>
-																<th>Дата</th>
-																<th>Сумма</th>
-															</tr>
-														</thead>
-														<tbody>
-															@foreach($scores as $score)
-																<tr class="rowsContract">
-																	<td>
-																		{{ $score->number_invoice }}
-																	</td>
-																	<td>
-																		{{ $score->date_invoice ? date('d.m.Y', strtotime($score->date_invoice)) : '' }}
-																	</td>
-																	<td>
-																		{{ $score->amount_p_invoice }}
-																	</td>
-																</tr>
-															@endforeach
-														</tbody>
-													</table>
-												@endif
-											</div>
-											<div class="col-md-6">
 												@if($prepayments)
 													<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
 														<thead>
@@ -1473,6 +1681,7 @@
 															</tr>
 														</thead>
 														<tbody>
+															<?php $pr_amount = 0; ?>
 															@foreach($prepayments as $prepayment)
 																<tr class="rowsContract">
 																	<td>
@@ -1485,7 +1694,133 @@
 																		{{ $prepayment->amount_p_invoice }}
 																	</td>
 																</tr>
+																<?php $pr_amount += $prepayment->amount_p_invoice; ?>
 															@endforeach
+															<tr>
+																<td>
+																<td><b>Итого:</b></td>
+																<td>{{$pr_amount}}</td>
+															</tr>
+														</tbody>
+													</table>
+												@endif
+											</div>
+											<div class="col-md-6">
+												@if($payments)
+													<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
+														<thead>
+															<tr>
+																<th colspan='3' style='text-align: center;'>ОПЛАТА АВАНСА</th>
+															</tr>
+															<tr>
+																<th>№ п/п</th>
+																<th>Дата</th>
+																<th>Сумма</th>
+															</tr>
+														</thead>
+														<tbody>
+															<?php $pr_amount = 0; ?>
+															@foreach($payments as $payment)
+																@if($payment->is_prepayment_invoice)
+																	<tr class="rowsContract">
+																		<td>
+																			{{ $payment->number_invoice }}
+																		</td>
+																		<td>
+																			{{ $payment->date_invoice ? date('d.m.Y', strtotime($payment->date_invoice)) : '' }}
+																		</td>
+																		<td>
+																			{{ $payment->amount_p_invoice }}
+																		</td>
+																	</tr>
+																	<?php $pr_amount += $payment->amount_p_invoice; ?>
+																@endif
+															@endforeach
+															<tr>
+																<td>
+																<td><b>Итого:</b></td>
+																<td>{{$pr_amount}}</td>
+															</tr>
+														</tbody>
+													</table>
+												@endif
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-6">
+												@if($scores)
+													<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
+														<thead>
+															<tr>
+																<th colspan='3' style='text-align: center;'>СЧЕТ НА ОПЛАТУ</th>
+															</tr>
+															<tr>
+																<th>№ сч</th>
+																<th>Дата</th>
+																<th>Сумма</th>
+															</tr>
+														</thead>
+														<tbody>
+															<?php $pr_amount = 0; ?>
+															@foreach($scores as $score)
+																<tr class="rowsContract">
+																	<td>
+																		{{ $score->number_invoice }}
+																	</td>
+																	<td>
+																		{{ $score->date_invoice ? date('d.m.Y', strtotime($score->date_invoice)) : '' }}
+																	</td>
+																	<td>
+																		{{ $score->amount_p_invoice }}
+																	</td>
+																</tr>
+																<?php $pr_amount += $score->amount_p_invoice; ?>
+															@endforeach
+															<tr>
+																<td>
+																<td><b>Итого:</b></td>
+																<td>{{$pr_amount}}</td>
+															</tr>
+														</tbody>
+													</table>
+												@endif
+											</div>
+											<div class="col-md-6">
+												@if($payments)
+													<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
+														<thead>
+															<tr>
+																<th colspan='3' style='text-align: center;'>ОПЛАТА ТОВАРА, РАБОТ, УСЛУГ</th>
+															</tr>
+															<tr>
+																<th>№ п/п</th>
+																<th>Дата</th>
+																<th>Сумма</th>
+															</tr>
+														</thead>
+														<tbody>
+															<?php $pr_amount = 0; ?>
+															@foreach($payments as $payment)
+																@if(!$payment->is_prepayment_invoice)
+																	<tr class="rowsContract">
+																		<td>
+																			{{ $payment->number_invoice }}
+																		</td>
+																		<td>
+																			{{ $payment->date_invoice ? date('d.m.Y', strtotime($payment->date_invoice)) : '' }}
+																		</td>
+																		<td>
+																			{{ $payment->amount_p_invoice }}
+																		</td>
+																	</tr>
+																	<?php $pr_amount += $payment->amount_p_invoice; ?>
+																@endif
+															@endforeach
+															<tr>
+																<td>
+																<td><b>Итого:</b></td>
+																<td>{{$pr_amount}}</td>
+															</tr>
 														</tbody>
 													</table>
 												@endif
@@ -1506,6 +1841,7 @@
 															</tr>
 														</thead>
 														<tbody>
+															<?php $pr_amount = 0; ?>
 															@foreach($invoices as $invoice)
 																<tr class="rowsContract">
 																	<td>
@@ -1518,17 +1854,23 @@
 																		{{ $invoice->amount_p_invoice }}
 																	</td>
 																</tr>
+																<?php $pr_amount += $invoice->amount_p_invoice; ?>
 															@endforeach
+															<tr>
+																<td>
+																<td><b>Итого:</b></td>
+																<td>{{$pr_amount}}</td>
+															</tr>
 														</tbody>
 													</table>
 												@endif
 											</div>
 											<div class="col-md-6">
-												@if($payments)
+												@if($returns)
 													<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
 														<thead>
 															<tr>
-																<th colspan='3' style='text-align: center;'>ОПЛАТА ОКАЗАННЫХ УСЛУГ</th>
+																<th colspan='3' style='text-align: center;'>ВОЗВРАТ</th>
 															</tr>
 															<tr>
 																<th>№ п/п</th>
@@ -1537,19 +1879,26 @@
 															</tr>
 														</thead>
 														<tbody>
-															@foreach($payments as $payment)
+															<?php $pr_amount = 0; ?>
+															@foreach($returns as $return)
 																<tr class="rowsContract">
 																	<td>
-																		{{ $payment->number_invoice }}
+																		{{ $return->number_invoice }}
 																	</td>
 																	<td>
-																		{{ $payment->date_invoice ? date('d.m.Y', strtotime($payment->date_invoice)) : '' }}
+																		{{ $return->date_invoice ? date('d.m.Y', strtotime($return->date_invoice)) : '' }}
 																	</td>
 																	<td>
-																		{{ $payment->amount_p_invoice }}
+																		{{ $return->amount_p_invoice }}
 																	</td>
 																</tr>
+																<?php $pr_amount += $return->amount_p_invoice; ?>
 															@endforeach
+															<tr>
+																<td>
+																<td><b>Итого:</b></td>
+																<td>{{$pr_amount}}</td>
+															</tr>
 														</tbody>
 													</table>
 												@endif
@@ -1567,212 +1916,185 @@
 						<div class="content">
 							<form method='POST' action="{{route('department.ekonomic.update_reestr', $contract->id)}}">
 								{{csrf_field()}}
-								<div class="row border-top border-bottom border-left border-right">
-									<div class="col-md-2 border-top border-left border-bottom">
-										<div class="form-group">
-											<label>Контрагент</label>
-											<div class="form-group">
-												<select id="sel4" class='form-control select_counterpartie_reestr {{$errors->has("id_counterpartie_contract") ? print("inputError ") : print("")}}' name='id_counterpartie_contract' required>
-													<option></option>
-													<option value='{{$contract->id_counterpartie_contract}}' full_name='{{$contract->full_name_counterpartie_contract}}' inn='{{$contract->inn_counterpartie_contract}}' selected>{{$contract->name_counterpartie_contract}}</option>
-												</select>
-												@if($errors->has('id_counterpartie_contract'))
-													<label class='msgError'>{{$errors->first('id_counterpartie_contract')}}</label>
-												@endif
+								<div class="row">
+									<div class='col-md-9 border-top border-bottom border-left border-right'>
+										<div class='row'>
+											<div class="col-md-4">
+												<label>Контрагент</label>
+												<div class="form-group">
+													<select id="sel4" class='form-control select_counterpartie_reestr {{$errors->has("id_counterpartie_contract") ? print("inputError ") : print("")}}' name='id_counterpartie_contract' required>
+														<option></option>
+														<option value='{{$contract->id_counterpartie_contract}}' full_name='{{$contract->full_name_counterpartie_contract}}' inn='{{$contract->inn_counterpartie_contract}}' selected>{{$contract->name_counterpartie_contract}}</option>
+													</select>
+													@if($errors->has('id_counterpartie_contract'))
+														<label class='msgError'>{{$errors->first('id_counterpartie_contract')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class="col-md-1">
+												<div class="form-group">
+													<button type='button' data-toggle="modal" data-target="#chose_counterpartie" class="btn btn-primary" style='margin-top: 27px;'>Выбрать</button>
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label>Внимание!</label>
+													<input class='form-control' style='color:red; text-align:center;' type='text' value='<?php 
+														if($reestr->date_registration_project_reestr)
+															if(!$reestr->date_signing_contract_reestr){
+																if(time() - strtotime($reestr->date_registration_project_reestr) > 2592000)
+																	echo 'Не подписан более 30 дней!';
+															}else
+																if(strtotime($reestr->date_signing_contract_reestr) - strtotime($reestr->date_registration_project_reestr) > 2592000)
+																	echo 'Не был подписан более 30 дней!';
+													?>' readonly />
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class='col-md-7'>
+													<div class="form-group">
+														<label for='numberContract'>Номер договора</label>
+														<input id='numberContract' class='form-control {{$errors->has("number_contract") ? print("inputError ") : print("")}}' name='number_contract' type='text' value='{{old("number_contract") ? old("number_contract") : $contract->number_contract}}' readonly />
+														@if($errors->has('number_contract'))
+															<label class='msgError'>{{$errors->first('number_contract')}}</label>
+														@endif
+													</div>
+												</div>
+												<div class="col-md-5" style='text-align: center;'>
+													<div class='form-group' style='margin-top: 27px;'>
+														@if(isset($prev_contract))
+															@if(isset($_GET['isSmallPage']))
+																<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}?isSmallPage=true" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+															@else
+																<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+															@endif
+														@else
+															<button class='btn btn-primary' title='Назад' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+														@endif
+														@if(isset($next_contract))
+															@if(isset($_GET['isSmallPage']))
+																<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}?isSmallPage=true" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+															@else
+																<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+															@endif
+														@else
+															<button class='btn btn-primary' title='Вперед' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+														@endif
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
-									<div class="col-md-1 border-top border-bottom">
-										<div class="form-group">
-											<button type='button' data-toggle="modal" data-target="#chose_counterpartie" class="btn btn-primary" style='margin-top: 27px;'>Выбрать</button>
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom">
-										<div class="form-group">
-											<label>Внимание!</label>
-											<input class='form-control' style='color:red; text-align:center;' type='text' value='<?php 
-												if($reestr->date_registration_project_reestr)
-													if(!$reestr->date_signing_contract_reestr){
-														if(time() - strtotime($reestr->date_registration_project_reestr) > 2592000)
-															echo 'Не подписан более 30 дней!';
-													}else
-														if(strtotime($reestr->date_signing_contract_reestr) - strtotime($reestr->date_registration_project_reestr) > 2592000)
-															echo 'Не был подписан более 30 дней!';
-											?>' readonly />
-										</div>
-									</div>
-									<div class="col-md-3 border-top border-bottom border-right">
-										<div class='col-md-7'>
-											<div class="form-group">
-												<label for='numberContract'>Номер договора</label>
-												<input id='numberContract' class='form-control {{$errors->has("number_contract") ? print("inputError ") : print("")}}' name='number_contract' type='text' value='{{old("number_contract") ? old("number_contract") : $contract->number_contract}}' readonly />
-												@if($errors->has('number_contract'))
-													<label class='msgError'>{{$errors->first('number_contract')}}</label>
-												@endif
+									<div class='col-md-3 border-bottom border-right border-top'>
+										<div class='row'>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='amount_contract_reestr' class='small-text'>Сумма (окончательная)</label>
+													<input id='amount_contract_reestr' class='form-control check-number' name='amount_contract_reestr' type='text' value='{{old("amount_contract_reestr") ? old("amount_contract_reestr") : $reestr->amount_contract_reestr}}'/>
+												</div>
 											</div>
-										</div>
-										<div class="col-md-5" style='text-align: center;'>
-											<div class='form-group' style='margin-top: 27px;'>
-												@if(isset($prev_contract))
-													@if(isset($_GET['isSmallPage']))
-														<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}?isSmallPage=true" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-													@else
-														<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-													@endif
-												@else
-													<button class='btn btn-primary' title='Назад' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-												@endif
-												@if(isset($next_contract))
-													@if(isset($_GET['isSmallPage']))
-														<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}?isSmallPage=true" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-													@else
-														<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-													@endif
-												@else
-													<button class='btn btn-primary' title='Вперед' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-												@endif
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='amount_invoice_reestr'>Сумма по счетам</label>
+													<input id='amount_invoice_reestr' class='form-control check-number' name='amount_invoice_reestr' type='text' value='{{$reestr->amount_invoice_reestr}}' disabled />
+												</div>
 											</div>
-										</div>
-									</div>
-									<div class="col-md-2 border-bottom border-top">
-										<div class="form-group">
-											<label for='amount_contract_reestr'>Сумма (окончательная)</label>
-											<input id='amount_contract_reestr' class='form-control check-number' name='amount_contract_reestr' type='text' value='{{old("amount_contract_reestr") ? old("amount_contract_reestr") : $reestr->amount_contract_reestr}}'/>
-										</div>
-									</div>
-									<div class="col-md-2 border-bottom border-top border-right">
-										<div class="form-group">
-											<label for='amount_invoice_reestr'>Сумма по счетам</label>
-											<input id='amount_invoice_reestr' class='form-control check-number' name='amount_invoice_reestr' type='text' value='{{$reestr->amount_invoice_reestr}}' disabled />
-										</div>
-									</div>
-								</div>
-								<div class="row border-right border-left">
-									<div class="col-md-1 border-top border-bottom">
-										<div class="form-group">
-											<label for='number_pp'>№ п/п</label>
-											<input id='number_pp' class='change_contract_number form-control {{$errors->has("number_pp") ? print("inputError ") : print("")}}' name='number_pp' type='text' value='{{old("number_pp") ? old("number_pp") : (strlen($contract->number_contract) > 0 ? explode("‐",$contract->number_contract)[0] : "")}}' required/>
-											@if($errors->has('number_pp'))
-												<label class='msgError'>{{$errors->first('number_pp')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-1 border-top border-bottom">
-										<div class="form-group">
-											<label for='index_dep' style='font-size: 12px;'>Индекс подразд.</label>
-											<select id='index_dep' class='change_contract_number form-control {{$errors->has("index_dep") ? print("inputError ") : print("")}}' name='index_dep' type='text' value='{{old("index_dep")}}' required>
-												@if(old('index_dep'))
-													<option>{{old('index_dep')}}</option>
-												@endif
-												<option></option>
-												@foreach($departments as $department)
-													@if(count(explode("‐",$contract->number_contract))>1)
-														@if(explode("‐",$contract->number_contract)[1] == $department->index_department)
-															<option value='{{$department->index_department}}' selected>{{$department->index_department}} {{$department->name_department}}</option>
-														@else
-															<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
-														@endif
-													@else
-														<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
-													@endif
-												@endforeach
-											</select>
-											@if($errors->has('index_dep'))
-												<label class='msgError'>{{$errors->first('index_dep')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-1 border-top border-bottom border-right">
-										<div class="form-group">
-											<label for='year_contract'>Год</label>
-											<input id='year_contract' class='change_contract_number form-control {{$errors->has("year_contract") ? print("inputError ") : print("")}}' name='year_contract' type='text' value='{{old("year_contract") ? old("year_contract") : $contract->year_contract}}' required />
-											@if($errors->has('year_contract'))
-												<label class='msgError'>{{$errors->first('year_contract')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom">
-										<div class="form-group">
-											<label for='executor_contract_reestr'>Исполнитель по Дог./Контр.</label>
-											<input id='executor_contract_reestr' class='form-control' name='executor_contract_reestr' type='text' value='{{old("executor_contract_reestr") ? old("executor_contract_reestr") : $reestr->executor_contract_reestr}}'/>
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom">
-										<div class="form-group">
-											<label for='executor_reestr'>Исполнитель ОУД</label>
-											<select class='form-control' name='executor_reestr'>
-												<option></option>
-												@if(old('executor_reestr'))
-													@foreach($curators as $in_curators)
-														@if(old('executor_reestr') == $in_curators->id)
-															<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
-														@else
-															<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
-														@endif
-													@endforeach
-												@else
-													@foreach($curators as $in_curators)
-														@if($reestr->executor_reestr == $in_curators->id)
-															<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
-														@else
-															<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
-														@endif
-													@endforeach
-												@endif
-											</select>
-											@if($errors->has('executor_reestr'))
-												<label class='msgError'>{{$errors->first('executor_reestr')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-left border-top border-bottom" style='font-size: 12px;'>
-										<div class="form-group">
-											<label for='date_save_contract_reestr'>Дата сдачи Дог./Контр. на хранение</label>
-											<input id='date_save_contract_reestr' class='datepicker form-control {{$errors->has("date_save_contract_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_reestr' value='{{old("date_save_contract_reestr") ? old("date_save_contract_reestr") : $reestr->date_save_contract_reestr}}'/>
-											@if($errors->has('date_save_contract_reestr'))
-												<label class='msgError'>{{$errors->first('date_save_contract_reestr')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-top">
-										<div class="form-group">
-											<label for='place_save_contract_reestr'>Место хранения</label>
-											<input id='place_save_contract_reestr' class='form-control {{$errors->has("place_save_contract_reestr") ? print("inputError ") : print("")}}' name='place_save_contract_reestr' value='{{old("place_save_contract_reestr") ? old("place_save_contract_reestr") : $reestr->place_save_contract_reestr}}'/>
-											@if($errors->has('place_save_contract'))
-												<label class='msgError'>{{$errors->first('place_save_contract')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-1 border-top">
-										<div class="form-group">
-											<label for='sel6' style='font-size: 12px;'>Тип документа</label>
-											<select id="sel6" class='form-control {{$errors->has("type_document_reestr") ? print("inputError ") : print("")}}' name='type_document_reestr'>
-												<option></option>
-												@foreach($type_documents as $type_document)
-													@if(old('type_document_reestr'))
-														@if(old('type_document_reestr') == $type_document->id)
-															<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
-														@else
-															<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
-														@endif
-													@else
-														@if($reestr->type_document_reestr == $type_document->id)
-															<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
-														@else
-															<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
-														@endif
-													@endif
-												@endforeach
-											</select>
 										</div>
 									</div>
 								</div>
 								<div class='row'>
-									<div class="col-md-9">
+									<div class='col-md-7'>
 										<div class='row'>
-											<div class="col-md-9">
+											<div class='col-md-6 border-left border-right border-top border-bottom'>
 												<div class='row'>
-													<div class="col-md-4 border-top border-left">
+													<div class="col-md-4">
+														<div class="form-group">
+															<label for='number_pp'>№ п/п</label>
+															<input id='number_pp' class='change_contract_number form-control {{$errors->has("number_pp") ? print("inputError ") : print("")}}' name='number_pp' type='text' value='{{old("number_pp") ? old("number_pp") : (strlen($contract->number_contract) > 0 ? explode("‐",$contract->number_contract)[0] : "")}}' required/>
+															@if($errors->has('number_pp'))
+																<label class='msgError'>{{$errors->first('number_pp')}}</label>
+															@endif
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group">
+															<label for='index_dep' style='font-size: 12px;'>Индекс подразд.</label>
+															<select id='index_dep' class='change_contract_number form-control {{$errors->has("index_dep") ? print("inputError ") : print("")}}' name='index_dep' type='text' value='{{old("index_dep")}}' required>
+																@if(old('index_dep'))
+																	<option>{{old('index_dep')}}</option>
+																@endif
+																<option></option>
+																@foreach($departments as $department)
+																	@if(count(explode("‐",$contract->number_contract))>1)
+																		@if(explode("‐",$contract->number_contract)[1] == $department->index_department)
+																			<option value='{{$department->index_department}}' selected>{{$department->index_department}} {{$department->name_department}}</option>
+																		@else
+																			<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
+																		@endif
+																	@else
+																		<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
+																	@endif
+																@endforeach
+															</select>
+															@if($errors->has('index_dep'))
+																<label class='msgError'>{{$errors->first('index_dep')}}</label>
+															@endif
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group">
+															<label for='year_contract'>Год</label>
+															<input id='year_contract' class='change_contract_number form-control {{$errors->has("year_contract") ? print("inputError ") : print("")}}' name='year_contract' type='text' value='{{old("year_contract") ? old("year_contract") : $contract->year_contract}}' required />
+															@if($errors->has('year_contract'))
+																<label class='msgError'>{{$errors->first('year_contract')}}</label>
+															@endif
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class='col-md-6 border-left border-right border-top border-bottom'>
+												<div class='row'>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for='executor_contract_reestr' class='small-text'>Исполнитель по Дог./Контр.</label>
+															<input id='executor_contract_reestr' class='form-control' name='executor_contract_reestr' type='text' value='{{old("executor_contract_reestr") ? old("executor_contract_reestr") : $reestr->executor_contract_reestr}}'/>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for='executor_reestr'>Исполнитель ОУД</label>
+															<select class='form-control' name='executor_reestr'>
+																<option></option>
+																@if(old('executor_reestr'))
+																	@foreach($curators as $in_curators)
+																		@if(old('executor_reestr') == $in_curators->id)
+																			<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
+																		@else
+																			<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
+																		@endif
+																	@endforeach
+																@else
+																	@foreach($curators as $in_curators)
+																		@if($reestr->executor_reestr == $in_curators->id)
+																			<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
+																		@else
+																			<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
+																		@endif
+																	@endforeach
+																@endif
+															</select>
+															@if($errors->has('executor_reestr'))
+																<label class='msgError'>{{$errors->first('executor_reestr')}}</label>
+															@endif
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12 border-left border-top border-right border-bottom'>
+												<div class='row'>
+													<div class="col-md-4">
 														<div class="form-group">
 															<label for='date_contract_on_first_reestr'>Дата Дог./Контр. на 1 л.</label>
 															<input id='date_contract_on_first_reestr' class='datepicker form-control {{$errors->has("date_contract_on_first_reestr") ? print("inputError ") : print("")}}' name='date_contract_on_first_reestr' value='{{old("date_contract_on_first_reestr") ? old("date_contract_on_first_reestr") : $reestr->date_contract_on_first_reestr}}'/>
@@ -1781,18 +2103,18 @@
 															@endif
 														</div>
 													</div>
-													<div class="col-md-4 border-top">
+													<div class="col-md-4">
 														<div class="form-group">
-															<label for='date_signing_contract_reestr'>Дата подписания ФКП "НТИИМ"</label>
+															<label for='date_signing_contract_reestr' style='font-size: 11px;'>Дата подписания ф-л "НТИИМ"(ФКП "НТИИМ")</label>
 															<input id='date_signing_contract_reestr' class='datepicker form-control {{$errors->has("date_signing_contract_reestr") ? print("inputError ") : print("")}}' name='date_signing_contract_reestr' value='{{old("date_signing_contract_reestr") ? old("date_signing_contract_reestr") : $reestr->date_signing_contract_reestr}}'/>
 															@if($errors->has('date_signing_contract_reestr'))
 																<label class='msgError'>{{$errors->first('date_signing_contract_reestr')}}</label>
 															@endif
 														</div>
 													</div>
-													<div class="col-md-4 border-top" style='font-size: 12px;'>
+													<div class="col-md-4">
 														<div class="form-group">
-															<label for='date_control_signing_contract_reestr'>Контрольный срок подписания Дог./Контр.</label>
+															<label for='date_control_signing_contract_reestr' class='small-text'>Контрольный срок подписания Дог./Контр.</label>
 															<input id='date_control_signing_contract_reestr' class='datepicker form-control {{$errors->has("date_control_signing_contract_reestr") ? print("inputError ") : print("")}}' name='date_control_signing_contract_reestr' value='{{old("date_control_signing_contract_reestr") ? old("date_control_signing_contract_reestr") : $reestr->date_control_signing_contract_reestr}}'/>
 															@if($errors->has('date_control_signing_contract_reestr'))
 																<label class='msgError'>{{$errors->first('date_control_signing_contract_reestr')}}</label>
@@ -1801,7 +2123,7 @@
 													</div>
 												</div>
 												<div class='row'>
-													<div class="col-md-4 border-left border-bottom">
+													<div class="col-md-4">
 														<div class="form-group">
 															<label id='label_date_registration_project_reestr' for='date_registration_project_reestr'>{{ $reestr->application_reestr ? 'Дата регистрации заявки' : 'Дата регистрации проекта'}}</label>
 															@if(old('application_reestr'))
@@ -1820,7 +2142,7 @@
 															@endif
 														</div>
 													</div>
-													<div class="col-md-4 border-bottom">
+													<div class="col-md-4">
 														<div class="form-group">
 															<label for='date_signing_contract_counterpartie_reestr'>Дата подписания Контрагентом</label>
 															<input id='date_signing_contract_counterpartie_reestr' class='datepicker form-control {{$errors->has("date_signing_contract_counterpartie_reestr") ? print("inputError ") : print("")}}' name='date_signing_contract_counterpartie_reestr' value='{{old("date_signing_contract_counterpartie_reestr") ? old("date_signing_contract_counterpartie_reestr") : $reestr->date_signing_contract_counterpartie_reestr}}'/>
@@ -1829,7 +2151,7 @@
 															@endif
 														</div>
 													</div>
-													<div class="col-md-4 border-bottom">
+													<div class="col-md-4">
 														<div class="form-group">
 															<label for='date_entry_into_force_reestr'>Дата вступления Дог./Контр. в силу</label>
 															<input id='date_entry_into_force_reestr' class='datepicker form-control {{$errors->has("date_entry_into_force_reestr") ? print("inputError ") : print("")}}' name='date_entry_into_force_reestr' value='{{old("date_entry_into_force_reestr") ? old("date_entry_into_force_reestr") : $reestr->date_entry_into_force_reestr}}'/>
@@ -1840,48 +2162,71 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-md-3">
-												<div class='row'>
-													<div class="col-md-6 border-top">
-														<div class="form-group">
-															<label for='protocols_reestr'>Протоколы</label>
-															<input id='protocols_reestr' class='form-control {{$errors->has("protocols_reestr") ? print("inputError ") : print("")}}' name='protocols_reestr' value='{{$big_date_protocol != null ? $big_date_protocol : ""}}' readonly />
-														</div>
-													</div>
-													<div class="col-md-6 border-top border-right">
-														<div class="form-group">
-															<label for='add_agreements_reestr'>ДС</label>
-															<input id='add_agreements_reestr' class='form-control {{$errors->has("add_agreements_reestr") ? print("inputError ") : print("")}}' name='add_agreements_reestr' value='{{$big_date_add_agreement != null ? $big_date_add_agreement : ""}}' readonly />
-														</div>
-													</div>
+										</div>
+									</div>
+									<div class='col-md-5 border-left border-top border-right border-bottom'>
+										<div class='row'>
+											<div class="col-md-5">
+												<div class="form-group">
+													<label for='date_save_contract_reestr' style='font-size: 11px;'>Дата сдачи Д/К на хранение оригинала</label>
+													<input id='date_save_contract_reestr' class='datepicker form-control {{$errors->has("date_save_contract_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_reestr' value='{{old("date_save_contract_reestr") ? old("date_save_contract_reestr") : $reestr->date_save_contract_reestr}}'/>
+													@if($errors->has('date_save_contract_reestr'))
+														<label class='msgError'>{{$errors->first('date_save_contract_reestr')}}</label>
+													@endif
 												</div>
-												<div class='row'>
-													<div class="col-md-6 border-bottom">
-														<div class="form-group">
-															<label for='sel9'>Согл./Не согл.</label>
-															<select id="sel9" class='form-control {{$errors->has("reconciliation_protocol_reestr") ? print("inputError ") : print("")}}' name='reconciliation_protocol_reestr'>
-																<option value='0' {{$reestr->reconciliation_protocol_reestr == 0 ? 'selected' : ''}}></option>
-																<option value='1' {{$reestr->reconciliation_protocol_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
-																<option value='2' {{$reestr->reconciliation_protocol_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
-															</select>
-														</div>
-													</div>
-													<div class="col-md-6 border-bottom border-right">
-														<div class="form-group">
-															<label for='sel10'>Согл./Не согл.</label>
-															<select id="sel10" class='form-control {{$errors->has("reconciliation_agreement_reestr") ? print("inputError ") : print("")}}' name='reconciliation_agreement_reestr'>
-																<option value='0' {{$reestr->reconciliation_agreement_reestr == 0 ? 'selected' : ''}}></option>
-																<option value='1' {{$reestr->reconciliation_agreement_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
-																<option value='2' {{$reestr->reconciliation_agreement_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
-															</select>
-														</div>
-													</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for='place_save_contract_reestr'>Место хранения</label>
+													<input id='place_save_contract_reestr' class='form-control {{$errors->has("place_save_contract_reestr") ? print("inputError ") : print("")}}' name='place_save_contract_reestr' value='{{old("place_save_contract_reestr") ? old("place_save_contract_reestr") : $reestr->place_save_contract_reestr}}'/>
+													@if($errors->has('place_save_contract'))
+														<label class='msgError'>{{$errors->first('place_save_contract')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for='sel6' style='font-size: 12px;'>Тип документа</label>
+													<select id="sel6" class='form-control {{$errors->has("type_document_reestr") ? print("inputError ") : print("")}}' name='type_document_reestr'>
+														<option></option>
+														@foreach($type_documents as $type_document)
+															@if(old('type_document_reestr'))
+																@if(old('type_document_reestr') == $type_document->id)
+																	<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
+																@else
+																	<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
+																@endif
+															@else
+																@if($reestr->type_document_reestr == $type_document->id)
+																	<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
+																@else
+																	<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
+																@endif
+															@endif
+														@endforeach
+													</select>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-md-3">
 										<div class='row'>
+											<div class="col-md-5">
+												<div class="form-group">
+													<label for='date_save_contract_el_reestr' class='small-text'>Дата сдачи Д/К на хранение скана</label>
+													<input id='date_save_contract_el_reestr' class='datepicker form-control {{$errors->has("date_save_contract_el_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_el_reestr' value='{{old("date_save_contract_el_reestr") ? old("date_save_contract_el_reestr") : $reestr->date_save_contract_el_reestr}}'/>
+													@if($errors->has('date_save_contract_el_reestr'))
+														<label class='msgError'>{{$errors->first('date_save_contract_el_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for='count_save_contract_reestr'>Срок хранения по</label>
+													<input id='count_save_contract_reestr' class='datepicker form-control {{$errors->has("count_save_contract_reestr") ? print("inputError ") : print("")}}' name='count_save_contract_reestr' value='{{old("count_save_contract_reestr") ? old("count_save_contract_reestr") : $reestr->count_save_contract_reestr}}'/>
+													@if($errors->has('count_save_contract_reestr'))
+														<label class='msgError'>{{$errors->first('count_save_contract_reestr')}}</label>
+													@endif
+												</div>
+											</div>
 											<div class="col-md-3">
 												<div class="form-group">
 													<label class='form-check-label' for='break'>ОТКАЗ</label>
@@ -1908,27 +2253,27 @@
 													@endif
 												</div>
 											</div>
-											<div class="col-md-9 border-right">
+										</div>
+										<div class='row'>
+											<div class="col-md-5">
 												<div class="form-group">
-													<label for='document_success_renouncement_reestr'>Документ, подтверждающий отказ</label>
+													<label for='document_success_renouncement_reestr' class='small-text'>Документ, подтверждающий отказ</label>
 													<input id='document_success_renouncement_reestr' class='form-control {{$errors->has("document_success_renouncement_reestr") ? print("inputError ") : print("")}}' name='document_success_renouncement_reestr' value='{{old("document_success_renouncement_reestr") ? old("document_success_renouncement_reestr") : $contract->document_success_renouncement_reestr}}'/>
 													@if($errors->has('document_success_renouncement_reestr'))
 														<label class='msgError'>{{$errors->first('document_success_renouncement_reestr')}}</label>
 													@endif
 												</div>
 											</div>
-										</div>
-										<div class='row'>
-											<div class="col-md-6 border-bottom">
+											<div class="col-md-2">
 												<div class="form-group">
-													<label for='date_renouncement_contract'>Дата отказа</label>
+													<label for='date_renouncement_contract' class='small-text'>Дата отказа</label>
 													<input id='date_renouncement_contract' class='form-control datepicker {{$errors->has("date_renouncement_contract") ? print("inputError ") : print("")}}' name='date_renouncement_contract' value='{{old("date_renouncement_contract") ? old("date_renouncement_contract") : $contract->date_renouncement_contract}}'/>
 													@if($errors->has('date_renouncement_contract'))
 														<label class='msgError'>{{$errors->first('date_renouncement_contract')}}</label>
 													@endif
 												</div>
 											</div>
-											<div class="col-md-6 border-bottom border-right">
+											<div class="col-md-5">
 												<div class="form-group">
 													<label for='number_aftair_renouncement_reestr'>№ дела</label>
 													<input id='number_aftair_renouncement_reestr' class='form-control {{$errors->has("number_aftair_renouncement_reestr") ? print("inputError ") : print("")}}' name='number_aftair_renouncement_reestr' value='{{old("number_aftair_renouncement_reestr") ? old("number_aftair_renouncement_reestr") : $contract->number_aftair_renouncement_reestr}}'/>
@@ -1940,102 +2285,182 @@
 										</div>
 									</div>
 								</div>
-								<div class='row'>
-									<div class="col-md-2 border-bottom border-left border-top">
-										<div class="form-group">
-											<label for="sel3">Вид договора</span></label>
-											<select id="sel3" class='form-control {{$errors->has("id_view_contract") ? print("inputError ") : print("")}}' name='id_view_contract' required>
-												<option></option>
-												@if($viewContracts)
-													@foreach($viewContracts as $viewContract)
-														@if(old('id_view_contract'))
-															@if(old('id_view_contract') == $viewContract->id)
-																<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
-															@else
-																<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
-															@endif
-														@else
-															@if($reestr->id_view_contract == $viewContract->id)
-																<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
-															@else
-																<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
-															@endif
+								<div class="row">
+									<div class='col-md-2 border-left border-top border-right border-bottom'>
+										<div class='row'>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for="sel3">Вид договора</span></label>
+													<select id="sel3" class='form-control {{$errors->has("id_view_contract") ? print("inputError ") : print("")}}' name='id_view_contract' required>
+														<option></option>
+														@if($viewContracts)
+															@foreach($viewContracts as $viewContract)
+																@if(old('id_view_contract'))
+																	@if(old('id_view_contract') == $viewContract->id)
+																		<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
+																	@else
+																		<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
+																	@endif
+																@else
+																	@if($reestr->id_view_contract == $viewContract->id)
+																		<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
+																	@else
+																		<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
+																	@endif
+																@endif
+															@endforeach
 														@endif
-													@endforeach
-												@endif
-											</select>
-											@if($errors->has('id_view_contract'))
-												<label class='msgError'>{{$errors->first('id_view_contract')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-2 border-top border-bottom border-right">
-										<div class="form-group">
-											<label for="sel5">Отбор поставщика</span></label>
-											<select id="sel5" class='form-control {{$errors->has("selection_supplier_reestr") ? print("inputError ") : print("")}}' name='selection_supplier_reestr'>
-												<option></option>
-												@foreach($selection_suppliers as $selection_supplier)
-													@if(old('selection_supplier_reestr'))
-														@if(old('selection_supplier_reestr') == $selection_supplier->id)
-															<option value='{{$selection_supplier->id}}' selected>{{$selection_supplier->name_selection_supplier}}</option>
-														@else
-															<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
-														@endif
-													@else
-														@if($reestr->selection_supplier_reestr == $selection_supplier->id)
-															<option value='{{$selection_supplier->id}}' selected>{{$selection_supplier->name_selection_supplier}}</option>
-														@else
-															<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
-														@endif
+													</select>
+													@if($errors->has('id_view_contract'))
+														<label class='msgError'>{{$errors->first('id_view_contract')}}</label>
 													@endif
-												@endforeach
-											</select>
-											@if($errors->has('selection_supplier_reestr'))
-												<label class='msgError'>{{$errors->first('selection_supplier_reestr')}}</label>
-											@endif
+												</div>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for="sel5">Отбор поставщика</span></label>
+													<select id="sel5" class='form-control {{$errors->has("selection_supplier_reestr") ? print("inputError ") : print("")}}' name='selection_supplier_reestr'>
+														<option></option>
+														@foreach($selection_suppliers as $selection_supplier)
+															@if(old('selection_supplier_reestr'))
+																@if(old('selection_supplier_reestr') == $selection_supplier->id)
+																	<option value='{{$selection_supplier->id}}' selected>{{$selection_supplier->name_selection_supplier}}</option>
+																@else
+																	<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
+																@endif
+															@else
+																@if($reestr->selection_supplier_reestr == $selection_supplier->id)
+																	<option value='{{$selection_supplier->id}}' selected>{{$selection_supplier->name_selection_supplier}}</option>
+																@else
+																	<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
+																@endif
+															@endif
+														@endforeach
+													</select>
+													@if($errors->has('selection_supplier_reestr'))
+														<label class='msgError'>{{$errors->first('selection_supplier_reestr')}}</label>
+													@endif
+												</div>
+											</div>
 										</div>
 									</div>
-									<div class="col-md-2 border-top border-bottom border-left">
-										<div class="form-group">
-											<label for='app_outgoing_number_reestr'>Заявка исх. №</label>
-											<input id='app_outgoing_number_reestr' class='form-control {{$errors->has("app_outgoing_number_reestr") ? print("inputError ") : print("")}}' name='app_outgoing_number_reestr' value='{{old("app_outgoing_number_reestr") ? old("app_outgoing_number_reestr") : $reestr->app_outgoing_number_reestr}}'/>
-											@if($errors->has('app_outgoing_number_reestr'))
-												<label class='msgError'>{{$errors->first('app_outgoing_number_reestr')}}</label>
-											@endif
+									<div class='col-md-4 border-left border-top border-right border-bottom'>
+										<div class='row'>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='app_outgoing_number_reestr'>Заявка исх. №</label>
+													<input id='app_outgoing_number_reestr' class='form-control {{$errors->has("app_outgoing_number_reestr") ? print("inputError ") : print("")}}' name='app_outgoing_number_reestr' value='{{old("app_outgoing_number_reestr") ? old("app_outgoing_number_reestr") : $reestr->app_outgoing_number_reestr}}'/>
+													@if($errors->has('app_outgoing_number_reestr'))
+														<label class='msgError'>{{$errors->first('app_outgoing_number_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='app_incoming_number_reestr'>Вх. №</label>
+													<input id='app_incoming_number_reestr' class='form-control {{$errors->has("app_incoming_number_reestr") ? print("inputError ") : print("")}}' name='app_incoming_number_reestr' value='{{old("app_incoming_number_reestr") ? old("app_incoming_number_reestr") : $reestr->app_incoming_number_reestr}}'/>
+													@if($errors->has('app_incoming_number_reestr'))
+														<label class='msgError'>{{$errors->first('app_incoming_number_reestr')}}</label>
+													@endif
+												</div>
+											</div>
 										</div>
 									</div>
-									<div class="col-md-2 border-top border-bottom border-right">
-										<div class="form-group">
-											<label for='app_incoming_number_reestr'>Вх. №</label>
-											<input id='app_incoming_number_reestr' class='form-control {{$errors->has("app_incoming_number_reestr") ? print("inputError ") : print("")}}' name='app_incoming_number_reestr' value='{{old("app_incoming_number_reestr") ? old("app_incoming_number_reestr") : $reestr->app_incoming_number_reestr}}'/>
-											@if($errors->has('app_incoming_number_reestr'))
-												<label class='msgError'>{{$errors->first('app_incoming_number_reestr')}}</label>
-											@endif
+									<div class='col-md-2 border-left border-top border-right border-bottom'>
+										<div class='row'>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='protocols_reestr'>Протоколы</label>
+													<input id='protocols_reestr' class='form-control {{$errors->has("protocols_reestr") ? print("inputError ") : print("")}}' name='protocols_reestr' value='{{$big_date_protocol != null ? $big_date_protocol : ""}}' readonly />
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='add_agreements_reestr'>ДС</label>
+													<input id='add_agreements_reestr' class='form-control {{$errors->has("add_agreements_reestr") ? print("inputError ") : print("")}}' name='add_agreements_reestr' value='{{$big_date_add_agreement != null ? $big_date_add_agreement : ""}}' readonly />
+												</div>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='sel9' class='small-text'>Согл./Не согл.</label>
+													<select id="sel9" class='form-control {{$errors->has("reconciliation_protocol_reestr") ? print("inputError ") : print("")}}' name='reconciliation_protocol_reestr'>
+														<option value='0' {{$reestr->reconciliation_protocol_reestr == 0 ? 'selected' : ''}}></option>
+														<option value='1' {{$reestr->reconciliation_protocol_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
+														<option value='2' {{$reestr->reconciliation_protocol_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
+													</select>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label for='sel10' class='small-text'>Согл./Не согл.</label>
+													<select id="sel10" class='form-control {{$errors->has("reconciliation_agreement_reestr") ? print("inputError ") : print("")}}' name='reconciliation_agreement_reestr'>
+														<option value='0' {{$reestr->reconciliation_agreement_reestr == 0 ? 'selected' : ''}}></option>
+														<option value='1' {{$reestr->reconciliation_agreement_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
+														<option value='2' {{$reestr->reconciliation_agreement_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
+													</select>
+												</div>
+											</div>
 										</div>
 									</div>
-									<div class="col-md-2 border-top border-bottom border-left">
-										<div class="form-group">
-											<label for='result_second_department_date_reestr'>Заключение отдела №2 Дата</label>
-											<input id='result_second_department_date_reestr' class='datepicker form-control {{$errors->has("result_second_department_date_reestr") ? print("inputError ") : print("")}}' name='result_second_department_date_reestr' value='{{old("result_second_department_date_reestr") ? old("result_second_department_date_reestr") : $reestr->result_second_department_date_reestr}}'/>
-											@if($errors->has('result_second_department_date_reestr'))
-												<label class='msgError'>{{$errors->first('result_second_department_date_reestr')}}</label>
-											@endif
+									<div class='col-md-2 border-left border-top border-right border-bottom'>
+										<div class='row'>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for='result_second_department_date_reestr'>Заключение отдела №2 Дата</label>
+													<input id='result_second_department_date_reestr' class='datepicker form-control {{$errors->has("result_second_department_date_reestr") ? print("inputError ") : print("")}}' name='result_second_department_date_reestr' value='{{old("result_second_department_date_reestr") ? old("result_second_department_date_reestr") : $reestr->result_second_department_date_reestr}}'/>
+													@if($errors->has('result_second_department_date_reestr'))
+														<label class='msgError'>{{$errors->first('result_second_department_date_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for='result_second_department_number_reestr'>№</label>
+													<input id='result_second_department_number_reestr' class='form-control {{$errors->has("result_second_department_number_reestr") ? print("inputError ") : print("")}}' name='result_second_department_number_reestr' value='{{old("result_second_department_number_reestr") ? old("result_second_department_number_reestr") : $reestr->result_second_department_number_reestr}}'/>
+													@if($errors->has('result_second_department_number_reestr'))
+														<label class='msgError'>{{$errors->first('result_second_department_number_reestr')}}</label>
+													@endif
+												</div>
+											</div>
 										</div>
 									</div>
-									<div class="col-md-2 border-top border-bottom border-right">
-										<div class="form-group">
-											<label for='result_second_department_number_reestr'>№</label>
-											<input id='result_second_department_number_reestr' class='form-control {{$errors->has("result_second_department_number_reestr") ? print("inputError ") : print("")}}' name='result_second_department_number_reestr' value='{{old("result_second_department_number_reestr") ? old("result_second_department_number_reestr") : $reestr->result_second_department_number_reestr}}'/>
-											@if($errors->has('result_second_department_number_reestr'))
-												<label class='msgError'>{{$errors->first('result_second_department_number_reestr')}}</label>
-											@endif
+									<div class='col-md-2 border-all'>
+										<div class='row'>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for='date_complete_reestr'>Договор исполнен на</label>
+													<input id='date_complete_reestr' class='datepicker form-control {{$errors->has("date_complete_reestr") ? print("inputError ") : print("")}}' name='date_complete_reestr' value='{{old("date_complete_reestr") ? old("date_complete_reestr") : $reestr->date_complete_reestr}}'/>
+													@if($errors->has('date_complete_reestr'))
+														<label class='msgError'>{{$errors->first('date_complete_reestr')}}</label>
+													@endif
+												</div>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for='reestr_number_reestr'>Реестровый номер Д/К</label>
+													<input id='reestr_number_reestr' class='form-control {{$errors->has("reestr_number_reestr") ? print("inputError ") : print("")}}' name='reestr_number_reestr' value='{{old("reestr_number_reestr") ? old("reestr_number_reestr") : $reestr->reestr_number_reestr}}' maxlength='30'/>
+													@if($errors->has('reestr_number_reestr'))
+														<label class='msgError'>{{$errors->first('reestr_number_reestr')}}</label>
+													@endif
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 								<div class='row'>
 									<input id='is_new_reestr' class='form-check-input' name='is_new_reestr' type="checkbox" checked style='display: none;'/>
-									<div class="col-md-5">
-										<div class="col-md-3 border-top border-bottom border-left">
+								</div>
+								<div class='row'>
+									<div class="col-md-5 border-left border-top border-right border-bottom">
+										<div class="col-md-3">
 											<div class='row'>
 												<div class="col-md-12">
 													@if(old('marketing_reestr'))
@@ -2107,7 +2532,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-5 border-top border-bottom">
+										<div class="col-md-5">
 											<div class='row'>
 												<div class="col-md-12">
 													@if(old('procurement_reestr'))
@@ -2179,7 +2604,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-4 border-top border-bottom border-right" style='padding-bottom: 33px;'>
+										<div class="col-md-4" style='padding-bottom: 33px;'>
 											<!--<div class='row'>
 												<div class="col-md-12">
 													@if(old('procurement_fz_223_reestr'))
@@ -2306,7 +2731,7 @@
 												@endif
 											</div>
 											<div class="col-md-2">
-												<label for='days_reconciliation_reestr'>Срок действия согласования крупной сделки</label>
+												<label for='days_reconciliation_reestr' class='small-text'>Срок действия согласования крупной сделки</label>
 											</div>
 											<div class="col-md-2">
 												<input id='days_reconciliation_reestr' class='form-control {{$errors->has("days_reconciliation_reestr") ? print("inputError ") : print("")}}' name='days_reconciliation_reestr' value='{{old("days_reconciliation_reestr") ? old("days_reconciliation_reestr") : $reestr->days_reconciliation_reestr}}'/>
@@ -2335,7 +2760,7 @@
 												@endif
 											</div>
 											<div class="col-md-2">
-												<label for='count_mounth_reestr'>Количество месяцев</label>
+												<label for='count_mounth_reestr' class='small-text'>Количество месяцев</label>
 											</div>
 											<div class="col-md-2">
 												<input id='count_mounth_reestr' class='form-control {{$errors->has("count_mounth_reestr") ? print("inputError ") : print("")}}' name='count_mounth_reestr' value='{{old("count_mounth_reestr") ? old("count_mounth_reestr") : $reestr->count_mounth_reestr}}'/>
@@ -2346,29 +2771,31 @@
 										</div>
 										<div class="row border-top">
 											<div class="col-md-2">
-												<label>Сроки согласования проекта договора исполнителей</label>
+												<label class='small-text'>Сроки согласования проекта договора исполнителей</label>
 											</div>
 											<div class="col-md-3">
-												<label for='begin_date_reconciliation_reestr'>Начало согласования (дата)</label>
+												<label for='begin_date_reconciliation_reestr' class='small-text'>Начало согласования (дата)</label>
 												<input id='begin_date_reconciliation_reestr' class='datepicker form-control {{$errors->has("begin_date_reconciliation_reestr") ? print("inputError ") : print("")}}' name='begin_date_reconciliation_reestr' value='{{old("begin_date_reconciliation_reestr") ? old("begin_date_reconciliation_reestr") : $reestr->begin_date_reconciliation_reestr}}'/>
 												@if($errors->has('begin_date_reconciliation_reestr'))
 													<label class='msgError'>{{$errors->first('begin_date_reconciliation_reestr')}}</label>
 												@endif
 											</div>
 											<div class="col-md-3">
-												<label for='end_date_reconciliation_reestr'>Окончание согласования (дата)</label>
+												<label for='end_date_reconciliation_reestr' style='font-size: 11px;'>Окончание согласования (дата)</label>
 												<input id='end_date_reconciliation_reestr' class='datepicker form-control {{$errors->has("end_date_reconciliation_reestr") ? print("inputError ") : print("")}}' name='end_date_reconciliation_reestr' value='{{old("end_date_reconciliation_reestr") ? old("end_date_reconciliation_reestr") : $reestr->end_date_reconciliation_reestr}}'/>
 												@if($errors->has('end_date_reconciliation_reestr'))
 													<label class='msgError'>{{$errors->first('end_date_reconciliation_reestr')}}</label>
 												@endif
 											</div>
 											<div class="col-md-4">
-												<label for='count_days_reconciliation_reestr'>Общее количество дней согласования</label>
+												<label for='count_days_reconciliation_reestr' class='small-text'>Общее количество дней согласования</label>
 												<input id='count_days_reconciliation_reestr' class='form-control {{$errors->has("count_days_reconciliation_reestr") ? print("inputError ") : print("")}}' name='count_days_reconciliation_reestr' value='{{old("count_days_reconciliation_reestr") ? old("count_days_reconciliation_reestr") : $reestr->count_days_reconciliation_reestr}}'/>
 												@if($errors->has('count_days_reconciliation_reestr'))
 													<label class='msgError'>{{$errors->first('count_days_reconciliation_reestr')}}</label>
 												@endif
 											</div>
+										</div>
+										<div class='row'>
 										</div>
 									</div>
 								</div>
@@ -2513,39 +2940,58 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-9 border-all">
+									<div class="col-md-7 border-all">
 										<div class="row">
 											<div class="col-md-12">
-												<label>Гарантия банка</label>
+												<label>Обеспечение гарантийных обязательств</label>
+											</div>
+											<div class="col-md-3">
+												<div class='row'>
+													<div class="col-md-12">
+														<label for='term_action_reestr'>Срок действия</label>
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-12">
+														<input id='term_action_reestr' class='form-control {{$errors->has("term_action_reestr") ? print("inputError ") : print("")}}' name='term_action_reestr' value='{{ old("term_action_reestr") ? old("term_action_reestr") : $reestr->term_action_reestr }}'/>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class='row'>
+													<div class="col-md-12">
+														<label for='date_bank_reestr'>Гарантия банка до</label>
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-12">
+														<input id='date_bank_reestr' class='form-control {{$errors->has("date_bank_reestr") ? print("inputError ") : print("")}}' name='date_bank_reestr' value='{{ old("date_bank_reestr") ? old("date_bank_reestr") : $reestr->date_bank_reestr }}'/>
+													</div>
+												</div>
 											</div>
 											<div class="col-md-2">
 												<div class='row'>
-													<div class="col-md-2">
-														<label for='date_bank_reestr'>До</label>
+													<div class="col-md-12">
+														<label for='amount_bank_reestr'>Сумма</label>
 													</div>
-													<div class="col-md-10">
-														<input id='date_bank_reestr' class='datepicker form-control {{$errors->has("date_bank_reestr") ? print("inputError ") : print("")}}' name='date_bank_reestr' value='{{ old("date_bank_reestr") ? old("date_bank_reestr") : $reestr->date_bank_reestr }}'/>
+												</div>
+												<div class='row'>
+													<div class="col-md-12">
+														<input id='amount_bank_reestr' class='form-control check-number {{$errors->has("amount_bank_reestr") ? print("inputError ") : print("")}}' name='amount_bank_reestr' value='{{ old("amount_bank_reestr") ? old("amount_bank_reestr") : $reestr->amount_bank_reestr }}'/>
 													</div>
 												</div>
 											</div>
-											<div class="col-md-5">
+											<div class='col-md-4'>
 												<div class='row'>
-													<div class="col-md-1">
-														<label for='amount_bank_reestr'>Сумма</label>
-													</div>
-													<div class="col-md-5">
-														<input id='amount_bank_reestr' class='form-control check-number {{$errors->has("amount_bank_reestr") ? print("inputError ") : print("")}}' name='amount_bank_reestr' value='{{ old("amount_bank_reestr") ? old("amount_bank_reestr") : $reestr->amount_bank_reestr }}'/>
-													</div>
-													<div class="col-md-1">
+													<div class="col-md-12">
 														<label for='bank_reestr'>Банк</label>
 													</div>
-													<div class="col-md-5">
+												</div>
+												<div class='row'>
+													<div class="col-md-12">
 														<input id='bank_reestr' class='form-control {{$errors->has("bank_reestr") ? print("inputError ") : print("")}}' name='bank_reestr' value='{{ old("bank_reestr") ? old("bank_reestr") : $reestr->bank_reestr }}'/>
 													</div>
 												</div>
-											</div>
-											<div class='col-md-5'>
-												<button class='btn btn-primary' data-toggle="modal" data-target="#scan" type='button' style='float: right; width: 184px;'>Сканы</button>
 											</div>
 										</div>
 										<div class="row border-top">
@@ -2556,7 +3002,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-md-5">
+											<div class="col-md-6">
 												<div class='row'>
 													<div class="col-md-1">
 														<label for='date_b_contract_reestr'>с</label>
@@ -2568,49 +3014,125 @@
 														<label for='date_e_contract_reestr'>по</label>
 													</div>
 													<div class="col-md-5">
-														<input id='date_e_contract_reestr' class='datepicker form-control {{$errors->has("date_e_contract_reestr") ? print("inputError ") : print("")}}' name='date_e_contract_reestr' value='{{ old("date_e_contract_reestr") ? old("date_e_contract_reestr") : $reestr->date_e_contract_reestr }}'/>
+														<input id='date_e_contract_reestr' class='form-control {{$errors->has("date_e_contract_reestr") ? print("inputError ") : print("")}}' value='{{ old("date_e_contract_reestr") ? old("date_e_contract_reestr") : $reestr->date_e_contract_reestr }}' readonly />
 													</div>
 												</div>
-											</div>
-											<div class='col-md-5'>
-												<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.reestr.show_obligation', $contract->id)}}">Исполнение Дог./Контр.</button>
 											</div>
 										</div>
 										<div class='row border-bottom'>
-											<div class="col-md-10">
+											<div class="col-md-11">
 												<div class="form-group">
-													<input id='date_contract_reestr' class='form-control {{$errors->has("date_contract_reestr") ? print("inputError ") : print("")}}' name='date_contract_reestr' value='{{ old("date_contract_reestr") ? old("date_contract_reestr") : $reestr->date_contract_reestr }}' spellcheck='true'/>
+													<input id='date_contract_reestr' class='form-control {{$errors->has("date_contract_reestr") ? print("inputError ") : print("")}}' value='{{ old("date_contract_reestr") ? old("date_contract_reestr") : $reestr->date_contract_reestr }}' readonly spellcheck='true'/>
 												</div>
 											</div>
-											<div class='col-md-2'>
-												<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.reestr.show_protocols', $contract->id)}}">ПР/ПСР/ПУР</button>
+											<div class='col-md-1'>
+												<button type='button' class='btn btn-primary' data-toggle="modal" data-target="#modal_date_contract_reestr" title='Форма срока действия договора'><!--☼--><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -49px; background-position-y: -179px;'></span></button>
 											</div>
 										</div>
 										<div class="row border-bottom">
-											<div class="col-md-10">
+											<div class='col-md-12'>
 												<div class="form-group">
-													<label for='date_maturity_reestr'>Срок исполнения обязательств</label>
-													<input id='date_maturity_reestr' class='form-control {{$errors->has("date_maturity_reestr") ? print("inputError ") : print("")}}' name='date_maturity_reestr' value='{{ old("date_maturity_reestr") ? old("date_maturity_reestr") : $reestr->date_maturity_reestr }}' spellcheck='true'/>
+													<div class='row'>
+														<div class="col-md-9">
+															<label for='date_maturity_reestr'>Срок исполнения обязательств</label>
+														</div>
+														<div class='col-md-2'>
+															<label for='date_e_maturity_reestr'>До</label>
+														</div>
+													</div>
+													<div class='row'>
+														<div class="col-md-9">
+															<input id='date_maturity_reestr' class='form-control {{$errors->has("date_maturity_reestr") ? print("inputError ") : print("")}}' value='{{ old("date_maturity_reestr") ? old("date_maturity_reestr") : $reestr->date_maturity_reestr }}' readonly spellcheck='true'/>
+														</div>
+														<div class='col-md-2'>
+															<input id='date_e_maturity_reestr' class='form-control {{$errors->has("date_e_maturity_reestr") ? print("inputError ") : print("")}}' value='{{ old("date_e_maturity_reestr") ? old("date_e_maturity_reestr") : $reestr->date_e_maturity_reestr }}' readonly spellcheck='true'/>
+														</div>
+														<div class='col-md-1'>
+															<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal_date_maturity_reestr' title='Форма срока исполнения обязательств'><!--☼--><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -49px; background-position-y: -179px;'></span></button>
+														</div>
+													</div>
 												</div>
-											</div>
-											<div class="col-md-2">
-												<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.reestr.show_additional_agreements', $contract->id)}}">ДС</button>
-											</div>
-											<div class="col-md-2">
-												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_amount_invoice', $contract->id)}}">Сумма по счетам</button>
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-md-10">
+											<div class="col-md-6">
 												<div class='row'>
-													<div class="col-md-1">
-														<label for='amount_reestr'>Сумма</label>
+													<div class="col-md-12">
+														<label for='amount_begin_reestr'>Цена при заключении Д/К</label>
 													</div>
-													<div class="col-md-2">
-														<input id='amount_reestr' class='form-control check-number {{$errors->has("amount_reestr") ? print("inputError ") : print("")}}' name='amount_reestr' value='{{old("amount_reestr") ? old("amount_reestr") : $reestr->amount_reestr}}'/>
+												</div>
+												<div class='row'>
+													<div class="col-md-4">
+														<input id='amount_begin_reestr' class='form-control check-number {{$errors->has("amount_begin_reestr") ? print("inputError ") : print("")}}' name='amount_begin_reestr' value='{{old("amount_begin_reestr") ? old("amount_begin_reestr") : $reestr->amount_begin_reestr}}'/>
 													</div>
-													<div class="col-md-2">
-														<select id="sel8" class='form-control {{$errors->has("unit_reestr") ? print("inputError ") : print("")}}' name='unit_reestr'>
+													<div class="col-md-4">
+														<select class='form-control {{$errors->has("unit_begin_reestr") ? print("inputError ") : print("")}}' name='unit_begin_reestr'>
+															<option></option>
+															@foreach($units as $unit)
+																@if(old('unit_begin_reestr'))
+																	<option value='{{$unit->id}}' selected>{{$unit->name_unit}}</option>
+																@else
+																	@if($reestr->unit_begin_reestr == $unit->id)
+																		<option value='{{$unit->id}}' selected>{{$unit->name_unit}}</option>
+																	@else
+																		<option value='{{$unit->id}}'>{{$unit->name_unit}}</option>
+																	@endif
+																@endif
+															@endforeach
+														</select>
+													</div>
+													<div class='col-md-4'>
+														<label for='VAT_BEGIN'>НДС</label>
+														@if(old('vat_begin_reestr'))
+															<input id='VAT_BEGIN' class='form-check-input' name='vat_begin_reestr' type="checkbox" checked />
+														@else
+															@if($reestr->vat_begin_reestr)
+																<input id='VAT_BEGIN' class='form-check-input' name='vat_begin_reestr' type="checkbox" checked />
+															@else
+																<input id='VAT_BEGIN' class='form-check-input' name='vat_begin_reestr' type="checkbox" />
+															@endif
+														@endif
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-6">
+														<label for='approximate_amount_begin_reestr'>Ориентировочная</label>
+														@if(old('approximate_amount_begin_reestr'))
+															<input id='approximate_amount_begin_reestr' class='form-check-input' name='approximate_amount_begin_reestr' type="checkbox" checked />
+														@else
+															@if($reestr->approximate_amount_begin_reestr)
+																<input id='approximate_amount_begin_reestr' class='form-check-input' name='approximate_amount_begin_reestr' type="checkbox" checked />
+															@else
+																<input id='approximate_amount_begin_reestr' class='form-check-input' name='approximate_amount_begin_reestr' type="checkbox" />
+															@endif
+														@endif
+													</div>
+													<div class="col-md-6">
+														<label for='fixed_amount_begin_reestr'>Фиксированная</label>
+														@if(old('fixed_amount_begin_reestr'))
+															<input id='fixed_amount_begin_reestr' class='form-check-input' name='fixed_amount_begin_reestr' type="checkbox" checked />
+														@else
+															@if($reestr->fixed_amount_begin_reestr)
+																<input id='fixed_amount_begin_reestr' class='form-check-input' name='fixed_amount_begin_reestr' type="checkbox" checked />
+															@else
+																<input id='fixed_amount_begin_reestr' class='form-check-input' name='fixed_amount_begin_reestr' type="checkbox" />
+															@endif
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class='col-md-6'>
+												<div class='row'>
+													<div class="col-md-12">
+														<label for='amount_reestr'>Сумма Д/К</label>
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-4">
+														<input id='amount_reestr' class='form-control check-number {{$errors->has("amount_reestr") ? print("inputError ") : print("")}}' value='{{old("amount_reestr") ? old("amount_reestr") : $reestr->amount_reestr}}' readonly />
+													</div>
+													<div class="col-md-3">
+														<select id="sel8" class='form-control {{$errors->has("unit_reestr") ? print("inputError ") : print("")}}' disabled >
 															<option></option>
 															@foreach($units as $unit)
 																@if(old('unit_reestr'))
@@ -2625,48 +3147,79 @@
 															@endforeach
 														</select>
 													</div>
-													<div class="col-md-2">
+													<div class="col-md-3">
 														<label for='VAT'>НДС</label>
 														@if(old('vat_reestr'))
-															<input id='VAT' class='form-check-input' name='vat_reestr' type="checkbox" checked />
+															<input id='VAT' class='form-check-input' type="checkbox" checked disabled />
 														@else
 															@if($reestr->vat_reestr)
-																<input id='VAT' class='form-check-input' name='vat_reestr' type="checkbox" checked />
+																<input id='VAT' class='form-check-input' type="checkbox" checked disabled />
 															@else
-																<input id='VAT' class='form-check-input' name='vat_reestr' type="checkbox"/>
+																<input id='VAT' class='form-check-input' type="checkbox" disabled />
 															@endif
 														@endif
 													</div>
-													<div class="col-md-3">
-														<label for='approximate_amount_reestr'>Ориентировочная</label>
-														@if(old('approximate_amount_reestr'))
-															<input id='approximate_amount_reestr' class='form-check-input' name='approximate_amount_reestr' type="checkbox" checked />
-														@else
-															@if($reestr->approximate_amount_reestr)
-																<input id='approximate_amount_reestr' class='form-check-input' name='approximate_amount_reestr' type="checkbox" checked />
-															@else
-																<input id='approximate_amount_reestr' class='form-check-input' name='approximate_amount_reestr' type="checkbox"/>
-															@endif
-														@endif
+													<div class='col-md-2'>
+														<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal_amount_reestr' title='Форма срока исполнения обязательств'><!--☼--><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -49px; background-position-y: -179px;'></span></button>
 													</div>
 												</div>
 												<div class='row'>
-													<div class="col-md-12">
-														<input class='form-control {{$errors->has("amount_comment_reestr") ? print("inputError ") : print("")}}' name='amount_comment_reestr' value='{{old("amount_comment_reestr") ? old("amount_comment_reestr") : $reestr->amount_comment_reestr}}' spellcheck='true'/>
+													<div class="col-md-6">
+														<label for='approximate_amount_reestr'>Ориентировочная</label>
+														@if(old('approximate_amount_reestr'))
+															<input id='approximate_amount_reestr' class='form-check-input' type="checkbox" checked disabled />
+														@else
+															@if($reestr->approximate_amount_reestr)
+																<input id='approximate_amount_reestr' class='form-check-input' type="checkbox" checked disabled />
+															@else
+																<input id='approximate_amount_reestr' class='form-check-input' type="checkbox" disabled />
+															@endif
+														@endif
+													</div>
+													<div class="col-md-6">
+														<label for='fixed_amount_reestr'>Фиксированная</label>
+														@if(old('fixed_amount_reestr'))
+															<input id='fixed_amount_reestr' class='form-check-input' type="checkbox" checked disabled />
+														@else
+															@if($reestr->fixed_amount_reestr)
+																<input id='fixed_amount_reestr' class='form-check-input' type="checkbox" checked disabled />
+															@else
+																<input id='fixed_amount_reestr' class='form-check-input' type="checkbox" disabled />
+															@endif
+														@endif
 													</div>
 												</div>
 											</div>
 										</div>
 										<div class='row'>
-											<div class="col-md-6">
+											<div class="col-md-12">
+												<input class='form-control {{$errors->has("amount_comment_reestr") ? print("inputError ") : print("")}}' name='amount_comment_reestr' value='{{old("amount_comment_reestr") ? old("amount_comment_reestr") : $reestr->amount_comment_reestr}}' spellcheck='true'/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-4">
 												<div class='row'>
-													<div class="col-md-2">
+													<div class="col-md-12">
+														<label for='end_term_repayment_reestr' class='small-text'>Конечный срок оплаты по Д/К</label>
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-9">
+														<input id='end_term_repayment_reestr' class='datepicker form-control {{$errors->has("end_term_repayment_reestr") ? print("inputError ") : print("")}}' name='end_term_repayment_reestr' value='{{old("end_term_repayment_reestr") ? old("end_term_repayment_reestr") : $reestr->end_term_repayment_reestr}}' />
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class='row'>
+													<div class="col-md-12">
 														<label for='nmcd_reestr'>НМЦД/НМЦК</label>
 													</div>
-													<div class="col-md-3">
+												</div>
+												<div class='row'>
+													<div class="col-md-7">
 														<input id='nmcd_reestr' class='form-control check-number {{$errors->has("nmcd_reestr") ? print("inputError ") : print("")}}' name='nmcd_reestr' value='{{old("nmcd_reestr") ? old("nmcd_reestr") : $reestr->nmcd_reestr}}'/>
 													</div>
-													<div class="col-md-3">
+													<div class="col-md-5">
 														<select class='form-control {{$errors->has("nmcd_unit_reestr") ? print("inputError ") : print("")}}' name='nmcd_unit_reestr'>
 															<option></option>
 															@foreach($units as $unit)
@@ -2684,15 +3237,17 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class='row'>
-													<div class="col-md-2">
+													<div class="col-md-12">
 														<label for='economy_reestr'>Экономия</label>
 													</div>
-													<div class="col-md-3">
+												</div>
+												<div class='row'>
+													<div class="col-md-7">
 														<input id='economy_reestr' class='form-control check-number {{$errors->has("economy_reestr") ? print("inputError ") : print("")}}' name='economy_reestr' value='{{old("economy_reestr") ? old("economy_reestr") : $reestr->economy_reestr}}'/>
 													</div>
-													<div class="col-md-3">
+													<div class="col-md-5">
 														<select class='form-control {{$errors->has("economy_unit_reestr") ? print("inputError ") : print("")}}' name='economy_unit_reestr'>
 															<option></option>
 															@foreach($units as $unit)
@@ -2712,7 +3267,7 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-md-10">
+											<div class="col-md-12">
 												<label>Порядок оплаты</label>
 												<div class='row'>
 													<div class="col-md-6">
@@ -2744,6 +3299,60 @@
 														<input id='prolongation_reestr' class='form-check-input' type="checkbox" name='prolongation_reestr'/>
 													@endif
 												@endif
+											</div>
+										</div>
+									</div>
+									<div class='col-md-2'>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary' data-toggle="modal" data-target="#scan" type='button' style='float: right; width: 184px; margin-top: 5px;'>Сканы</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.peo.show_additional_documents', $contract->id)}}">Догов. мат</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' type='button'  href="{{route('tree_map.show_contract',$contract->id)}}" style='float: right; width: 184px; margin-top: 5px;'>Граф договора</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' type='button'  href="{{route('journal.contract',$contract->id)}}" style='float: right; width: 184px; margin-top: 5px;'>История изменений</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' type='button'  href="{{route('new_applications.copying', $contract->id_new_application_contract)}}" style='float: right; width: 184px; margin-top: 5px;' {{$contract->id_new_application_contract ? '' : 'disabled'}}>Переписка по заявке</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_obligation', $contract->id)}}">Исполнение Д/К</button>
+											</div>
+										</div>
+										<!--
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_protocols', $contract->id)}}" disabled >ПР/ПСР/ПУР</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_additional_agreements', $contract->id)}}" disabled >ДС</button>
+											</div>
+										</div>
+										-->
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_amount_invoice', $contract->id)}}">Сумма по счетам</button>
+											</div>
+										</div>
+										<div class='row'>
+											<div class='col-md-12'>
+												<button class='btn btn-primary btn-href' style='float: right; width: 184px; margin-top: 5px;' type='button' href="{{route('department.reestr.show_specify', $contract->id)}}">Спецификация</button>
 											</div>
 										</div>
 									</div>
@@ -3155,166 +3764,633 @@
 							</div>
 						</div>
 					</div>
+					<!-- Модальное окно срок действия договора -->
+					<div class="modal fade" id="modal_date_contract_reestr" tabindex="-1" role="dialog" aria-labelledby="dateContractModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-lg" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="dateContractModalLabel">Срок действия Д/К</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<div id='table_date_contract_reestr' class='row'>
+										@if(count($all_reest_date_contract) > 0)
+											<div class='col-md-12'>
+												<table class="table" style='margin: 0 auto;'>
+													<thead>
+														<tr>
+															<th>Наименование</th>
+															<th>Срок действия Д/К</th>
+															<th>До</th>
+															@if(Auth::User()->hasRole()->role != 'Администрация')
+																<th>Изменить</th>
+															@endif
+															@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+																<th>Удалить</th>
+															@endif
+														</tr>
+													</thead>
+													<tbody>
+														@foreach($all_reest_date_contract as $reestr_date_contract)
+															<tr class='rowsContract'>
+																<td>{{$reestr_date_contract->name_date_contract}}</td>
+																<td>{{$reestr_date_contract->term_date_contract}}</td>
+																<td>{{$reestr_date_contract->end_date_contract}}</td>
+																@if(Auth::User()->hasRole()->role != 'Администрация')
+																	<td><button class='btn btn-primary btn-update-date-contract steps' type='button' reestr_date_contract='{{$reestr_date_contract}}' action_update='{{ route("reestr.date_contract.update", $reestr_date_contract->id)}}' first_step='#table_date_contract_reestr' second_step='#update_date_contract_reestr'>Изменить</button></td>
+																@endif
+																@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+																	<td><button class='btn btn-danger btn-href' type='button' href='{{route("reestr.date_contract.destroy", $reestr_date_contract->id)}}'>Удалить</button></td>
+																@endif
+															</tr>
+														@endforeach
+													</tbody>
+												</table>
+											</div>
+										@endif
+										<div class='col-md-12'>
+											@if(Auth::User()->hasRole()->role != 'Администрация')
+												<button class='btn btn-primary steps' type='button' style='margin-top: 10px;' first_step='#table_date_contract_reestr' second_step='#new_date_contract_reestr'>Добавить срок действия Д/К</button>
+											@endif
+										</div>
+									</div>
+									<div id='new_date_contract_reestr' class='row' style='display: none;'>
+										<form method='POST' action='{{route("reestr.date_contract.store", $contract->id)}}'>
+											{{csrf_field()}}
+											<div class='col-md-12 form-group'>
+												<label for='name_date_contract' class='col-md-3 col-form-label'>Наименование</label>
+												<div class='col-md-9'>
+													<input id='name_date_contract' class='form-control {{$errors->has("name_date_contract") ? print("inputError ") : print("")}}' type='text' name='name_date_contract' maxlength='100' required />
+													@if($errors->has('name_date_contract'))
+														<label class='msgError'>{{$errors->first('name_date_contract')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='term_date_contract' class='col-md-3 col-form-label'>Срок действия</label>
+												<div class='col-md-9'>
+													<textarea id='term_date_contract' class='form-control {{$errors->has("term_date_contract") ? print("inputError ") : print("")}}' type='text' name='term_date_contract' required rows='3'></textarea>
+													@if($errors->has('term_date_contract'))
+														<label class='msgError'>{{$errors->first('term_date_contract')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='end_date_contract' class='col-md-3 col-form-label'>До</label>
+												<div class='col-md-9'>
+													<input id='end_date_contract' class='datepicker form-control {{$errors->has("end_date_contract") ? print("inputError ") : print("")}}' type='text' name='end_date_contract'/>
+													@if($errors->has('end_date_contract'))
+														<label class='msgError'>{{$errors->first('end_date_contract')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<div class='row'>
+													<div class='col-md-6'>
+													</div>
+													<div class='col-md-3'>
+														<button type="submit" class="btn btn-primary">Добавить</button>
+													</div>
+													<div class='col-md-3'>
+														<button type="button" class="btn btn-secondary steps" first_step='#new_date_contract_reestr' second_step='#table_date_contract_reestr'>Назад</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+									<div id='update_date_contract_reestr' class='row' style='display: none;'>
+										<form id='form_update_date_contract_reestr' method='POST' action=''>
+											{{csrf_field()}}
+											<div class='col-md-12 form-group'>
+												<label for='update_name_date_contract' class='col-md-3 col-form-label'>Наименование</label>
+												<div class='col-md-9'>
+													<input id='update_name_date_contract' class='form-control {{$errors->has("name_date_contract") ? print("inputError ") : print("")}}' type='text' name='name_date_contract' maxlength='100' required />
+													@if($errors->has('name_date_contract'))
+														<label class='msgError'>{{$errors->first('name_date_contract')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='update_term_date_contract' class='col-md-3 col-form-label'>Срок действия</label>
+												<div class='col-md-9'>
+													<textarea id='update_term_date_contract' class='form-control {{$errors->has("term_date_contract") ? print("inputError ") : print("")}}' type='text' name='term_date_contract' required rows='3'></textarea>
+													@if($errors->has('term_date_contract'))
+														<label class='msgError'>{{$errors->first('term_date_contract')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='update_end_date_contract' class='col-md-3 col-form-label'>До</label>
+												<div class='col-md-9'>
+													<input id='update_end_date_contract' class='datepicker form-control {{$errors->has("end_date_contract") ? print("inputError ") : print("")}}' type='text' name='end_date_contract'/>
+													@if($errors->has('end_date_contract'))
+														<label class='msgError'>{{$errors->first('end_date_contract')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<div class='row'>
+													<div class='col-md-6'>
+													</div>
+													<div class='col-md-3'>
+														<button type="submit" class="btn btn-primary">Сохранить</button>
+													</div>
+													<div class='col-md-3'>
+														<button type="button" class="btn btn-secondary steps" first_step='#update_date_contract_reestr' second_step='#table_date_contract_reestr'>Назад</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Модальное окно срок исполнения обязательств -->
+					<div class="modal fade" id="modal_date_maturity_reestr" tabindex="-1" role="dialog" aria-labelledby="dateMaturityModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-lg" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="dateMaturityModalLabel">Срок исполнения обязательств</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<div id='table_date_maturity_reestr' class='row'>
+										@if(count($all_reest_date_maturity) > 0)
+											<div class='col-md-12'>
+												<table class="table" style='margin: 0 auto;'>
+													<thead>
+														<tr>
+															<th>Наименование</th>
+															<th>Срок исполнения</th>
+															<th>До</th>
+															@if(Auth::User()->hasRole()->role != 'Администрация')
+																<th>Изменить</th>
+															@endif
+															@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+																<th>Удалить</th>
+															@endif
+														</tr>
+													</thead>
+													<tbody>
+														@foreach($all_reest_date_maturity as $reestr_date_maturity)
+															<tr class='rowsContract'>
+																<td>{{$reestr_date_maturity->name_date_maturity}}</td>
+																<td>{{$reestr_date_maturity->term_date_maturity}}</td>
+																<td>{{$reestr_date_maturity->end_date_maturity}}</td>
+																@if(Auth::User()->hasRole()->role != 'Администрация')
+																	<td><button class='btn btn-primary btn-update-date-maturity steps' type='button' reestr_date_maturity='{{$reestr_date_maturity}}' action_update='{{ route("reestr.date_maturity.update", $reestr_date_maturity->id)}}' first_step='#table_date_maturity_reestr' second_step='#update_date_maturity_reestr'>Изменить</button></td>
+																@endif
+																@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+																	<td><button class='btn btn-danger btn-href' type='button' href='{{route("reestr.date_maturity.destroy", $reestr_date_maturity->id)}}'>Удалить</button></td>
+																@endif
+															</tr>
+														@endforeach
+													</tbody>
+												</table>
+											</div>
+										@endif
+										<div class='col-md-12'>
+											@if(Auth::User()->hasRole()->role != 'Администрация')
+												<button class='btn btn-primary steps' type='button' style='margin-top: 10px;' first_step='#table_date_maturity_reestr' second_step='#new_date_maturity_reestr'>Добавить срок исполнения обязательств</button>
+											@endif
+										</div>
+									</div>
+									<div id='new_date_maturity_reestr' class='row' style='display: none;'>
+										<form method='POST' action='{{route("reestr.date_maturity.store", $contract->id)}}'>
+											{{csrf_field()}}
+											<div class='col-md-12 form-group'>
+												<label for='name_date_maturity' class='col-md-3 col-form-label'>Наименование</label>
+												<div class='col-md-9'>
+													<input id='name_date_maturity' class='form-control {{$errors->has("name_date_maturity") ? print("inputError ") : print("")}}' type='text' name='name_date_maturity' maxlength='100' required />
+													@if($errors->has('name_date_maturity'))
+														<label class='msgError'>{{$errors->first('name_date_maturity')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='term_date_maturity' class='col-md-3 col-form-label'>Срок исполнения</label>
+												<div class='col-md-9'>
+													<textarea id='term_date_maturity' class='form-control {{$errors->has("term_date_maturity") ? print("inputError ") : print("")}}' type='text' name='term_date_maturity' required rows='3'></textarea>
+													@if($errors->has('term_date_maturity'))
+														<label class='msgError'>{{$errors->first('term_date_maturity')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='end_date_maturity' class='col-md-3 col-form-label'>До</label>
+												<div class='col-md-9'>
+													<input id='end_date_maturity' class='datepicker form-control {{$errors->has("end_date_maturity") ? print("inputError ") : print("")}}' type='text' name='end_date_maturity'/>
+													@if($errors->has('end_date_maturity'))
+														<label class='msgError'>{{$errors->first('end_date_maturity')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<div class='row'>
+													<div class='col-md-6'>
+													</div>
+													<div class='col-md-3'>
+														<button type="submit" class="btn btn-primary">Добавить</button>
+													</div>
+													<div class='col-md-3'>
+														<button type="button" class="btn btn-secondary steps" first_step='#new_date_maturity_reestr' second_step='#table_date_maturity_reestr'>Назад</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+									<div id='update_date_maturity_reestr' class='row' style='display: none;'>
+										<form id='form_update_date_maturity_reestr' method='POST' action=''>
+											{{csrf_field()}}
+											<div class='col-md-12 form-group'>
+												<label for='update_name_date_maturity' class='col-md-3 col-form-label'>Наименование</label>
+												<div class='col-md-9'>
+													<input id='update_name_date_maturity' class='form-control {{$errors->has("name_date_maturity") ? print("inputError ") : print("")}}' type='text' name='name_date_maturity' maxlength='100' required />
+													@if($errors->has('name_date_maturity'))
+														<label class='msgError'>{{$errors->first('name_date_maturity')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='update_term_date_maturity' class='col-md-3 col-form-label'>Срок исполнения</label>
+												<div class='col-md-9'>
+													<textarea id='update_term_date_maturity' class='form-control {{$errors->has("term_date_maturity") ? print("inputError ") : print("")}}' type='text' name='term_date_maturity' required rows='3'></textarea>
+													@if($errors->has('term_date_maturity'))
+														<label class='msgError'>{{$errors->first('term_date_maturity')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='update_end_date_maturity' class='col-md-3 col-form-label'>До</label>
+												<div class='col-md-9'>
+													<input id='update_end_date_maturity' class='datepicker form-control {{$errors->has("end_date_maturity") ? print("inputError ") : print("")}}' type='text' name='end_date_maturity'/>
+													@if($errors->has('end_date_maturity'))
+														<label class='msgError'>{{$errors->first('end_date_maturity')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<div class='row'>
+													<div class='col-md-6'>
+													</div>
+													<div class='col-md-3'>
+														<button type="submit" class="btn btn-primary">Сохранить</button>
+													</div>
+													<div class='col-md-3'>
+														<button type="button" class="btn btn-secondary steps" first_step='#update_date_maturity_reestr' second_step='#table_date_maturity_reestr'>Назад</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Модальное окно сумм -->
+					<div class="modal fade" id="modal_amount_reestr" tabindex="-1" role="dialog" aria-labelledby="amountModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-lg" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="amountModalLabel">Сумма Д/К</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<div id='table_amount_reestr' class='row'>
+										@if(count($all_reestr_amount) > 0)
+											<div class='col-md-12'>
+												<table class="table" style='margin: 0 auto;'>
+													<thead>
+														<tr>
+															<th>Наименование</th>
+															<th>Сумма</th>
+															<th>Валюта</th>
+															<th>Параметры</th>
+															@if(Auth::User()->hasRole()->role != 'Администрация')
+																<th>Изменить</th>
+															@endif
+															@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+																<th>Удалить</th>
+															@endif
+														</tr>
+													</thead>
+													<tbody>
+														@foreach($all_reestr_amount as $reestr_amount)
+															<tr class='rowsContract'>
+																<td>{{$reestr_amount->name_amount}}</td>
+																<td>{{$reestr_amount->value_amount}}</td>
+																<td>{{$reestr_amount->name_unit}}</td>
+																<td>
+																	<?php
+																		if ($reestr_amount->vat_amount)
+																			echo 'НДС<br/>';
+																		if ($reestr_amount->approximate_amount)
+																			echo 'Ориентировочная<br/>';
+																		if ($reestr_amount->fixed_amount)
+																			echo 'Фиксированная<br/>';
+																	?>
+																</td>
+																@if(Auth::User()->hasRole()->role != 'Администрация')
+																	<td><button class='btn btn-primary btn-update-amount steps' type='button' reestr_amount='{{$reestr_amount}}' action_update='{{ route("reestr.amount.update", $reestr_amount->id)}}' first_step='#table_amount_reestr' second_step='#update_amount_reestr'>Изменить</button></td>
+																@endif
+																@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+																	<td><button class='btn btn-danger btn-href' type='button' href='{{route("reestr.amount.destroy", $reestr_amount->id)}}'>Удалить</button></td>
+																@endif
+															</tr>
+														@endforeach
+													</tbody>
+												</table>
+											</div>
+										@endif
+										<div class='col-md-12'>
+											@if(Auth::User()->hasRole()->role != 'Администрация')
+												<button class='btn btn-primary steps' type='button' style='margin-top: 10px;' first_step='#table_amount_reestr' second_step='#new_amount_reestr'>Добавить сумму</button>
+											@endif
+										</div>
+									</div>
+									<div id='new_amount_reestr' class='row' style='display: none;'>
+										<form method='POST' action='{{route("reestr.amount.store", $contract->id)}}'>
+											{{csrf_field()}}
+											<div class='col-md-12 form-group'>
+												<label for='name_amount' class='col-md-3 col-form-label'>Наименование</label>
+												<div class='col-md-9'>
+													<input id='name_amount' class='form-control {{$errors->has("name_amount") ? print("inputError ") : print("")}}' type='text' name='name_amount' maxlength='100' required />
+													@if($errors->has('name_amount'))
+														<label class='msgError'>{{$errors->first('name_amount')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='value_amount' class='col-md-3 col-form-label'>Сумма</label>
+												<div class='col-md-9'>
+													<input id='value_amount' class='check-number form-control {{$errors->has("value_amount") ? print("inputError ") : print("")}}' type='text' name='value_amount' required />
+													@if($errors->has('value_amount'))
+														<label class='msgError'>{{$errors->first('value_amount')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='unit_amount' class='col-md-3 col-form-label'>Валюта</label>
+												<div class='col-md-9'>
+													<select class='form-control {{$errors->has("unit_amount") ? print("inputError ") : print("")}}' name='unit_amount'>
+														<option></option>
+														@foreach($units as $unit)
+															<option value='{{$unit->id}}'>{{$unit->name_unit}}</option>
+														@endforeach
+													</select>
+												</div>
+											</div>
+											<div class='col-md-3 form-group'>
+											</div>
+											<div class='col-md-3 form-group'>
+												<label for='vat_amount'>НДС</label>
+												<input id='vat_amount' class='form-check-input' name='vat_amount' type="checkbox"/>
+											</div>
+											<div class='col-md-3 form-group'>
+												<label for='approximate_amount'>Ориентировочная</label>
+												<input id='approximate_amount' class='form-check-input' name='approximate_amount' type="checkbox"/>
+											</div>
+											<div class='col-md-3 form-group'>
+												<label for='fixed_amount'>Фиксированная</label>
+												<input id='fixed_amount' class='form-check-input' name='fixed_amount' type="checkbox"/>
+											</div>
+											<div class='col-md-12 form-group'>
+												<div class='row'>
+													<div class='col-md-6'>
+													</div>
+													<div class='col-md-3'>
+														<button type="submit" class="btn btn-primary">Добавить</button>
+													</div>
+													<div class='col-md-3'>
+														<button type="button" class="btn btn-secondary steps" first_step='#new_amount_reestr' second_step='#table_amount_reestr'>Назад</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+									<div id='update_amount_reestr' class='row' style='display: none;'>
+										<form id='form_update_amount_reestr' method='POST' action=''>
+											{{csrf_field()}}
+											<div class='col-md-12 form-group'>
+												<label for='update_name_amount' class='col-md-3 col-form-label'>Наименование</label>
+												<div class='col-md-9'>
+													<input id='update_name_amount' class='form-control {{$errors->has("name_amount") ? print("inputError ") : print("")}}' type='text' name='name_amount' maxlength='100' required />
+													@if($errors->has('name_amount'))
+														<label class='msgError'>{{$errors->first('name_amount')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='update_value_amount' class='col-md-3 col-form-label'>Сумма</label>
+												<div class='col-md-9'>
+													<input id='update_value_amount' class='check-number form-control {{$errors->has("value_amount") ? print("inputError ") : print("")}}' type='text' name='value_amount' required />
+													@if($errors->has('value_amount'))
+														<label class='msgError'>{{$errors->first('value_amount')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class='col-md-12 form-group'>
+												<label for='update_unit_amount' class='col-md-3 col-form-label'>Валюта</label>
+												<div class='col-md-9'>
+													<select id='update_unit_amount' class='form-control {{$errors->has("unit_amount") ? print("inputError ") : print("")}}' name='unit_amount'>
+														<option></option>
+														@foreach($units as $unit)
+															<option value='{{$unit->id}}'>{{$unit->name_unit}}</option>
+														@endforeach
+													</select>
+												</div>
+											</div>
+											<div class='col-md-3 form-group'>
+											</div>
+											<div class='col-md-3 form-group'>
+												<label for='update_vat_amount'>НДС</label>
+												<input id='update_vat_amount' class='form-check-input' name='vat_amount' type="checkbox"/>
+											</div>
+											<div class='col-md-3 form-group'>
+												<label for='update_approximate_amount'>Ориентировочная</label>
+												<input id='update_approximate_amount' class='form-check-input' name='approximate_amount' type="checkbox"/>
+											</div>
+											<div class='col-md-3 form-group'>
+												<label for='update_fixed_amount'>Фиксированная</label>
+												<input id='update_fixed_amount' class='form-check-input' name='fixed_amount' type="checkbox"/>
+											</div>
+											<div class='col-md-12 form-group'>
+												<div class='row'>
+													<div class='col-md-6'>
+													</div>
+													<div class='col-md-3'>
+														<button type="submit" class="btn btn-primary">Сохранить</button>
+													</div>
+													<div class='col-md-3'>
+														<button type="button" class="btn btn-secondary steps" first_step='#update_amount_reestr' second_step='#table_amount_reestr'>Назад</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				@else
 					<!-- ДОБАВЛЕНИЕ КОНТРАКТА В РЕЕСТР (НЕ СИП) -->
 					<div class="content">
 						<form method='POST' action="{{route('department.ekonomic.create_reestr')}}" file='true' enctype='multipart/form-data'>
 							{{csrf_field()}}
-							<div class="row border-top border-bottom border-left border-right">
-								<div class="col-md-2 border-top border-left border-bottom">
-									<label>Контрагент</label>
-									<div class="form-group">
-										<select id="sel4" class='form-control select_counterpartie_reestr {{$errors->has("id_counterpartie_contract") ? print("inputError ") : print("")}}' name='id_counterpartie_contract' required>
-											<option></option>
-										</select>
-										@if($errors->has('id_counterpartie_contract'))
-											<label class='msgError'>{{$errors->first('id_counterpartie_contract')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-1 border-top border-bottom">
-									<div class="form-group">
-										<button type='button' class="btn btn-primary" data-toggle="modal" data-target="#chose_counterpartie" style='margin-top: 27px;'>Выбрать</button>
-									</div>
-								</div>
-								<div class="col-md-2 border-top border-bottom">
-									<div class="form-group">
-										<label>Внимание!</label>
-										<input class='form-control' style='color:red; text-align:center;' type='text' value='' readonly />
-									</div>
-								</div>
-								<div class="col-md-3 border-top border-bottom border-right">
-									<div class="form-group">
-										<label for='numberContract'>Номер договора</label>
-										<input id='numberContract' class='form-control {{$errors->has("number_contract") ? print("inputError ") : print("")}}' name='number_contract' type='text' value='{{old("number_contract")}}' readonly />
-										@if($errors->has('number_contract'))
-											<label class='msgError'>{{$errors->first('number_contract')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-2 border-top border-bottom">
-									<div class="form-group">
-										<label for='amount_contract_reestr'>Сумма (окончательная)</label>
-										<input id='amount_contract_reestr' class='form-control check-number' name='amount_contract_reestr' type='text' value='{{old("amount_contract_reestr")}}'/>
-									</div>
-								</div>
-								<div class="col-md-2 border-top border-bottom border-right">
-									<div class="form-group">
-										<label for='amount_invoice_reestr'>Сумма по счетам</label>
-										<input id='amount_invoice_reestr' class='form-control check-number' name='amount_invoice_reestr' type='text' value='{{$reestr->amount_invoice_reestr}}' disabled />
-									</div>
-								</div>
-							</div>
-							<div class="row border-right border-left">
-								<div class="col-md-1 border-top border-bottom">
-									<div class="form-group">
-										<label for='number_pp'>№ п/п</label>
-										<input id='number_pp' class='change_contract_number form-control {{$errors->has("number_pp") ? print("inputError ") : print("")}}' name='number_pp' type='text' value='{{old("number_pp")}}' required/>
-										@if($errors->has('number_pp'))
-											<label class='msgError'>{{$errors->first('number_pp')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-1 border-top border-bottom">
-									<div class="form-group">
-										<label for='index_dep' style='font-size: 12px;'>Индекс подразд.</label>
-										<select id='index_dep' class='change_contract_number form-control {{$errors->has("index_dep") ? print("inputError ") : print("")}}' name='index_dep' type='text' value='{{old("index_dep")}}' required>
-											@if(old('index_dep'))
-												<option>{{old('index_dep')}}</option>
-											@endif
-											<option></option>
-											@foreach($departments as $department)
-												<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
-											@endforeach
-										</select>
-										@if($errors->has('index_dep'))
-											<label class='msgError'>{{$errors->first('index_dep')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-1 border-top border-bottom border-right">
-									<div class="form-group">
-										<label for='year_contract'>Год</label>
-										<input id='year_contract' class='change_contract_number form-control {{$errors->has("year_contract") ? print("inputError ") : print("")}}' name='year_contract' type='text' value='{{old("year_contract")}}' required />
-										@if($errors->has('year_contract'))
-											<label class='msgError'>{{$errors->first('year_contract')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-2 border-top border-bottom">
-									<div class="form-group">
-										<label for='executor_contract_reestr'>Исполнитель по Дог./Контр.</label>
-										<input id='executor_contract_reestr' class='form-control' name='executor_contract_reestr' type='text' value='{{old("executor_contract_reestr")}}'/>
-									</div>
-								</div>
-								<div class="col-md-2 border-top border-bottom">
-									<div class="form-group">
-										<label for='executor_reestr'>Исполнитель ОУД</label>
-										<select class='form-control' name='executor_reestr'>
-											<option></option>
-											@if(old('executor_reestr'))
-												@foreach($curators as $in_curators)
-													@if(old('executor_reestr') == $in_curators->id)
-														<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
-													@else
-														<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
-													@endif
-												@endforeach
-											@else
-												@foreach($curators as $in_curators)
-													<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
-												@endforeach
-											@endif
-										</select>
-										@if($errors->has('executor_reestr'))
-											<label class='msgError'>{{$errors->first('executor_reestr')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-2 border-top border-bottom border-left">
-									<div class="form-group">
-										<label for='date_save_contract_reestr' style='font-size: 12px;'>Дата сдачи Дог./Контр. на хранение</label>
-										<input id='date_save_contract_reestr' class='datepicker form-control {{$errors->has("date_save_contract_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_reestr' value='{{old("date_save_contract_reestr")}}'/>
-										@if($errors->has('date_save_contract_reestr'))
-											<label class='msgError'>{{$errors->first('date_save_contract_reestr')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-2 border-top">
-									<div class="form-group">
-										<label for='place_save_contract_reestr'>Место хранения</label>
-										<input id='place_save_contract_reestr' class='form-control {{$errors->has("place_save_contract_reestr") ? print("inputError ") : print("")}}' name='place_save_contract_reestr' value='{{old("place_save_contract_reestr")}}'/>
-										@if($errors->has('place_save_contract'))
-											<label class='msgError'>{{$errors->first('place_save_contract')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-1 border-top border-right">
-									<div class="form-group">
-										<label for='sel6' style='font-size: 12px;'>Тип документа</label>
-										<select id="sel6" class='form-control {{$errors->has("type_document_reestr") ? print("inputError ") : print("")}}' name='type_document_reestr'>
-											<option></option>
-											@foreach($type_documents as $type_document)
-												@if(old('type_document_reestr'))
-													@if(old('type_document_reestr') == $type_document->id)
-														<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
-													@else
-														<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
-													@endif
-												@else
-													<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
+							<div class="row">
+								<div class='col-md-9 border-top border-bottom border-left border-right'>
+									<div class='row'>
+										<div class="col-md-4">
+											<label>Контрагент</label>
+											<div class="form-group">
+												<select id="sel4" class='form-control select_counterpartie_reestr {{$errors->has("id_counterpartie_contract") ? print("inputError ") : print("")}}' name='id_counterpartie_contract' required>
+													<option></option>
+												</select>
+												@if($errors->has('id_counterpartie_contract'))
+													<label class='msgError'>{{$errors->first('id_counterpartie_contract')}}</label>
 												@endif
-											@endforeach
-										</select>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<button type='button' class="btn btn-primary" data-toggle="modal" data-target="#chose_counterpartie" style='margin-top: 27px;'>Выбрать</button>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label>Внимание!</label>
+												<input class='form-control' style='color:red; text-align:center;' type='text' value='' readonly />
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="col-md-7">
+												<div class="form-group">
+													<label for='numberContract'>Номер договора</label>
+													<input id='numberContract' class='form-control {{$errors->has("number_contract") ? print("inputError ") : print("")}}' name='number_contract' type='text' value='{{old("number_contract")}}' readonly />
+													@if($errors->has('number_contract'))
+														<label class='msgError'>{{$errors->first('number_contract')}}</label>
+													@endif
+												</div>
+											</div>
+											<div class="col-md-5" style='text-align: center;'>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='col-md-3 border-bottom border-right border-top'>
+									<div class='row'>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='amount_contract_reestr' class='small-text'>Сумма (окончательная)</label>
+												<input id='amount_contract_reestr' class='form-control check-number' name='amount_contract_reestr' type='text' value='{{old("amount_contract_reestr")}}'/>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='amount_invoice_reestr'>Сумма по счетам</label>
+												<input id='amount_invoice_reestr' class='form-control check-number' name='amount_invoice_reestr' type='text' value='{{$reestr->amount_invoice_reestr}}' disabled />
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 							<div class='row'>
-								<div class="col-md-9">
+								<div class='col-md-7'>
 									<div class='row'>
-										<div class="col-md-9">
+										<div class='col-md-6 border-left border-right border-top border-bottom'>
 											<div class='row'>
-												<div class="col-md-4 border-top border-left">
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for='number_pp'>№ п/п</label>
+														<input id='number_pp' class='change_contract_number form-control {{$errors->has("number_pp") ? print("inputError ") : print("")}}' name='number_pp' type='text' value='{{old("number_pp")}}' required/>
+														@if($errors->has('number_pp'))
+															<label class='msgError'>{{$errors->first('number_pp')}}</label>
+														@endif
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for='index_dep' style='font-size: 12px;'>Индекс подразд.</label>
+														<select id='index_dep' class='change_contract_number form-control {{$errors->has("index_dep") ? print("inputError ") : print("")}}' name='index_dep' type='text' value='{{old("index_dep")}}' required>
+															@if(old('index_dep'))
+																<option>{{old('index_dep')}}</option>
+															@endif
+															<option></option>
+															@foreach($departments as $department)
+																<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
+															@endforeach
+														</select>
+														@if($errors->has('index_dep'))
+															<label class='msgError'>{{$errors->first('index_dep')}}</label>
+														@endif
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for='year_contract'>Год</label>
+														<input id='year_contract' class='change_contract_number form-control {{$errors->has("year_contract") ? print("inputError ") : print("")}}' name='year_contract' type='text' value='{{old("year_contract")}}' required />
+														@if($errors->has('year_contract'))
+															<label class='msgError'>{{$errors->first('year_contract')}}</label>
+														@endif
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class='col-md-6 border-left border-right border-top border-bottom'>
+											<div class='row'>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label for='executor_contract_reestr' class='small-text'>Исполнитель по Дог./Контр.</label>
+														<input id='executor_contract_reestr' class='form-control' name='executor_contract_reestr' type='text' value='{{old("executor_contract_reestr")}}'/>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label for='executor_reestr'>Исполнитель ОУД</label>
+														<select class='form-control' name='executor_reestr'>
+															<option></option>
+															@if(old('executor_reestr'))
+																@foreach($curators as $in_curators)
+																	@if(old('executor_reestr') == $in_curators->id)
+																		<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
+																	@else
+																		<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
+																	@endif
+																@endforeach
+															@else
+																@foreach($curators as $in_curators)
+																	<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
+																@endforeach
+															@endif
+														</select>
+														@if($errors->has('executor_reestr'))
+															<label class='msgError'>{{$errors->first('executor_reestr')}}</label>
+														@endif
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class='row'>
+										<div class='col-md-12 border-left border-top border-right border-bottom'>
+											<div class='row'>
+												<div class="col-md-4">
 													<div class="form-group">
 														<label for='date_contract_on_first_reestr'>Дата Дог./Контр. на 1 л.</label>
 														<input id='date_contract_on_first_reestr' class='datepicker form-control {{$errors->has("date_contract_on_first_reestr") ? print("inputError ") : print("")}}' name='date_contract_on_first_reestr' value='{{old("date_contract_on_first_reestr")}}'/>
@@ -3323,18 +4399,18 @@
 														@endif
 													</div>
 												</div>
-												<div class="col-md-4 border-top">
+												<div class="col-md-4">
 													<div class="form-group">
-														<label for='date_signing_contract_reestr'>Дата подписания ФКП "НТИИМ"</label>
+														<label for='date_signing_contract_reestr' class='small-text'>Дата подписания ф-л "НТИИМ"(ФКП "НТИИМ")</label>
 														<input id='date_signing_contract_reestr' class='datepicker form-control {{$errors->has("date_signing_contract_reestr") ? print("inputError ") : print("")}}' name='date_signing_contract_reestr' value='{{old("date_signing_contract_reestr")}}'/>
 														@if($errors->has('date_signing_contract_reestr'))
 															<label class='msgError'>{{$errors->first('date_signing_contract_reestr')}}</label>
 														@endif
 													</div>
 												</div>
-												<div class="col-md-4 border-top" style='font-size: 12px;'>
+												<div class="col-md-4">
 													<div class="form-group">
-														<label for='date_control_signing_contract_reestr'>Контрольный срок подписания Дог./Контр.</label>
+														<label for='date_control_signing_contract_reestr' class='small-text'>Контрольный срок подписания Дог./Контр.</label>
 														<input id='date_control_signing_contract_reestr' class='datepicker form-control {{$errors->has("date_control_signing_contract_reestr") ? print("inputError ") : print("")}}' name='date_control_signing_contract_reestr' value='{{old("date_control_signing_contract_reestr")}}'/>
 														@if($errors->has('date_control_signing_contract_reestr'))
 															<label class='msgError'>{{$errors->first('date_control_signing_contract_reestr')}}</label>
@@ -3343,7 +4419,7 @@
 												</div>
 											</div>
 											<div class='row'>
-												<div class="col-md-4 border-left border-bottom">
+												<div class="col-md-4">
 													<div class="form-group">
 														<label id='label_date_registration_project_reestr' for='date_registration_project_reestr'>{{ $reestr->application_reestr ? 'Дата регистрации заявки' : 'Дата регистрации проекта'}}</label>
 														@if(old('application_reestr'))
@@ -3358,7 +4434,7 @@
 														@endif
 													</div>
 												</div>
-												<div class="col-md-4 border-bottom">
+												<div class="col-md-4">
 													<div class="form-group">
 														<label for='date_signing_contract_counterpartie_reestr'>Дата подписания Контрагентом</label>
 														<input id='date_signing_contract_counterpartie_reestr' class='datepicker form-control {{$errors->has("date_signing_contract_counterpartie_reestr") ? print("inputError ") : print("")}}' name='date_signing_contract_counterpartie_reestr' value='{{old("date_signing_contract_counterpartie_reestr")}}'/>
@@ -3367,7 +4443,7 @@
 														@endif
 													</div>
 												</div>
-												<div class="col-md-4 border-bottom">
+												<div class="col-md-4">
 													<div class="form-group">
 														<label for='date_entry_into_force_reestr'>Дата вступления Дог./Контр. в силу</label>
 														<input id='date_entry_into_force_reestr' class='datepicker form-control {{$errors->has("date_entry_into_force_reestr") ? print("inputError ") : print("")}}' name='date_entry_into_force_reestr' value='{{old("date_entry_into_force_reestr")}}'/>
@@ -3378,54 +4454,67 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-3">
-											<div class='row'>
-												<div class="col-md-6 border-top">
-													<div class="form-group">
-														<label for='protocols_reestr'>Протоколы</label>
-														<input id='protocols_reestr' class='form-control {{$errors->has("protocols_reestr") ? print("inputError ") : print("")}}' name='protocols_reestr' value='{{old("protocols_reestr")}}' readonly />
-														@if($errors->has('protocols_reestr'))
-															<label class='msgError'>{{$errors->first('protocols_reestr')}}</label>
-														@endif
-													</div>
-												</div>
-												<div class="col-md-6 border-top border-right">
-													<div class="form-group">
-														<label for='add_agreements_reestr'>ДС</label>
-														<input id='add_agreements_reestr' class='form-control {{$errors->has("add_agreements_reestr") ? print("inputError ") : print("")}}' name='add_agreements_reestr' value='{{old("add_agreements_reestr")}}' readonly />
-														@if($errors->has('add_agreements_reestr'))
-															<label class='msgError'>{{$errors->first('add_agreements_reestr')}}</label>
-														@endif
-													</div>
-												</div>
+									</div>
+								</div>
+								<div class='col-md-5 border-left border-top border-right border-bottom'>
+									<div class='row'>
+										<div class="col-md-5">
+											<div class="form-group">
+												<label for='date_save_contract_reestr' style='font-size: 11px;'>Дата сдачи Д/К на хранение оригинала</label>
+												<input id='date_save_contract_reestr' class='datepicker form-control {{$errors->has("date_save_contract_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_reestr' value='{{old("date_save_contract_reestr")}}'/>
+												@if($errors->has('date_save_contract_reestr'))
+													<label class='msgError'>{{$errors->first('date_save_contract_reestr')}}</label>
+												@endif
 											</div>
-											<div class='row'>
-												<div class="col-md-6 border-bottom">
-													<div class="form-group">
-														<label for='sel9'>Согл./Не согл.</label>
-														<select id="sel9" class='form-control {{$errors->has("reconciliation_protocol_reestr") ? print("inputError ") : print("")}}' name='reconciliation_protocol_reestr'>
-															<option value='0'></option>
-															<option value='1'>Согласовано</option>
-															<option value='2'>Не согласовано</option>
-														</select>
-													</div>
-												</div>
-												<div class="col-md-6 border-bottom border-right">
-													<div class="form-group">
-														<label for='sel10'>Согл./Не согл.</label>
-														<select id="sel10" class='form-control {{$errors->has("reconciliation_agreement_reestr") ? print("inputError ") : print("")}}' name='reconciliation_agreement_reestr'>
-															<option value='0'></option>
-															<option value='1'>Согласовано</option>
-															<option value='2'>Не согласовано</option>
-														</select>
-													</div>
-												</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for='place_save_contract_reestr'>Место хранения</label>
+												<input id='place_save_contract_reestr' class='form-control {{$errors->has("place_save_contract_reestr") ? print("inputError ") : print("")}}' name='place_save_contract_reestr' value='{{old("place_save_contract_reestr")}}'/>
+												@if($errors->has('place_save_contract'))
+													<label class='msgError'>{{$errors->first('place_save_contract')}}</label>
+												@endif
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for='sel6' style='font-size: 12px;'>Тип документа</label>
+												<select id="sel6" class='form-control {{$errors->has("type_document_reestr") ? print("inputError ") : print("")}}' name='type_document_reestr'>
+													<option></option>
+													@foreach($type_documents as $type_document)
+														@if(old('type_document_reestr'))
+															@if(old('type_document_reestr') == $type_document->id)
+																<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
+															@else
+																<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
+															@endif
+														@else
+															<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
+														@endif
+													@endforeach
+												</select>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="col-md-3">
 									<div class='row'>
+										<div class="col-md-5">
+											<div class="form-group">
+												<label for='date_save_contract_el_reestr' class='small-text'>Дата сдачи Д/К на хранение скана</label>
+												<input id='date_save_contract_el_reestr' class='datepicker form-control {{$errors->has("date_save_contract_el_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_el_reestr' value='{{old("date_save_contract_el_reestr")}}'/>
+												@if($errors->has('date_save_contract_el_reestr'))
+													<label class='msgError'>{{$errors->first('date_save_contract_el_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for='count_save_contract_reestr'>Срок хранения по</label>
+												<input id='count_save_contract_reestr' class='datepicker form-control {{$errors->has("count_save_contract_reestr") ? print("inputError ") : print("")}}' name='count_save_contract_reestr' value='{{old("count_save_contract_reestr")}}'/>
+												@if($errors->has('count_save_contract_reestr'))
+													<label class='msgError'>{{$errors->first('count_save_contract_reestr')}}</label>
+												@endif
+											</div>
+										</div>
 										<div class="col-md-3">
 											<div class="form-group">
 												<label class='form-check-label' for='break'>ОТКАЗ</label>
@@ -3444,27 +4533,27 @@
 												@endif
 											</div>
 										</div>
-										<div class="col-md-9 border-right">
+									</div>
+									<div class='row'>
+										<div class="col-md-5">
 											<div class="form-group">
-												<label for='document_success_renouncement_reestr'>Документ, подтверждающий отказ</label>
+												<label for='document_success_renouncement_reestr' class='small-text'>Документ, подтверждающий отказ</label>
 												<input id='document_success_renouncement_reestr' class='form-control {{$errors->has("document_success_renouncement_reestr") ? print("inputError ") : print("")}}' name='document_success_renouncement_reestr' value='{{old("document_success_renouncement_reestr")}}'/>
 												@if($errors->has('document_success_renouncement_reestr'))
 													<label class='msgError'>{{$errors->first('document_success_renouncement_reestr')}}</label>
 												@endif
 											</div>
 										</div>
-									</div>
-									<div class='row'>
-										<div class="col-md-6 border-bottom">
+										<div class="col-md-2">
 											<div class="form-group">
-												<label for='date_renouncement_contract'>Дата отказа</label>
+												<label for='date_renouncement_contract' class='small-text'>Дата отказа</label>
 												<input id='date_renouncement_contract' class='form-control datepicker {{$errors->has("date_renouncement_contract") ? print("inputError ") : print("")}}' name='date_renouncement_contract' value='{{old("date_renouncement_contract")}}'/>
 												@if($errors->has('date_renouncement_contract'))
 													<label class='msgError'>{{$errors->first('date_renouncement_contract')}}</label>
 												@endif
 											</div>
 										</div>
-										<div class="col-md-6 border-right border-bottom">
+										<div class="col-md-5">
 											<div class="form-group">
 												<label for='number_aftair_renouncement_reestr'>№ дела</label>
 												<input id='number_aftair_renouncement_reestr' class='form-control {{$errors->has("number_aftair_renouncement_reestr") ? print("inputError ") : print("")}}' name='number_aftair_renouncement_reestr' value='{{old("number_aftair_renouncement_reestr")}}'/>
@@ -3476,94 +4565,180 @@
 									</div>
 								</div>
 							</div>
-							<div class='row'>
-								<div class="col-md-2 border-bottom border-left border-top">
-									<div class="form-group">
-										<label for="sel3">Вид договора</span></label>
-										<select id="sel3" class='form-control {{$errors->has("id_view_contract") ? print("inputError ") : print("")}}' name='id_view_contract' required>
-											<option></option>
-											@if($viewContracts)
-												@foreach($viewContracts as $viewContract)
-													@if(old('id_view_contract'))
-														@if(old('id_view_contract') == $viewContract->id)
-															<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
-														@else
-															<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
-														@endif
-													@else
-														<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
+							<div class="row">
+								<div class='col-md-2 border-left border-top border-right border-bottom'>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="sel3">Вид договора</span></label>
+												<select id="sel3" class='form-control {{$errors->has("id_view_contract") ? print("inputError ") : print("")}}' name='id_view_contract' required>
+													<option></option>
+													@if($viewContracts)
+														@foreach($viewContracts as $viewContract)
+															@if(old('id_view_contract'))
+																@if(old('id_view_contract') == $viewContract->id)
+																	<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
+																@else
+																	<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
+																@endif
+															@else
+																<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
+															@endif
+														@endforeach
 													@endif
-												@endforeach
-											@endif
-										</select>
-										@if($errors->has('id_view_contract'))
-											<label class='msgError'>{{$errors->first('id_view_contract')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-2 border-top border-bottom border-right">
-									<div class="form-group">
-										<label for="sel5">Отбор поставщика</span></label>
-										<select id="sel5" class='form-control {{$errors->has("selection_supplier_reestr") ? print("inputError ") : print("")}}' name='selection_supplier_reestr'>
-											<option></option>
-											@foreach($selection_suppliers as $selection_supplier)
-												@if(old('selection_supplier_reestr'))
-													@if(old('selection_supplier_reestr') == $selection_supplier->id)
-														<option value='{{$selection_supplier->id}}' selected>{{$selection_supplier->name_selection_supplier}}</option>
-													@else
-														<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
-													@endif
-												@else
-													<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
+												</select>
+												@if($errors->has('id_view_contract'))
+													<label class='msgError'>{{$errors->first('id_view_contract')}}</label>
 												@endif
-											@endforeach
-										</select>
-										@if($errors->has('selection_supplier_reestr'))
-											<label class='msgError'>{{$errors->first('selection_supplier_reestr')}}</label>
-										@endif
+											</div>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="sel5">Отбор поставщика</span></label>
+												<select id="sel5" class='form-control {{$errors->has("selection_supplier_reestr") ? print("inputError ") : print("")}}' name='selection_supplier_reestr'>
+													<option></option>
+													@foreach($selection_suppliers as $selection_supplier)
+														@if(old('selection_supplier_reestr'))
+															@if(old('selection_supplier_reestr') == $selection_supplier->id)
+																<option value='{{$selection_supplier->id}}' selected>{{$selection_supplier->name_selection_supplier}}</option>
+															@else
+																<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
+															@endif
+														@else
+															<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
+														@endif
+													@endforeach
+												</select>
+												@if($errors->has('selection_supplier_reestr'))
+													<label class='msgError'>{{$errors->first('selection_supplier_reestr')}}</label>
+												@endif
+											</div>
+										</div>
 									</div>
 								</div>
-								<div class="col-md-2 border-top border-bottom border-left">
-									<div class="form-group">
-										<label for='app_outgoing_number_reestr'>Заявка исх. №</label>
-										<input id='app_outgoing_number_reestr' class='form-control {{$errors->has("app_outgoing_number_reestr") ? print("inputError ") : print("")}}' name='app_outgoing_number_reestr' value='{{old("app_outgoing_number_reestr")}}'/>
-										@if($errors->has('app_outgoing_number_reestr'))
-											<label class='msgError'>{{$errors->first('app_outgoing_number_reestr')}}</label>
-										@endif
+								<div class='col-md-4 border-left border-top border-right border-bottom'>
+									<div class='row'>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='app_outgoing_number_reestr'>Заявка исх. №</label>
+												<input id='app_outgoing_number_reestr' class='form-control {{$errors->has("app_outgoing_number_reestr") ? print("inputError ") : print("")}}' name='app_outgoing_number_reestr' value='{{old("app_outgoing_number_reestr")}}'/>
+												@if($errors->has('app_outgoing_number_reestr'))
+													<label class='msgError'>{{$errors->first('app_outgoing_number_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='app_incoming_number_reestr'>Вх. №</label>
+												<input id='app_incoming_number_reestr' class='form-control {{$errors->has("app_incoming_number_reestr") ? print("inputError ") : print("")}}' name='app_incoming_number_reestr' value='{{old("app_incoming_number_reestr")}}'/>
+												@if($errors->has('app_incoming_number_reestr'))
+													<label class='msgError'>{{$errors->first('app_incoming_number_reestr')}}</label>
+												@endif
+											</div>
+										</div>
 									</div>
 								</div>
-								<div class="col-md-2 border-top border-bottom border-right">
-									<div class="form-group">
-										<label for='app_incoming_number_reestr'>Вх. №</label>
-										<input id='app_incoming_number_reestr' class='form-control {{$errors->has("app_incoming_number_reestr") ? print("inputError ") : print("")}}' name='app_incoming_number_reestr' value='{{old("app_incoming_number_reestr")}}'/>
-										@if($errors->has('app_incoming_number_reestr'))
-											<label class='msgError'>{{$errors->first('app_incoming_number_reestr')}}</label>
-										@endif
+								<div class='col-md-2 border-left border-top border-right border-bottom'>
+									<div class='row'>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='protocols_reestr'>Протоколы</label>
+												<input id='protocols_reestr' class='form-control {{$errors->has("protocols_reestr") ? print("inputError ") : print("")}}' name='protocols_reestr' value='{{old("protocols_reestr")}}' readonly />
+												@if($errors->has('protocols_reestr'))
+													<label class='msgError'>{{$errors->first('protocols_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='add_agreements_reestr'>ДС</label>
+												<input id='add_agreements_reestr' class='form-control {{$errors->has("add_agreements_reestr") ? print("inputError ") : print("")}}' name='add_agreements_reestr' value='{{old("add_agreements_reestr")}}' readonly />
+												@if($errors->has('add_agreements_reestr'))
+													<label class='msgError'>{{$errors->first('add_agreements_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='sel9' class='small-text'>Согл./Не согл.</label>
+												<select id="sel9" class='form-control {{$errors->has("reconciliation_protocol_reestr") ? print("inputError ") : print("")}}' name='reconciliation_protocol_reestr'>
+													<option value='0'></option>
+													<option value='1'>Согласовано</option>
+													<option value='2'>Не согласовано</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='sel10' class='small-text'>Согл./Не согл.</label>
+												<select id="sel10" class='form-control {{$errors->has("reconciliation_agreement_reestr") ? print("inputError ") : print("")}}' name='reconciliation_agreement_reestr'>
+													<option value='0'></option>
+													<option value='1'>Согласовано</option>
+													<option value='2'>Не согласовано</option>
+												</select>
+											</div>
+										</div>
 									</div>
 								</div>
-								<div class="col-md-2 border-top border-bottom border-left">
-									<div class="form-group">
-										<label for='result_second_department_date_reestr'>Заключение отдела №2 Дата</label>
-										<input id='result_second_department_date_reestr' class='datepicker form-control {{$errors->has("result_second_department_date_reestr") ? print("inputError ") : print("")}}' name='result_second_department_date_reestr' value='{{old("result_second_department_date_reestr")}}'/>
-										@if($errors->has('result_second_department_date_reestr'))
-											<label class='msgError'>{{$errors->first('result_second_department_date_reestr')}}</label>
-										@endif
+								<div class='col-md-2 border-left border-top border-right border-bottom'>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for='result_second_department_date_reestr'>Заключение отдела №2 Дата</label>
+												<input id='result_second_department_date_reestr' class='datepicker form-control {{$errors->has("result_second_department_date_reestr") ? print("inputError ") : print("")}}' name='result_second_department_date_reestr' value='{{old("result_second_department_date_reestr")}}'/>
+												@if($errors->has('result_second_department_date_reestr'))
+													<label class='msgError'>{{$errors->first('result_second_department_date_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for='result_second_department_number_reestr'>№</label>
+												<input id='result_second_department_number_reestr' class='form-control {{$errors->has("result_second_department_number_reestr") ? print("inputError ") : print("")}}' name='result_second_department_number_reestr' value='{{old("result_second_department_number_reestr")}}'/>
+												@if($errors->has('result_second_department_number_reestr'))
+													<label class='msgError'>{{$errors->first('result_second_department_number_reestr')}}</label>
+												@endif
+											</div>
+										</div>
 									</div>
 								</div>
-								<div class="col-md-2 border-top border-bottom border-right">
-									<div class="form-group">
-										<label for='result_second_department_number_reestr'>№</label>
-										<input id='result_second_department_number_reestr' class='form-control {{$errors->has("result_second_department_number_reestr") ? print("inputError ") : print("")}}' name='result_second_department_number_reestr' value='{{old("result_second_department_number_reestr")}}'/>
-										@if($errors->has('result_second_department_number_reestr'))
-											<label class='msgError'>{{$errors->first('result_second_department_number_reestr')}}</label>
-										@endif
+								<div class='col-md-2 border-all'>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for='date_complete_reestr'>Договор исполнен на</label>
+												<input id='date_complete_reestr' class='datepicker form-control {{$errors->has("date_complete_reestr") ? print("inputError ") : print("")}}' name='date_complete_reestr' value='{{old("date_complete_reestr")}}'/>
+												@if($errors->has('date_complete_reestr'))
+													<label class='msgError'>{{$errors->first('date_complete_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for='reestr_number_reestr'>Реестровый номер Д/К</label>
+												<input id='reestr_number_reestr' class='form-control {{$errors->has("reestr_number_reestr") ? print("inputError ") : print("")}}' name='reestr_number_reestr' value='{{old("reestr_number_reestr")}}' maxlength='30'/>
+												@if($errors->has('reestr_number_reestr'))
+													<label class='msgError'>{{$errors->first('reestr_number_reestr')}}</label>
+												@endif
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 							<div class='row'>
 								<input id='is_new_reestr' class='form-check-input' name='is_new_reestr' type="checkbox" checked style='display: none;'/>
-								<div class="col-md-5">
-									<div class="col-md-3 border-top border-bottom border-left">
+							</div>
+							<div class='row'>
+								<div class="col-md-5 border-left border-top border-right border-bottom">
+									<div class="col-md-3">
 										<div class='row'>
 											<div class="col-md-12">
 												@if(old('marketing_reestr'))
@@ -3615,7 +4790,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-5 border-top border-bottom">
+									<div class="col-md-5">
 										<div class='row'>
 											<div class="col-md-12">
 												@if(old('procurement_reestr'))
@@ -3667,7 +4842,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-4 border-top border-bottom border-right" style='padding-bottom: 33px;'>
+									<div class="col-md-4" style='padding-bottom: 33px;'>
 										<!--<div class='row'>
 											<div class="col-md-12">
 												@if(old('procurement_fz_223_reestr'))
@@ -3766,7 +4941,7 @@
 											@endif
 										</div>
 										<div class="col-md-2">
-											<label for='days_reconciliation_reestr'>Срок действия согласования крупной сделки</label>
+											<label for='days_reconciliation_reestr' class='small-text'>Срок действия согласования крупной сделки</label>
 										</div>
 										<div class="col-md-2">
 											<input id='days_reconciliation_reestr' class='form-control {{$errors->has("days_reconciliation_reestr") ? print("inputError ") : print("")}}' name='days_reconciliation_reestr' value='{{old("days_reconciliation_reestr")}}'/>
@@ -3795,7 +4970,7 @@
 											@endif
 										</div>
 										<div class="col-md-2">
-											<label for='count_mounth_reestr'>Количество месяцев</label>
+											<label for='count_mounth_reestr' class='small-text'>Количество месяцев</label>
 										</div>
 										<div class="col-md-2">
 											<input id='count_mounth_reestr' class='form-control {{$errors->has("count_mounth_reestr") ? print("inputError ") : print("")}}' name='count_mounth_reestr' value='{{old("count_mounth_reestr")}}'/>
@@ -3806,24 +4981,24 @@
 									</div>
 									<div class="row border-top">
 										<div class="col-md-2">
-											<label>Сроки согласования проекта договора исполнителей</label>
+											<label class='small-text'>Сроки согласования проекта договора исполнителей</label>
 										</div>
 										<div class="col-md-3">
-											<label for='begin_date_reconciliation_reestr'>Начало согласования (дата)</label>
+											<label for='begin_date_reconciliation_reestr' class='small-text'>Начало согласования (дата)</label>
 											<input id='begin_date_reconciliation_reestr' class='datepicker form-control {{$errors->has("begin_date_reconciliation_reestr") ? print("inputError ") : print("")}}' name='begin_date_reconciliation_reestr' value='{{old("begin_date_reconciliation_reestr")}}'/>
 											@if($errors->has('begin_date_reconciliation_reestr'))
 												<label class='msgError'>{{$errors->first('begin_date_reconciliation_reestr')}}</label>
 											@endif
 										</div>
 										<div class="col-md-3">
-											<label for='end_date_reconciliation_reestr'>Окончание согласования (дата)</label>
+											<label for='end_date_reconciliation_reestr' style='font-size: 11px;'>Окончание согласования (дата)</label>
 											<input id='end_date_reconciliation_reestr' class='datepicker form-control {{$errors->has("end_date_reconciliation_reestr") ? print("inputError ") : print("")}}' name='end_date_reconciliation_reestr' value='{{old("end_date_reconciliation_reestr")}}'/>
 											@if($errors->has('end_date_reconciliation_reestr'))
 												<label class='msgError'>{{$errors->first('end_date_reconciliation_reestr')}}</label>
 											@endif
 										</div>
 										<div class="col-md-4">
-											<label for='count_days_reconciliation_reestr'>Общее количество дней согласования</label>
+											<label for='count_days_reconciliation_reestr' class='small-text'>Общее количество дней согласования</label>
 											<input id='count_days_reconciliation_reestr' class='form-control {{$errors->has("count_days_reconciliation_reestr") ? print("inputError ") : print("")}}' name='count_days_reconciliation_reestr' value='{{old("count_days_reconciliation_reestr")}}'/>
 											@if($errors->has('count_days_reconciliation_reestr'))
 												<label class='msgError'>{{$errors->first('count_days_reconciliation_reestr')}}</label>
@@ -3898,39 +5073,58 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-md-9 border-all">
+								<div class="col-md-7 border-all">
 									<div class="row">
 										<div class="col-md-12">
-											<label>Гарантия банка</label>
+											<label>Обеспечение гарантийных обязательств</label>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-3">
 											<div class='row'>
-												<div class="col-md-2">
-													<label for='date_bank_reestr'>До</label>
+												<div class="col-md-12">
+													<label for='term_action_reestr'>Срок действия</label>
 												</div>
-												<div class="col-md-10">
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													<input id='term_action_reestr' class='form-control {{$errors->has("term_action_reestr") ? print("inputError ") : print("")}}' name='term_action_reestr' value='{{ old("term_action_reestr") }}'/>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class='row'>
+												<div class="col-md-12">
+													<label for='date_bank_reestr'>Гарантия банка до</label>
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
 													<input id='date_bank_reestr' class='datepicker form-control {{$errors->has("date_bank_reestr") ? print("inputError ") : print("")}}' name='date_bank_reestr' value='{{ old("date_bank_reestr") }}'/>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-5">
+										<div class="col-md-2">
 											<div class='row'>
-												<div class="col-md-1">
+												<div class="col-md-12">
 													<label for='amount_bank_reestr'>Сумма</label>
 												</div>
-												<div class="col-md-5">
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
 													<input id='amount_bank_reestr' class='form-control check-number {{$errors->has("amount_bank_reestr") ? print("inputError ") : print("")}}' name='amount_bank_reestr' value='{{ old("amount_bank_reestr") }}'/>
-												</div>
-												<div class="col-md-1">
-													<label for='bank_reestr'>Банк</label>
-												</div>
-												<div class="col-md-5">
-													<input id='bank_reestr' class='form-control {{$errors->has("bank_reestr") ? print("inputError ") : print("")}}' name='bank_reestr' value='{{ old("bank_reestr") }}'/>
 												</div>
 											</div>
 										</div>
-										<div class='col-md-5'>
-											<button class='btn btn-primary' data-toggle="modal" data-target="#scan" type='button' style='float: right; width: 184px;'>Скан</button>
+										<div class='col-md-4'>
+											<div class='row'>
+												<div class="col-md-12">
+													<label for='bank_reestr'>Банк</label>
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													<input id='bank_reestr' class='form-control {{$errors->has("bank_reestr") ? print("inputError ") : print("")}}' name='bank_reestr' value='{{ old("bank_reestr") }}'/>
+												</div>
+											</div>
 										</div>
 									</div>
 									<div class="row border-top">
@@ -3941,7 +5135,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-5">
+										<div class="col-md-6">
 											<div class='row'>
 												<div class="col-md-1">
 													<label for='date_b_contract_reestr'>с</label>
@@ -3959,30 +5153,96 @@
 										</div>
 									</div>
 									<div class='row border-bottom'>
-										<div class="col-md-10">
+										<div class="col-md-12">
 											<div class="form-group">
 												<input id='date_contract_reestr' class='form-control {{$errors->has("date_contract_reestr") ? print("inputError ") : print("")}}' name='date_contract_reestr' value='{{ old("date_contract_reestr") }}' spellcheck='true'/>
 											</div>
 										</div>
 									</div>
 									<div class="row border-bottom">
-										<div class="col-md-10">
+										<div class="col-md-12">
 											<div class="form-group">
-												<label for='date_maturity_reestr'>Срок исполнения обязательств</label>
-												<input id='date_maturity_reestr' class='form-control {{$errors->has("date_maturity_reestr") ? print("inputError ") : print("")}}' name='date_maturity_reestr' value='{{ old("date_maturity_reestr") }}' spellcheck='true'/>
+												<div class='row'>
+													<div class="col-md-10">
+														<label for='date_maturity_reestr'>Срок исполнения обязательств</label>
+													</div>
+													<div class="col-md-2">
+														<label for='date_e_maturity_reestr'>До</label>
+													</div>
+												</div>
+												<div class='row'>
+													<div class="col-md-10">
+														<input id='date_maturity_reestr' class='form-control {{$errors->has("date_maturity_reestr") ? print("inputError ") : print("")}}' name='date_maturity_reestr' value='{{ old("date_maturity_reestr") }}' spellcheck='true'/>
+													</div>
+													<div class='col-md-2'>
+														<input id='date_e_maturity_reestr' class='datepicker form-control {{$errors->has("date_e_maturity_reestr") ? print("inputError ") : print("")}}' name='date_e_maturity_reestr' value='{{ old("date_e_maturity_reestr") }}' spellcheck='true'/>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-10">
+										<div class="col-md-6">
 											<div class='row'>
-												<div class="col-md-1">
-													<label for='amount_reestr'>Сумма</label>
+												<div class="col-md-12">
+													<label for='amount_begin_reestr'>Цена при заключении Д/К</label>
 												</div>
-												<div class="col-md-2">
+											</div>
+											<div class='row'>
+												<div class="col-md-4">
+													<input id='amount_begin_reestr' class='form-control check-number {{$errors->has("amount_begin_reestr") ? print("inputError ") : print("")}}' name='amount_begin_reestr' value='{{old("amount_begin_reestr")}}' />
+												</div>
+												<div class="col-md-4">
+													<select class='form-control {{$errors->has("unit_begin_reestr") ? print("inputError ") : print("")}}' name='unit_begin_reestr'>
+														<option></option>
+														@foreach($units as $unit)
+															@if(old('unit_begin_reestr'))
+																<option value='{{$unit->id}}' selected>{{$unit->name_unit}}</option>
+															@else
+																<option value='{{$unit->id}}'>{{$unit->name_unit}}</option>
+															@endif
+														@endforeach
+													</select>
+												</div>
+												<div class='col-md-4'>
+													<label for='VAT_BEGIN'>НДС</label>
+													@if(old('vat_begin_reestr'))
+														<input id='VAT_BEGIN' class='form-check-input' name='vat_begin_reestr' type="checkbox" checked />
+													@else
+														<input id='VAT_BEGIN' class='form-check-input' name='vat_begin_reestr' type="checkbox"/>
+													@endif
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-6">
+													<label for='approximate_amount_begin_reestr'>Ориентировочная</label>
+													@if(old('approximate_amount_begin_reestr'))
+														<input id='approximate_amount_begin_reestr' class='form-check-input' name='approximate_amount_begin_reestr' type="checkbox" checked />
+													@else
+														<input id='approximate_amount_begin_reestr' class='form-check-input' name='approximate_amount_begin_reestr' type="checkbox"/>
+													@endif
+												</div>
+												<div class="col-md-6">
+													<label for='fixed_amount_begin_reestr'>Фиксированная</label>
+													@if(old('fixed_amount_begin_reestr'))
+														<input id='fixed_amount_begin_reestr' class='form-check-input' name='fixed_amount_begin_reestr' type="checkbox" checked />
+													@else
+														<input id='fixed_amount_begin_reestr' class='form-check-input' name='fixed_amount_begin_reestr' type="checkbox"/>
+													@endif
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class='row'>
+												<div class="col-md-12">
+													<label for='amount_reestr'>Сумма Д/К</label>
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-4">
 													<input id='amount_reestr' class='form-control check-number {{$errors->has("amount_reestr") ? print("inputError ") : print("")}}' name='amount_reestr' value='{{old("amount_reestr") }}'/>
 												</div>
-												<div class="col-md-2">
+												<div class="col-md-3">
 													<select id="sel8" class='form-control {{$errors->has("unit_reestr") ? print("inputError ") : print("")}}' name='unit_reestr'>
 														<option></option>
 														@foreach($units as $unit)
@@ -3994,7 +5254,7 @@
 														@endforeach
 													</select>
 												</div>
-												<div class="col-md-2">
+												<div class="col-md-3">
 													<label for='VAT'>НДС</label>
 													@if(old('vat_reestr'))
 														<input id='VAT' class='form-check-input' name='vat_reestr' type="checkbox" checked />
@@ -4002,7 +5262,9 @@
 														<input id='VAT' class='form-check-input' name='vat_reestr' type="checkbox"/>
 													@endif
 												</div>
-												<div class="col-md-3">
+											</div>
+											<div class='row'>
+												<div class="col-md-6">
 													<label for='approximate_amount_reestr'>Ориентировочная</label>
 													@if(old('approximate_amount_reestr'))
 														<input id='approximate_amount_reestr' class='form-check-input' name='approximate_amount_reestr' type="checkbox" checked />
@@ -4010,24 +5272,46 @@
 														<input id='approximate_amount_reestr' class='form-check-input' name='approximate_amount_reestr' type="checkbox"/>
 													@endif
 												</div>
-											</div>
-											<div class='row'>
-												<div class="col-md-12">
-													<input class='form-control {{$errors->has("amount_comment_reestr") ? print("inputError ") : print("")}}' name='amount_comment_reestr' value='{{old("amount_comment_reestr") }}' spellcheck='true'/>
+												<div class="col-md-6">
+													<label for='fixed_amount_reestr'>Фиксированная</label>
+													@if(old('fixed_amount_reestr'))
+														<input id='fixed_amount_reestr' class='form-check-input' name='fixed_amount_reestr' type="checkbox" checked />
+													@else
+														<input id='fixed_amount_reestr' class='form-check-input' name='fixed_amount_reestr' type="checkbox"/>
+													@endif
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class='row'>
-										<div class="col-md-6">
+										<div class="col-md-12">
+											<input class='form-control {{$errors->has("amount_comment_reestr") ? print("inputError ") : print("")}}' name='amount_comment_reestr' value='{{old("amount_comment_reestr") }}' spellcheck='true'/>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-4">
 											<div class='row'>
-												<div class="col-md-2">
+												<div class="col-md-12">
+													<label for='end_term_repayment_reestr' class='small-text'>Конечный срок оплаты по Д/К</label>
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-9">
+													<input id='end_term_repayment_reestr' class='datepicker form-control {{$errors->has("end_term_repayment_reestr") ? print("inputError ") : print("")}}' name='end_term_repayment_reestr' value='{{old("end_term_repayment_reestr")}}' />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class='row'>
+												<div class="col-md-12">
 													<label for='nmcd_reestr'>НМЦД/НМЦК</label>
 												</div>
-												<div class="col-md-3">
+											</div>
+											<div class='row'>
+												<div class="col-md-7">
 													<input id='nmcd_reestr' class='form-control check-number {{$errors->has("nmcd_reestr") ? print("inputError ") : print("")}}' name='nmcd_reestr' value='{{old("nmcd_reestr") }}'/>
 												</div>
-												<div class="col-md-3">
+												<div class="col-md-5">
 													<select class='form-control {{$errors->has("nmcd_unit_reestr") ? print("inputError ") : print("")}}' name='nmcd_unit_reestr'>
 														<option></option>
 														@foreach($units as $unit)
@@ -4041,15 +5325,17 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class='row'>
-												<div class="col-md-2">
+												<div class="col-md-12">
 													<label for='economy_reestr'>Экономия</label>
 												</div>
-												<div class="col-md-3">
+											</div>
+											<div class='row'>
+												<div class="col-md-7">
 													<input id='economy_reestr' class='form-control check-number {{$errors->has("economy_reestr") ? print("inputError ") : print("")}}' name='economy_reestr' value='{{old("economy_reestr") }}'/>
 												</div>
-												<div class="col-md-3">
+												<div class="col-md-5">
 													<select class='form-control {{$errors->has("economy_unit_reestr") ? print("inputError ") : print("")}}' name='economy_unit_reestr'>
 														<option></option>
 														@foreach($units as $unit)
@@ -4065,7 +5351,7 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-10">
+										<div class="col-md-12">
 											<label>Порядок оплаты</label>
 											<div class='row'>
 												<div class="col-md-6">
@@ -4099,6 +5385,9 @@
 											@endif
 										</div>
 									</div>
+								</div>
+								<div class="col-md-2">
+									<button class='btn btn-primary' data-toggle="modal" data-target="#scan" type='button' style='float: right; width: 184px;'>Скан</button>
 								</div>
 							</div>
 							<div class="row">
@@ -4283,279 +5572,311 @@
 						<form method='POST' action="{{route('department.ekonomic.update_reestr', $contract->id)}}">
 							{{csrf_field()}}
 							<div class="row">
-								<div class="col-md-2">
-									<label>Контрагент</label>
-									<div class="form-group">
-										<select id="sel4" class='form-control select_counterpartie_reestr {{$errors->has("id_counterpartie_contract") ? print("inputError ") : print("")}}' name='id_counterpartie_contract' disabled >
-											<option value='{{$contract->id_counterpartie_contract}}' full_name='{{$contract->full_name_counterpartie_contract}}' inn='{{$contract->inn_counterpartie_contract}}' selected>{{$contract->name_counterpartie_contract}}</option>
-										</select>
-										@if($errors->has('id_counterpartie_contract'))
-											<label class='msgError'>{{$errors->first('id_counterpartie_contract')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-1">
-										<div class="form-group">
-											<button type='button' class="btn btn-primary" data-toggle="modal" data-target="#chose_counterpartie" style='margin-top: 27px;' disabled>Выбрать</button>
-										</div>
-									</div>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label>Внимание!</label>
-										<input class='form-control' style='color:red; text-align:center;' type='text' value='<?php 
-											if($reestr->date_registration_project_reestr)
-												if(!$reestr->date_signing_contract_reestr){
-													if(time() - strtotime($reestr->date_registration_project_reestr) > 2592000)
-														echo 'Не подписан более 30 дней!';
-												}else
-													if(strtotime($reestr->date_signing_contract_reestr) - strtotime($reestr->date_registration_project_reestr) > 2592000)
-														echo 'Не был подписан более 30 дней!';
-										?>' readonly />
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="col-md-7">
-										<div class="form-group">
-											<label for='numberContract'>Номер договора</label>
-											<input id='numberContract' class='form-control {{$errors->has("number_contract") ? print("inputError ") : print("")}}' name='number_contract' type='text' value='{{old("number_contract") ? old("number_contract") : $contract->number_contract}}' readonly />
-											@if($errors->has('number_contract'))
-												<label class='msgError'>{{$errors->first('number_contract')}}</label>
-											@endif
-										</div>
-									</div>
-									<div class="col-md-5" style='text-align: center;'>
-										<div class='form-group' style='margin-top: 27px;'>
-											@if(isset($prev_contract))
-												@if(isset($_GET['isSmallPage']))
-													<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}?isSmallPage=true" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-												@else
-													<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-												@endif
-											@else
-												<button class='btn btn-primary' title='Назад' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-											@endif
-											@if(isset($next_contract))
-												@if(isset($_GET['isSmallPage']))
-													<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}?isSmallPage=true" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-												@else
-													<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-												@endif
-											@else
-												<button class='btn btn-primary' title='Вперед' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
-											@endif
-										</div>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<label for='amount_contract_reestr'>Сумма (окончательная)</label>
-									<input id='amount_contract_reestr' class='form-control check-number' name='amount_contract_reestr' type='text' value='{{old("amount_contract_reestr") ? old("amount_contract_reestr") : $reestr->amount_contract_reestr}}' readonly />
-								</div>
-								<div class="col-md-2">
-									<label for='amount_invoice_reestr'>Сумма по счетам</label>
-									<input id='amount_invoice_reestr' class='form-control check-number' name='amount_invoice_reestr' type='text' value='{{$reestr->amount_invoice_reestr}}' disabled />
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-1">
-									<div class="form-group">
-										<label for='number_pp'>№ п/п</label>
-										<input id='number_pp' class='change_contract_number form-control {{$errors->has("number_pp") ? print("inputError ") : print("")}}' name='number_pp' type='text' value='{{old("number_pp") ? old("number_pp") : (strlen($contract->number_contract) > 0 ? explode("‐",$contract->number_contract)[0] : "")}}' readonly />
-										@if($errors->has('number_pp'))
-											<label class='msgError'>{{$errors->first('number_pp')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-1">
-									<div class="form-group">
-										<label for='index_dep' style="font-size: 12px;">Индекс подразд.</label>
-										<select id='index_dep' class='change_contract_number form-control {{$errors->has("index_dep") ? print("inputError ") : print("")}}' name='index_dep' type='text' value='{{old("index_dep")}}' disabled >
-											@if(old('index_dep'))
-												<option>{{old('index_dep')}}</option>
-											@endif
-											<option></option>
-											@foreach($departments as $department)
-												@if(count(explode("‐",$contract->number_contract))>1)
-													@if(explode("‐",$contract->number_contract)[1] == $department->index_department)
-														<option value='{{$department->index_department}}' selected>{{$department->index_department}} {{$department->name_department}}</option>
-													@else
-														<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
-													@endif
-												@else
-													<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
-												@endif
-											@endforeach
-										</select>
-										@if($errors->has('index_dep'))
-											<label class='msgError'>{{$errors->first('index_dep')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-1">
-									<div class="form-group">
-										<label for='year_contract'>Год</label>
-										<input id='year_contract' class='change_contract_number form-control {{$errors->has("year_contract") ? print("inputError ") : print("")}}' name='year_contract' type='text' value='{{old("year_contract") ? old("year_contract") : $contract->year_contract}}' readonly />
-										@if($errors->has('year_contract'))
-											<label class='msgError'>{{$errors->first('year_contract')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-2">
-									<label for='executor_contract_reestr'>Исполнитель по Дог./Контр.</label>
-									<input id='executor_contract_reestr' class='form-control' name='executor_contract_reestr' type='text' value='{{old("executor_contract_reestr") ? old("executor_contract_reestr") : $reestr->executor_contract_reestr}}' readonly />
-								</div>
-								<div class="col-md-2">
-									<label for='executor_reestr'>Исполнитель ОУД</label>
-									<select class='form-control' name='executor_reestr' disabled >
-										<option></option>
-										@if(old('executor_reestr'))
-											@foreach($curators as $in_curators)
-												@if(old('executor_reestr') == $in_curators->id)
-													<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
-												@else
-													<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
-												@endif
-											@endforeach
-										@else
-											@foreach($curators as $in_curators)
-												@if($reestr->executor_reestr == $in_curators->id)
-													<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
-												@else
-													<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
-												@endif
-											@endforeach
-										@endif
-									</select>
-									@if($errors->has('executor_reestr'))
-										<label class='msgError'>{{$errors->first('executor_reestr')}}</label>
-									@endif
-								</div>
-								<div class="col-md-2">
-									<label for='date_save_contract_reestr' style="font-size: 12px;">Дата сдачи Дог./Контр. на хранение</label>
-									<input id='date_save_contract_reestr' class='form-control {{$errors->has("date_save_contract_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_reestr' value='{{old("date_save_contract_reestr") ? old("date_save_contract_reestr") : $reestr->date_save_contract_reestr}}' readonly />
-									@if($errors->has('date_save_contract_reestr'))
-										<label class='msgError'>{{$errors->first('date_save_contract_reestr')}}</label>
-									@endif
-								</div>
-								<div class="col-md-2">
-									<label for='place_save_contract_reestr'>Место хранения</label>
-									<input id='place_save_contract_reestr' class='form-control {{$errors->has("place_save_contract_reestr") ? print("inputError ") : print("")}}' name='place_save_contract_reestr' value='{{old("place_save_contract_reestr") ? old("place_save_contract_reestr") : $reestr->place_save_contract_reestr}}' readonly />
-									@if($errors->has('place_save_contract'))
-										<label class='msgError'>{{$errors->first('place_save_contract')}}</label>
-									@endif
-								</div>
-								<div class="col-md-1">
-									<label for='sel6' style="font-size: 12px;">Тип документа</label>
-									<select id="sel6" class='form-control {{$errors->has("type_document_reestr") ? print("inputError ") : print("")}}' name='type_document_reestr' disabled >
-										<option></option>
-										@foreach($type_documents as $type_document)
-											@if(old('type_document_reestr'))
-												@if(old('type_document_reestr') == $type_document->id)
-													<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
-												@else
-													<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
-												@endif
-											@else
-												@if($reestr->type_document_reestr == $type_document->id)
-													<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
-												@else
-													<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
-												@endif
-											@endif
-										@endforeach
-									</select>
-								</div>
-							</div>
-							<div class='row'>
-								<div class="col-md-9">
+								<div class='col-md-9 border-top border-bottom border-left border-right'>
 									<div class='row'>
-										<div class="col-md-9">
-											<div class='row'>
-												<div class="col-md-4">
-													<label for='date_contract_on_first_reestr'>Дата Дог./Контр. на 1 л.</label>
-													<input id='date_contract_on_first_reestr' class='form-control {{$errors->has("date_contract_on_first_reestr") ? print("inputError ") : print("")}}' name='date_contract_on_first_reestr' value='{{old("date_contract_on_first_reestr") ? old("date_contract_on_first_reestr") : $reestr->date_contract_on_first_reestr}}' readonly />
-													@if($errors->has('date_contract_on_first_reestr'))
-														<label class='msgError'>{{$errors->first('date_contract_on_first_reestr')}}</label>
-													@endif
-												</div>
-												<div class="col-md-4">
-													<label for='date_signing_contract_reestr'>Дата подписания ФКП "НТИИМ"</label>
-													<input id='date_signing_contract_reestr' class='form-control {{$errors->has("date_signing_contract_reestr") ? print("inputError ") : print("")}}' name='date_signing_contract_reestr' value='{{old("date_signing_contract_reestr") ? old("date_signing_contract_reestr") : $reestr->date_signing_contract_reestr}}' readonly />
-													@if($errors->has('date_signing_contract_reestr'))
-														<label class='msgError'>{{$errors->first('date_signing_contract_reestr')}}</label>
-													@endif
-												</div>
-												<div class="col-md-4">
-													<label for='date_control_signing_contract_reestr' style="font-size: 12px;">Контрольный срок подписания Дог./Контр.</label>
-													<input id='date_control_signing_contract_reestr' class='form-control {{$errors->has("date_control_signing_contract_reestr") ? print("inputError ") : print("")}}' name='date_control_signing_contract_reestr' value='{{old("date_control_signing_contract_reestr") ? old("date_control_signing_contract_reestr") : $reestr->date_control_signing_contract_reestr}}' readonly />
-													@if($errors->has('date_control_signing_contract_reestr'))
-														<label class='msgError'>{{$errors->first('date_control_signing_contract_reestr')}}</label>
-													@endif
-												</div>
+										<div class="col-md-4">
+											<label>Контрагент</label>
+											<div class="form-group">
+												<select id="sel4" class='form-control select_counterpartie_reestr {{$errors->has("id_counterpartie_contract") ? print("inputError ") : print("")}}' name='id_counterpartie_contract' disabled >
+													<option value='{{$contract->id_counterpartie_contract}}' full_name='{{$contract->full_name_counterpartie_contract}}' inn='{{$contract->inn_counterpartie_contract}}' selected>{{$contract->name_counterpartie_contract}}</option>
+												</select>
+												@if($errors->has('id_counterpartie_contract'))
+													<label class='msgError'>{{$errors->first('id_counterpartie_contract')}}</label>
+												@endif
 											</div>
-											<div class='row'>
-												<div class="col-md-4">
-													<label id='label_date_registration_project_reestr' for='date_registration_project_reestr'>{{ $reestr->application_reestr ? 'Дата регистрации заявки' : 'Дата регистрации проекта'}}</label>
-													@if($reestr->application_reestr)
-														<input id='application_reestr' class='form-check-input' style='float: right;' name='application_reestr' type="checkbox" checked disabled />
-													@else
-														<input id='application_reestr' class='form-check-input' style='float: right;' name='application_reestr' type="checkbox" disabled />
-													@endif
-													<label for='application_reestr' style='float: right; margin-right: 5px;'>Заявка</label>
-													<input id='date_registration_project_reestr' class='form-control {{$errors->has("date_registration_project_reestr") ? print("inputError ") : print("")}}' name='date_registration_project_reestr' value='{{old("date_registration_project_reestr") ? old("date_registration_project_reestr") : $reestr->date_registration_project_reestr}}' readonly />
-													@if($errors->has('date_registration_project_reestr'))
-														<label class='msgError'>{{$errors->first('date_registration_project_reestr')}}</label>
-													@endif
-												</div>
-												<div class="col-md-4">
-													<label for='date_signing_contract_counterpartie_reestr'>Дата подписания Контрагентом</label>
-													<input id='date_signing_contract_counterpartie_reestr' class='form-control {{$errors->has("date_signing_contract_counterpartie_reestr") ? print("inputError ") : print("")}}' name='date_signing_contract_counterpartie_reestr' value='{{old("date_signing_contract_counterpartie_reestr") ? old("date_signing_contract_counterpartie_reestr") : $reestr->date_signing_contract_counterpartie_reestr}}' readonly />
-													@if($errors->has('date_signing_contract_counterpartie_reestr'))
-														<label class='msgError'>{{$errors->first('date_signing_contract_counterpartie_reestr')}}</label>
-													@endif
-												</div>
-												<div class="col-md-4">
-													<label for='date_entry_into_force_reestr'>Дата вступления Дог./Контр. в силу</label>
-													<input id='date_entry_into_force_reestr' class='form-control {{$errors->has("date_entry_into_force_reestr") ? print("inputError ") : print("")}}' name='date_entry_into_force_reestr' value='{{old("date_entry_into_force_reestr") ? old("date_entry_into_force_reestr") : $reestr->date_entry_into_force_reestr}}' readonly />
-													@if($errors->has('date_entry_into_force_reestr'))
-														<label class='msgError'>{{$errors->first('date_entry_into_force_reestr')}}</label>
-													@endif
-												</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<button type='button' class="btn btn-primary" data-toggle="modal" data-target="#chose_counterpartie" style='margin-top: 27px;' disabled>Выбрать</button>
 											</div>
 										</div>
 										<div class="col-md-3">
-											<div class='row'>
-												<div class="col-md-6">
-													<label for='protocols_reestr'>Протоколы</label>
-													<input id='protocols_reestr' class='form-control {{$errors->has("protocols_reestr") ? print("inputError ") : print("")}}' name='protocols_reestr' value='{{$big_date_protocol != null ? $big_date_protocol : ""}}' readonly />
-												</div>
-												<div class="col-md-6">
-													<label for='add_agreements_reestr'>ДС</label>
-													<input id='add_agreements_reestr' class='form-control {{$errors->has("add_agreements_reestr") ? print("inputError ") : print("")}}' name='add_agreements_reestr' value='{{$big_date_add_agreement != null ? $big_date_add_agreement : ""}}' readonly />
+											<div class="form-group">
+												<label>Внимание!</label>
+												<input class='form-control' style='color:red; text-align:center;' type='text' value='<?php 
+													if($reestr->date_registration_project_reestr)
+														if(!$reestr->date_signing_contract_reestr){
+															if(time() - strtotime($reestr->date_registration_project_reestr) > 2592000)
+																echo 'Не подписан более 30 дней!';
+														}else
+															if(strtotime($reestr->date_signing_contract_reestr) - strtotime($reestr->date_registration_project_reestr) > 2592000)
+																echo 'Не был подписан более 30 дней!';
+												?>' readonly />
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="col-md-7">
+												<div class="form-group">
+													<label for='numberContract'>Номер договора</label>
+													<input id='numberContract' class='form-control {{$errors->has("number_contract") ? print("inputError ") : print("")}}' name='number_contract' type='text' value='{{old("number_contract") ? old("number_contract") : $contract->number_contract}}' readonly />
+													@if($errors->has('number_contract'))
+														<label class='msgError'>{{$errors->first('number_contract')}}</label>
+													@endif
 												</div>
 											</div>
-											<div class='row'>
-												<div class="col-md-6">
-													<label for='sel9'>Согл./Не согл.</label>
-													<select id="sel9" class='form-control {{$errors->has("reconciliation_protocol_reestr") ? print("inputError ") : print("")}}' name='reconciliation_protocol_reestr' disabled >
-														<option value='0' {{$reestr->reconciliation_protocol_reestr == 0 ? 'selected' : ''}}></option>
-														<option value='1' {{$reestr->reconciliation_protocol_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
-														<option value='2' {{$reestr->reconciliation_protocol_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
-													</select>
-												</div>
-												<div class="col-md-6">
-													<label for='sel10'>Согл./Не согл.</label>
-													<select id="sel10" class='form-control {{$errors->has("reconciliation_agreement_reestr") ? print("inputError ") : print("")}}' name='reconciliation_agreement_reestr' disabled >
-														<option value='0' {{$reestr->reconciliation_agreement_reestr == 0 ? 'selected' : ''}}></option>
-														<option value='1' {{$reestr->reconciliation_agreement_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
-														<option value='2' {{$reestr->reconciliation_agreement_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
-													</select>
+											<div class="col-md-5" style='text-align: center;'>
+												<div class='form-group' style='margin-top: 27px;'>
+													@if(isset($prev_contract))
+														@if(isset($_GET['isSmallPage']))
+															<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}?isSmallPage=true" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+														@else
+															<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $prev_contract)}}" title='Назад' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+														@endif
+													@else
+														<button class='btn btn-primary' title='Назад' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -114px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+													@endif
+													@if(isset($next_contract))
+														@if(isset($_GET['isSmallPage']))
+															<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}?isSmallPage=true" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+														@else
+															<button class='btn btn-primary btn-href' href="{{route('department.ekonomic.contract_new_reestr', $next_contract)}}" title='Вперед' type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+														@endif
+													@else
+														<button class='btn btn-primary' title='Вперед' disabled type='button'><span class="ui-icon ui-icon-1-1" style="background-size: 355px; background-position-x: -69px; background-position-y: -268px; width: 18px; height: 18px;"></span></button>
+													@endif
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="col-md-3">
+								<div class='col-md-3 border-bottom border-right border-top'>
 									<div class='row'>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='amount_contract_reestr' class='small-text'>Сумма (окончательная)</label>
+												<input id='amount_contract_reestr' class='form-control check-number' name='amount_contract_reestr' type='text' value='{{old("amount_contract_reestr") ? old("amount_contract_reestr") : $reestr->amount_contract_reestr}}' readonly />
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='amount_invoice_reestr'>Сумма по счетам</label>
+												<input id='amount_invoice_reestr' class='form-control check-number' name='amount_invoice_reestr' type='text' value='{{$reestr->amount_invoice_reestr}}' readonly />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class='row'>
+								<div class='col-md-7'>
+									<div class='row'>
+										<div class='col-md-6 border-left border-right border-top border-bottom'>
+											<div class='row'>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for='number_pp'>№ п/п</label>
+														<input id='number_pp' class='change_contract_number form-control {{$errors->has("number_pp") ? print("inputError ") : print("")}}' name='number_pp' type='text' value='{{old("number_pp") ? old("number_pp") : (strlen($contract->number_contract) > 0 ? explode("‐",$contract->number_contract)[0] : "")}}' readonly />
+														@if($errors->has('number_pp'))
+															<label class='msgError'>{{$errors->first('number_pp')}}</label>
+														@endif
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for='index_dep' style="font-size: 12px;">Индекс подразд.</label>
+														<select id='index_dep' class='change_contract_number form-control {{$errors->has("index_dep") ? print("inputError ") : print("")}}' name='index_dep' type='text' value='{{old("index_dep")}}' disabled >
+															@if(old('index_dep'))
+																<option>{{old('index_dep')}}</option>
+															@endif
+															<option></option>
+															@foreach($departments as $department)
+																@if(count(explode("‐",$contract->number_contract))>1)
+																	@if(explode("‐",$contract->number_contract)[1] == $department->index_department)
+																		<option value='{{$department->index_department}}' selected>{{$department->index_department}} {{$department->name_department}}</option>
+																	@else
+																		<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
+																	@endif
+																@else
+																	<option value='{{$department->index_department}}'>{{$department->index_department}} {{$department->name_department}}</option>
+																@endif
+															@endforeach
+														</select>
+														@if($errors->has('index_dep'))
+															<label class='msgError'>{{$errors->first('index_dep')}}</label>
+														@endif
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for='year_contract'>Год</label>
+														<input id='year_contract' class='change_contract_number form-control {{$errors->has("year_contract") ? print("inputError ") : print("")}}' name='year_contract' type='text' value='{{old("year_contract") ? old("year_contract") : $contract->year_contract}}' readonly />
+														@if($errors->has('year_contract'))
+															<label class='msgError'>{{$errors->first('year_contract')}}</label>
+														@endif
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class='col-md-6 border-left border-right border-top border-bottom'>
+											<div class='row'>
+												<div class="col-md-6">
+													<div class='form-group'>
+														<label for='executor_contract_reestr' class='small-text'>Исполнитель по Дог./Контр.</label>
+														<input id='executor_contract_reestr' class='form-control' name='executor_contract_reestr' type='text' value='{{old("executor_contract_reestr") ? old("executor_contract_reestr") : $reestr->executor_contract_reestr}}' readonly />
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label for='executor_reestr'>Исполнитель ОУД</label>
+														<select class='form-control' name='executor_reestr' disabled >
+															<option></option>
+															@if(old('executor_reestr'))
+																@foreach($curators as $in_curators)
+																	@if(old('executor_reestr') == $in_curators->id)
+																		<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
+																	@else
+																		<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
+																	@endif
+																@endforeach
+															@else
+																@foreach($curators as $in_curators)
+																	@if($reestr->executor_reestr == $in_curators->id)
+																		<option value='{{$in_curators->id}}' selected>{{$in_curators->FIO}}</option>
+																	@else
+																		<option value='{{$in_curators->id}}'>{{$in_curators->FIO}}</option>
+																	@endif
+																@endforeach
+															@endif
+														</select>
+														@if($errors->has('executor_reestr'))
+															<label class='msgError'>{{$errors->first('executor_reestr')}}</label>
+														@endif
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class='row'>
+										<div class='col-md-12 border-left border-top border-right border-bottom'>
+											<div class='row'>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for='date_contract_on_first_reestr'>Дата Дог./Контр. на 1 л.</label>
+														<input id='date_contract_on_first_reestr' class='form-control {{$errors->has("date_contract_on_first_reestr") ? print("inputError ") : print("")}}' name='date_contract_on_first_reestr' value='{{old("date_contract_on_first_reestr") ? old("date_contract_on_first_reestr") : $reestr->date_contract_on_first_reestr}}' readonly />
+														@if($errors->has('date_contract_on_first_reestr'))
+															<label class='msgError'>{{$errors->first('date_contract_on_first_reestr')}}</label>
+														@endif
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for='date_signing_contract_reestr' style='font-size: 11px;'>Дата подписания ф-л "НТИИМ"(ФКП "НТИИМ")</label>
+														<input id='date_signing_contract_reestr' class='form-control {{$errors->has("date_signing_contract_reestr") ? print("inputError ") : print("")}}' name='date_signing_contract_reestr' value='{{old("date_signing_contract_reestr") ? old("date_signing_contract_reestr") : $reestr->date_signing_contract_reestr}}' readonly />
+														@if($errors->has('date_signing_contract_reestr'))
+															<label class='msgError'>{{$errors->first('date_signing_contract_reestr')}}</label>
+														@endif
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for='date_control_signing_contract_reestr' class='small-text'>Контрольный срок подписания Дог./Контр.</label>
+														<input id='date_control_signing_contract_reestr' class='form-control {{$errors->has("date_control_signing_contract_reestr") ? print("inputError ") : print("")}}' name='date_control_signing_contract_reestr' value='{{old("date_control_signing_contract_reestr") ? old("date_control_signing_contract_reestr") : $reestr->date_control_signing_contract_reestr}}' readonly />
+														@if($errors->has('date_control_signing_contract_reestr'))
+															<label class='msgError'>{{$errors->first('date_control_signing_contract_reestr')}}</label>
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label id='label_date_registration_project_reestr' for='date_registration_project_reestr'>{{ $reestr->application_reestr ? 'Дата регистрации заявки' : 'Дата регистрации проекта'}}</label>
+														@if($reestr->application_reestr)
+															<input id='application_reestr' class='form-check-input' style='float: right;' name='application_reestr' type="checkbox" checked disabled />
+														@else
+															<input id='application_reestr' class='form-check-input' style='float: right;' name='application_reestr' type="checkbox" disabled />
+														@endif
+														<label for='application_reestr' style='float: right; margin-right: 5px;'>Заявка</label>
+														<input id='date_registration_project_reestr' class='form-control {{$errors->has("date_registration_project_reestr") ? print("inputError ") : print("")}}' name='date_registration_project_reestr' value='{{old("date_registration_project_reestr") ? old("date_registration_project_reestr") : $reestr->date_registration_project_reestr}}' readonly />
+														@if($errors->has('date_registration_project_reestr'))
+															<label class='msgError'>{{$errors->first('date_registration_project_reestr')}}</label>
+														@endif
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for='date_signing_contract_counterpartie_reestr'>Дата подписания Контрагентом</label>
+														<input id='date_signing_contract_counterpartie_reestr' class='form-control {{$errors->has("date_signing_contract_counterpartie_reestr") ? print("inputError ") : print("")}}' name='date_signing_contract_counterpartie_reestr' value='{{old("date_signing_contract_counterpartie_reestr") ? old("date_signing_contract_counterpartie_reestr") : $reestr->date_signing_contract_counterpartie_reestr}}' readonly />
+														@if($errors->has('date_signing_contract_counterpartie_reestr'))
+															<label class='msgError'>{{$errors->first('date_signing_contract_counterpartie_reestr')}}</label>
+														@endif
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for='date_entry_into_force_reestr'>Дата вступления Дог./Контр. в силу</label>
+														<input id='date_entry_into_force_reestr' class='form-control {{$errors->has("date_entry_into_force_reestr") ? print("inputError ") : print("")}}' name='date_entry_into_force_reestr' value='{{old("date_entry_into_force_reestr") ? old("date_entry_into_force_reestr") : $reestr->date_entry_into_force_reestr}}' readonly />
+														@if($errors->has('date_entry_into_force_reestr'))
+															<label class='msgError'>{{$errors->first('date_entry_into_force_reestr')}}</label>
+														@endif
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='col-md-5 border-left border-top border-right border-bottom'>
+									<div class='row'>
+										<div class="col-md-5">
+											<div class="form-group">
+												<label for='date_save_contract_reestr' style='font-size: 11px;'>Дата сдачи Д/К на хранение оригинала</label>
+												<input id='date_save_contract_reestr' class='form-control {{$errors->has("date_save_contract_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_reestr' value='{{old("date_save_contract_reestr") ? old("date_save_contract_reestr") : $reestr->date_save_contract_reestr}}' readonly />
+												@if($errors->has('date_save_contract_reestr'))
+													<label class='msgError'>{{$errors->first('date_save_contract_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for='place_save_contract_reestr'>Место хранения</label>
+												<input id='place_save_contract_reestr' class='form-control {{$errors->has("place_save_contract_reestr") ? print("inputError ") : print("")}}' name='place_save_contract_reestr' value='{{old("place_save_contract_reestr") ? old("place_save_contract_reestr") : $reestr->place_save_contract_reestr}}' readonly />
+												@if($errors->has('place_save_contract'))
+													<label class='msgError'>{{$errors->first('place_save_contract')}}</label>
+												@endif
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for='sel6' style="font-size: 12px;">Тип документа</label>
+												<select id="sel6" class='form-control {{$errors->has("type_document_reestr") ? print("inputError ") : print("")}}' name='type_document_reestr' disabled >
+													<option></option>
+													@foreach($type_documents as $type_document)
+														@if(old('type_document_reestr'))
+															@if(old('type_document_reestr') == $type_document->id)
+																<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
+															@else
+																<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
+															@endif
+														@else
+															@if($reestr->type_document_reestr == $type_document->id)
+																<option value='{{$type_document->id}}' selected>{{$type_document->name_type_document}}</option>
+															@else
+																<option value='{{$type_document->id}}'>{{$type_document->name_type_document}}</option>
+															@endif
+														@endif
+													@endforeach
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-5">
+											<div class="form-group">
+												<label for='date_save_contract_el_reestr' class='small-text'>Дата сдачи Д/К на хранение скана</label>
+												<input id='date_save_contract_el_reestr' class='form-control {{$errors->has("date_save_contract_el_reestr") ? print("inputError ") : print("")}}' name='date_save_contract_el_reestr' value='{{old("date_save_contract_el_reestr") ? old("date_save_contract_el_reestr") : $reestr->date_save_contract_el_reestr}}' readonly />
+												@if($errors->has('date_save_contract_el_reestr'))
+													<label class='msgError'>{{$errors->first('date_save_contract_el_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for='count_save_contract_reestr'>Срок хранения по</label>
+												<input id='count_save_contract_reestr' class='form-control {{$errors->has("count_save_contract_reestr") ? print("inputError ") : print("")}}' name='count_save_contract_reestr' value='{{old("count_save_contract_reestr") ? old("count_save_contract_reestr") : $reestr->count_save_contract_reestr}}' readonly />
+												@if($errors->has('count_save_contract_reestr'))
+													<label class='msgError'>{{$errors->first('count_save_contract_reestr')}}</label>
+												@endif
+											</div>
+										</div>
 										<div class="col-md-3">
 											<div class="form-group">
 											<label class='form-check-label' for='break'>ОТКАЗ</label>
@@ -4574,121 +5895,213 @@
 												@endif
 											</div>
 										</div>
-										<div class="col-md-9">
-											<label for='document_success_renouncement_reestr'>Документ, подтверждающий отказ</label>
-											<input id='document_success_renouncement_reestr' class='form-control {{$errors->has("document_success_renouncement_reestr") ? print("inputError ") : print("")}}' name='document_success_renouncement_reestr' value='{{old("document_success_renouncement_reestr") ? old("document_success_renouncement_reestr") : $contract->document_success_renouncement_reestr}}' readonly />
-											@if($errors->has('document_success_renouncement_reestr'))
-												<label class='msgError'>{{$errors->first('document_success_renouncement_reestr')}}</label>
-											@endif
-										</div>
 									</div>
 									<div class='row'>
-										<div class="col-md-6">
+										<div class="col-md-5">
 											<div class="form-group">
-												<label for='date_renouncement_contract'>Дата отказа</label>
+												<label for='document_success_renouncement_reestr' class='small-text'>Документ, подтверждающий отказ</label>
+												<input id='document_success_renouncement_reestr' class='form-control {{$errors->has("document_success_renouncement_reestr") ? print("inputError ") : print("")}}' name='document_success_renouncement_reestr' value='{{old("document_success_renouncement_reestr") ? old("document_success_renouncement_reestr") : $contract->document_success_renouncement_reestr}}' readonly />
+												@if($errors->has('document_success_renouncement_reestr'))
+													<label class='msgError'>{{$errors->first('document_success_renouncement_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="form-group">
+												<label for='date_renouncement_contract' class='small-text'>Дата отказа</label>
 												<input id='date_renouncement_contract' class='form-control datepicker {{$errors->has("date_renouncement_contract") ? print("inputError ") : print("")}}' name='date_renouncement_contract' value='{{old("date_renouncement_contract") ? old("date_renouncement_contract") : $contract->date_renouncement_contract}}' readonly />
 												@if($errors->has('date_renouncement_contract'))
 													<label class='msgError'>{{$errors->first('date_renouncement_contract')}}</label>
 												@endif
 											</div>
 										</div>
+										<div class="col-md-5">
+											<div class="form-group">
+												<label for='number_aftair_renouncement_reestr'>№ дела</label>
+												<input id='number_aftair_renouncement_reestr' class='form-control {{$errors->has("number_aftair_renouncement_reestr") ? print("inputError ") : print("")}}' name='number_aftair_renouncement_reestr' value='{{old("number_aftair_renouncement_reestr") ? old("number_aftair_renouncement_reestr") : $contract->number_aftair_renouncement_reestr}}' readonly />
+												@if($errors->has('number_aftair_renouncement_reestr'))
+													<label class='msgError'>{{$errors->first('number_aftair_renouncement_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class='col-md-2 border-left border-top border-right border-bottom'>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="sel3">Вид договора</span></label>
+												<select id="sel3" class='form-control {{$errors->has("id_view_contract") ? print("inputError ") : print("")}}' name='id_view_contract' disabled >
+													<option></option>
+													@if($viewContracts)
+														@foreach($viewContracts as $viewContract)
+															@if(old('id_view_contract'))
+																@if(old('id_view_contract') == $viewContract->id)
+																	<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
+																@else
+																	<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
+																@endif
+															@else
+																@if($reestr->id_view_contract == $viewContract->id)
+																	<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
+																@else
+																	<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
+																@endif
+															@endif
+														@endforeach
+													@endif
+												</select>
+												@if($errors->has('id_view_contract'))
+													<label class='msgError'>{{$errors->first('id_view_contract')}}</label>
+												@endif
+											</div>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="sel5">Отбор поставщика</span></label>
+												<select id="sel5" class='form-control {{$errors->has("selection_supplier_reestr") ? print("inputError ") : print("")}}' name='selection_supplier_reestr' disabled >
+													<option></option>
+													@foreach($selection_suppliers as $selection_supplier)
+														@if(old('selection_supplier_reestr'))
+															@if(old('selection_supplier_reestr') == $selection_supplier->id)
+																<option value='{{$selection_supplier->id}}' selected>{{$selection_supplier->name_selection_supplier}}</option>
+															@else
+																<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
+															@endif
+														@else
+															@if($reestr->selection_supplier_reestr == $selection_supplier->id)
+																<option value='{{$selection_supplier->id}}' selected>{{$selection_supplier->name_selection_supplier}}</option>
+															@else
+																<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
+															@endif
+														@endif
+													@endforeach
+												</select>
+												@if($errors->has('selection_supplier_reestr'))
+													<label class='msgError'>{{$errors->first('selection_supplier_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='col-md-4 border-left border-top border-right border-bottom'>
+									<div class='row'>
 										<div class="col-md-6">
-											<label for='number_aftair_renouncement_reestr'>№ дела</label>
-											<input id='number_aftair_renouncement_reestr' class='form-control {{$errors->has("number_aftair_renouncement_reestr") ? print("inputError ") : print("")}}' name='number_aftair_renouncement_reestr' value='{{old("number_aftair_renouncement_reestr") ? old("number_aftair_renouncement_reestr") : $contract->number_aftair_renouncement_reestr}}' readonly />
-											@if($errors->has('number_aftair_renouncement_reestr'))
-												<label class='msgError'>{{$errors->first('number_aftair_renouncement_reestr')}}</label>
-											@endif
+											<div class="form-group">
+												<label for='app_outgoing_number_reestr'>Заявка исх. №</label>
+												<input id='app_outgoing_number_reestr' class='form-control {{$errors->has("app_outgoing_number_reestr") ? print("inputError ") : print("")}}' name='app_outgoing_number_reestr' value='{{old("app_outgoing_number_reestr") ? old("app_outgoing_number_reestr") : $reestr->app_outgoing_number_reestr}}' readonly />
+												@if($errors->has('app_outgoing_number_reestr'))
+													<label class='msgError'>{{$errors->first('app_outgoing_number_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='app_incoming_number_reestr'>Вх. №</label>
+												<input id='app_incoming_number_reestr' class='form-control {{$errors->has("app_incoming_number_reestr") ? print("inputError ") : print("")}}' name='app_incoming_number_reestr' value='{{old("app_incoming_number_reestr") ? old("app_incoming_number_reestr") : $reestr->app_incoming_number_reestr}}' readonly />
+												@if($errors->has('app_incoming_number_reestr'))
+													<label class='msgError'>{{$errors->first('app_incoming_number_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='col-md-2 border-left border-top border-right border-bottom'>
+									<div class='row'>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='protocols_reestr'>Протоколы</label>
+												<input id='protocols_reestr' class='form-control {{$errors->has("protocols_reestr") ? print("inputError ") : print("")}}' name='protocols_reestr' value='{{$big_date_protocol != null ? $big_date_protocol : ""}}' readonly />
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='add_agreements_reestr'>ДС</label>
+												<input id='add_agreements_reestr' class='form-control {{$errors->has("add_agreements_reestr") ? print("inputError ") : print("")}}' name='add_agreements_reestr' value='{{$big_date_add_agreement != null ? $big_date_add_agreement : ""}}' readonly />
+											</div>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='sel9' class='small-text'>Согл./Не согл.</label>
+												<select id="sel9" class='form-control {{$errors->has("reconciliation_protocol_reestr") ? print("inputError ") : print("")}}' name='reconciliation_protocol_reestr' disabled >
+													<option value='0' {{$reestr->reconciliation_protocol_reestr == 0 ? 'selected' : ''}}></option>
+													<option value='1' {{$reestr->reconciliation_protocol_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
+													<option value='2' {{$reestr->reconciliation_protocol_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for='sel10' class='small-text'>Согл./Не согл.</label>
+												<select id="sel10" class='form-control {{$errors->has("reconciliation_agreement_reestr") ? print("inputError ") : print("")}}' name='reconciliation_agreement_reestr' disabled >
+													<option value='0' {{$reestr->reconciliation_agreement_reestr == 0 ? 'selected' : ''}}></option>
+													<option value='1' {{$reestr->reconciliation_agreement_reestr == 1 ? 'selected' : ''}}>Согласовано</option>
+													<option value='2' {{$reestr->reconciliation_agreement_reestr == 2 ? 'selected' : ''}}>Не согласовано</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='col-md-2 border-left border-top border-right border-bottom'>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for='result_second_department_date_reestr'>Заключение отдела №2 Дата</label>
+												<input id='result_second_department_date_reestr' class='form-control {{$errors->has("result_second_department_date_reestr") ? print("inputError ") : print("")}}' name='result_second_department_date_reestr' value='{{old("result_second_department_date_reestr") ? old("result_second_department_date_reestr") : $reestr->result_second_department_date_reestr}}' readonly />
+												@if($errors->has('result_second_department_date_reestr'))
+													<label class='msgError'>{{$errors->first('result_second_department_date_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for='result_second_department_number_reestr'>№</label>
+												<input id='result_second_department_number_reestr' class='form-control {{$errors->has("result_second_department_number_reestr") ? print("inputError ") : print("")}}' name='result_second_department_number_reestr' value='{{old("result_second_department_number_reestr") ? old("result_second_department_number_reestr") : $reestr->result_second_department_number_reestr}}' readonly />
+												@if($errors->has('result_second_department_number_reestr'))
+													<label class='msgError'>{{$errors->first('result_second_department_number_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='col-md-2 border-all'>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for='date_complete_reestr'>Договор исполнен на</label>
+												<input id='date_complete_reestr' class='datepicker form-control {{$errors->has("date_complete_reestr") ? print("inputError ") : print("")}}' name='date_complete_reestr' value='{{old("date_complete_reestr") ? old("date_complete_reestr") : $reestr->date_complete_reestr}}' readonly />
+												@if($errors->has('date_complete_reestr'))
+													<label class='msgError'>{{$errors->first('date_complete_reestr')}}</label>
+												@endif
+											</div>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for='reestr_number_reestr'>Реестровый номер Д/К</label>
+												<input id='reestr_number_reestr' class='datepicker form-control {{$errors->has("reestr_number_reestr") ? print("inputError ") : print("")}}' name='reestr_number_reestr' value='{{old("reestr_number_reestr") ? old("reestr_number_reestr") : $reestr->reestr_number_reestr}}' maxlength='30' readonly />
+												@if($errors->has('reestr_number_reestr'))
+													<label class='msgError'>{{$errors->first('reestr_number_reestr')}}</label>
+												@endif
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div class='row'>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label for="sel3">Вид договора</span></label>
-										<select id="sel3" class='form-control {{$errors->has("id_view_contract") ? print("inputError ") : print("")}}' name='id_view_contract' disabled >
-											<option></option>
-											@if($viewContracts)
-												@foreach($viewContracts as $viewContract)
-													@if(old('id_view_contract'))
-														@if(old('id_view_contract') == $viewContract->id)
-															<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
-														@else
-															<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
-														@endif
-													@else
-														@if($reestr->id_view_contract == $viewContract->id)
-															<option value='{{$viewContract->id}}' selected>{{ $viewContract->name_view_contract }}</option>
-														@else
-															<option value='{{$viewContract->id}}'>{{ $viewContract->name_view_contract }}</option>
-														@endif
-													@endif
-												@endforeach
-											@endif
-										</select>
-										@if($errors->has('id_view_contract'))
-											<label class='msgError'>{{$errors->first('id_view_contract')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label for="sel5">Отбор поставщика</span></label>
-										<select id="sel5" class='form-control {{$errors->has("selection_supplier_reestr") ? print("inputError ") : print("")}}' name='selection_supplier_reestr' disabled >
-											<option></option>
-											@foreach($selection_suppliers as $selection_supplier)
-												@if(old('selection_supplier_reestr'))
-													@if(old('selection_supplier_reestr') == $selection_supplier->id)
-														<option value='{{$selection_supplier->id}}' selected>{{$selection_supplier->name_selection_supplier}}</option>
-													@else
-														<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
-													@endif
-												@else
-													@if($reestr->selection_supplier_reestr == $selection_supplier->id)
-														<option value='{{$selection_supplier->id}}' selected>{{$selection_supplier->name_selection_supplier}}</option>
-													@else
-														<option value='{{$selection_supplier->id}}'>{{$selection_supplier->name_selection_supplier}}</option>
-													@endif
-												@endif
-											@endforeach
-										</select>
-										@if($errors->has('selection_supplier_reestr'))
-											<label class='msgError'>{{$errors->first('selection_supplier_reestr')}}</label>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-2">
-									<label for='app_outgoing_number_reestr'>Заявка исх. №</label>
-									<input id='app_outgoing_number_reestr' class='form-control {{$errors->has("app_outgoing_number_reestr") ? print("inputError ") : print("")}}' name='app_outgoing_number_reestr' value='{{old("app_outgoing_number_reestr") ? old("app_outgoing_number_reestr") : $reestr->app_outgoing_number_reestr}}' readonly />
-									@if($errors->has('app_outgoing_number_reestr'))
-										<label class='msgError'>{{$errors->first('app_outgoing_number_reestr')}}</label>
-									@endif
-								</div>
-								<div class="col-md-2">
-									<label for='app_incoming_number_reestr'>Вх. №</label>
-									<input id='app_incoming_number_reestr' class='form-control {{$errors->has("app_incoming_number_reestr") ? print("inputError ") : print("")}}' name='app_incoming_number_reestr' value='{{old("app_incoming_number_reestr") ? old("app_incoming_number_reestr") : $reestr->app_incoming_number_reestr}}' readonly />
-									@if($errors->has('app_incoming_number_reestr'))
-										<label class='msgError'>{{$errors->first('app_incoming_number_reestr')}}</label>
-									@endif
-								</div>
-								<div class="col-md-2">
-									<label for='result_second_department_date_reestr'>Заключение отдела №2 Дата</label>
-									<input id='result_second_department_date_reestr' class='form-control {{$errors->has("result_second_department_date_reestr") ? print("inputError ") : print("")}}' name='result_second_department_date_reestr' value='{{old("result_second_department_date_reestr") ? old("result_second_department_date_reestr") : $reestr->result_second_department_date_reestr}}' readonly />
-									@if($errors->has('result_second_department_date_reestr'))
-										<label class='msgError'>{{$errors->first('result_second_department_date_reestr')}}</label>
-									@endif
-								</div>
-								<div class="col-md-2">
-									<label for='result_second_department_number_reestr'>№</label>
-									<input id='result_second_department_number_reestr' class='form-control {{$errors->has("result_second_department_number_reestr") ? print("inputError ") : print("")}}' name='result_second_department_number_reestr' value='{{old("result_second_department_number_reestr") ? old("result_second_department_number_reestr") : $reestr->result_second_department_number_reestr}}' readonly />
-									@if($errors->has('result_second_department_number_reestr'))
-										<label class='msgError'>{{$errors->first('result_second_department_number_reestr')}}</label>
-									@endif
-								</div>
+								<input id='is_new_reestr' class='form-check-input' name='is_new_reestr' type="checkbox" checked style='display: none;'/>
 							</div>
 							<div class='row'>
-								<input id='is_new_reestr' class='form-check-input' name='is_new_reestr' type="checkbox" checked style='display: none;'/>
-								<div class="col-md-5">
+								<div class="col-md-5 border-left border-top border-right border-bottom">
 									<div class="col-md-3">
 										<div class='row'>
 											@if($reestr->marketing_reestr)
@@ -4888,7 +6301,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-md-7">
+								<div class="col-md-7 border-all">
 									<div class="row" style='text-align: center;'>
 										<div class="col-md-12">
 											<label>Согласование крупной сделки</label>
@@ -4914,7 +6327,7 @@
 											@endif
 										</div>
 										<div class="col-md-2">
-											<label for='days_reconciliation_reestr'>Срок действия согласования крупной сделки</label>
+											<label for='days_reconciliation_reestr' class='small-text'>Срок действия согласования крупной сделки</label>
 										</div>
 										<div class="col-md-2">
 											<input id='days_reconciliation_reestr' class='form-control {{$errors->has("days_reconciliation_reestr") ? print("inputError ") : print("")}}' name='days_reconciliation_reestr' value='{{old("days_reconciliation_reestr") ? old("days_reconciliation_reestr") : $reestr->days_reconciliation_reestr}}' readonly />
@@ -4943,7 +6356,7 @@
 											@endif
 										</div>
 										<div class="col-md-2">
-											<label for='count_mounth_reestr'>Количество месяцев</label>
+											<label for='count_mounth_reestr' class='small-text'>Количество месяцев</label>
 										</div>
 										<div class="col-md-2">
 											<input id='count_mounth_reestr' class='form-control {{$errors->has("count_mounth_reestr") ? print("inputError ") : print("")}}' name='count_mounth_reestr' value='{{old("count_mounth_reestr") ? old("count_mounth_reestr") : $reestr->count_mounth_reestr}}' readonly />
@@ -4954,24 +6367,24 @@
 									</div>
 									<div class="row">
 										<div class="col-md-2">
-											<label>Сроки согласования проекта договора исполнителей</label>
+											<label class='small-text'>Сроки согласования проекта договора исполнителей</label>
 										</div>
 										<div class="col-md-3">
-											<label for='begin_date_reconciliation_reestr'>Начало согласования (дата)</label>
+											<label for='begin_date_reconciliation_reestr' class='small-text'>Начало согласования (дата)</label>
 											<input id='begin_date_reconciliation_reestr' class='form-control {{$errors->has("begin_date_reconciliation_reestr") ? print("inputError ") : print("")}}' name='begin_date_reconciliation_reestr' value='{{old("begin_date_reconciliation_reestr") ? old("begin_date_reconciliation_reestr") : $reestr->begin_date_reconciliation_reestr}}' readonly />
 											@if($errors->has('begin_date_reconciliation_reestr'))
 												<label class='msgError'>{{$errors->first('begin_date_reconciliation_reestr')}}</label>
 											@endif
 										</div>
 										<div class="col-md-3">
-											<label for='end_date_reconciliation_reestr'>Окончание согласования (дата)</label>
+											<label for='end_date_reconciliation_reestr' style='font-size: 11px;'>Окончание согласования (дата)</label>
 											<input id='end_date_reconciliation_reestr' class='form-control {{$errors->has("end_date_reconciliation_reestr") ? print("inputError ") : print("")}}' name='end_date_reconciliation_reestr' value='{{old("end_date_reconciliation_reestr") ? old("end_date_reconciliation_reestr") : $reestr->end_date_reconciliation_reestr}}' readonly />
 											@if($errors->has('end_date_reconciliation_reestr'))
 												<label class='msgError'>{{$errors->first('end_date_reconciliation_reestr')}}</label>
 											@endif
 										</div>
 										<div class="col-md-4">
-											<label for='count_days_reconciliation_reestr'>Общее количество дней согласования</label>
+											<label for='count_days_reconciliation_reestr' class='small-text'>Общее количество дней согласования</label>
 											<input id='count_days_reconciliation_reestr' class='form-control {{$errors->has("count_days_reconciliation_reestr") ? print("inputError ") : print("")}}' name='count_days_reconciliation_reestr' value='{{old("count_days_reconciliation_reestr") ? old("count_days_reconciliation_reestr") : $reestr->count_days_reconciliation_reestr}}' readonly />
 											@if($errors->has('count_days_reconciliation_reestr'))
 												<label class='msgError'>{{$errors->first('count_days_reconciliation_reestr')}}</label>
@@ -4997,29 +6410,35 @@
 									</div>
 								@endif
 							</div>
-							<div class="row">
+							<div class="row border-all">
 								<div class="col-md-12">
 									<div class='row'>
 										<div class="col-md-6">
-											<label for='number_counterpartie_contract_reestr'>№ дог. контрагента</label>
-											<input id='number_counterpartie_contract_reestr' class='form-control {{$errors->has("number_counterpartie_contract_reestr") ? print("inputError ") : print("")}}' name='number_counterpartie_contract_reestr' value='{{old("number_counterpartie_contract_reestr") ? old("number_counterpartie_contract_reestr") : $reestr->number_counterpartie_contract_reestr}}' readonly />
-											@if($errors->has('number_counterpartie_contract_reestr'))
-												<label class='msgError'>{{$errors->first('number_counterpartie_contract_reestr')}}</label>
-											@endif
+											<div class="form-group">
+												<label for='number_counterpartie_contract_reestr'>№ дог. контрагента</label>
+												<input id='number_counterpartie_contract_reestr' class='form-control {{$errors->has("number_counterpartie_contract_reestr") ? print("inputError ") : print("")}}' name='number_counterpartie_contract_reestr' value='{{old("number_counterpartie_contract_reestr") ? old("number_counterpartie_contract_reestr") : $reestr->number_counterpartie_contract_reestr}}' readonly />
+												@if($errors->has('number_counterpartie_contract_reestr'))
+													<label class='msgError'>{{$errors->first('number_counterpartie_contract_reestr')}}</label>
+												@endif
+											</div>
 										</div>
 										<div class="col-md-3">
-											<label for='igk_reestr'>ИГК</label>
-											<input id='igk_reestr' class='form-control {{$errors->has("igk_reestr") ? print("inputError ") : print("")}}' name='igk_reestr' value='{{ old("igk_reestr") ? old("igk_reestr") : $reestr->igk_reestr }}' readonly />
+											<div class="form-group">
+												<label for='igk_reestr'>ИГК</label>
+												<input id='igk_reestr' class='form-control {{$errors->has("igk_reestr") ? print("inputError ") : print("")}}' name='igk_reestr' value='{{ old("igk_reestr") ? old("igk_reestr") : $reestr->igk_reestr }}' readonly />
+											</div>
 										</div>
 										<div class="col-md-3">
-											<label for='ikz_reestr'>ИКЗ</label>
-											<input id='ikz_reestr' class='form-control {{$errors->has("ikz_reestr") ? print("inputError ") : print("")}}' name='ikz_reestr' value='{{ old("ikz_reestr") ? old("ikz_reestr") : $reestr->ikz_reestr }}' readonly />
+											<div class="form-group">
+												<label for='ikz_reestr'>ИКЗ</label>
+												<input id='ikz_reestr' class='form-control {{$errors->has("ikz_reestr") ? print("inputError ") : print("")}}' name='ikz_reestr' value='{{ old("ikz_reestr") ? old("ikz_reestr") : $reestr->ikz_reestr }}' readonly />
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-md-3">
+								<div class="col-md-3 border-all">
 									<div class="row">
 										<div class="col-md-12">
 											<div class='form-group'>
@@ -5115,42 +6534,59 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-md-9">
+								<div class="col-md-7 border-all">
 									<div class="row">
 										<div class="col-md-12">
-											<label>Гарантия банка</label>
+											<label>Обеспечение гарантийных обязательств</label>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-3">
 											<div class='row'>
-												<div class="col-md-2">
-													<label for='date_bank_reestr'>До</label>
+												<div class="col-md-12">
+													<label for='term_action_reestr'>Срок действия</label>
 												</div>
-												<div class="col-md-10">
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
+													<input id='term_action_reestr' class='form-control {{$errors->has("term_action_reestr") ? print("inputError ") : print("")}}' name='term_action_reestr' value='{{ old("term_action_reestr") ? old("term_action_reestr") : $reestr->term_action_reestr }}' readonly />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class='row'>
+												<div class="col-md-12">
+													<label for='date_bank_reestr'>Гарантия банка до</label>
+												</div>
+												<div class="col-md-12">
 													<input id='date_bank_reestr' class='form-control {{$errors->has("date_bank_reestr") ? print("inputError ") : print("")}}' name='date_bank_reestr' value='{{ old("date_bank_reestr") ? old("date_bank_reestr") : $reestr->date_bank_reestr }}' readonly />
 												</div>
 											</div>
 										</div>
-										<div class="col-md-5">
+										<div class="col-md-2">
 											<div class='row'>
-												<div class="col-md-1">
+												<div class="col-md-12">
 													<label for='amount_bank_reestr'>Сумма</label>
 												</div>
-												<div class="col-md-5">
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
 													<input id='amount_bank_reestr' class='form-control check-number {{$errors->has("amount_bank_reestr") ? print("inputError ") : print("")}}' name='amount_bank_reestr' value='{{ old("amount_bank_reestr") ? old("amount_bank_reestr") : $reestr->amount_bank_reestr }}' readonly />
 												</div>
-												<div class="col-md-1">
+											</div>
+										</div>
+										<div class='col-md-4'>
+											<div class='row'>
+												<div class="col-md-12">
 													<label for='bank_reestr'>Банк</label>
 												</div>
-												<div class="col-md-5">
+											</div>
+											<div class='row'>
+												<div class="col-md-12">
 													<input id='bank_reestr' class='form-control {{$errors->has("bank_reestr") ? print("inputError ") : print("")}}' name='bank_reestr' value='{{ old("bank_reestr") ? old("bank_reestr") : $reestr->bank_reestr }}' readonly />
 												</div>
 											</div>
 										</div>
-										<div class='col-md-5'>
-											<button class='btn btn-primary' data-toggle="modal" data-target="#scan" type='button' style='float: right; width: 184px;'>Сканы</button>
-										</div>
 									</div>
-									<div class="row">
+									<div class="row border-top">
 										<div class="col-md-2">
 											<div class='row'>
 												<div class="col-md-12">
@@ -5158,7 +6594,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-5">
+										<div class="col-md-6">
 											<div class='row'>
 												<div class="col-md-1">
 													<label for='date_b_contract_reestr'>с</label>
@@ -5174,39 +6610,114 @@
 												</div>
 											</div>
 										</div>
-										<div class='col-md-5'>
-											<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.reestr.show_obligation', $contract->id)}}">Исполнение Дог./Контр.</button>
+									</div>
+									<div class='row border-bottom'>
+										<div class="col-md-12">
+											<div class="form-group">
+												<input id='date_contract_reestr' class='form-control {{$errors->has("date_contract_reestr") ? print("inputError ") : print("")}}' name='date_contract_reestr' value='{{ old("date_contract_reestr") ? old("date_contract_reestr") : $reestr->date_contract_reestr }}' readonly />
+											</div>
 										</div>
 									</div>
-									<div class='row'>
-										<div class="col-md-10">
-											<input id='date_contract_reestr' class='form-control {{$errors->has("date_contract_reestr") ? print("inputError ") : print("")}}' name='date_contract_reestr' value='{{ old("date_contract_reestr") ? old("date_contract_reestr") : $reestr->date_contract_reestr }}' readonly />
-										</div>
-										<div class='col-md-2'>
-											<!--<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.reestr.show_protocols', $contract->id)}}">ПР/ПСР/ПУР</button>-->
-											<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.peo.show_additional_documents', $contract->id)}}">Догов. мат</button>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-10">
-											<label for='date_maturity_reestr'>Срок исполнения обязательств</label>
-											<input id='date_maturity_reestr' class='form-control {{$errors->has("date_maturity_reestr") ? print("inputError ") : print("")}}' name='date_maturity_reestr' value='{{ old("date_maturity_reestr") ? old("date_maturity_reestr") : $reestr->date_maturity_reestr }}' readonly />
-										</div>
-										<div class='col-md-2'>
-											<!--<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.reestr.show_additional_agreements', $contract->id)}}">ДС</button>-->
-											<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('ten.show_contract', $contract->id)}}">Комплектация</button>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-10">
-											<div class='row'>
-												<div class="col-md-1">
-													<label for='amount_reestr'>Сумма</label>
+									<div class="row border-bottom">
+										<div class='col-md-12'>
+											<div class="form-group">
+												<div class='row'>
+													<div class="col-md-10">
+														<label for='date_maturity_reestr'>Срок исполнения обязательств</label>
+													</div>
+													<div class='col-md-2'>
+														<label for='date_e_maturity_reestr'>До</label>
+													</div>
 												</div>
-												<div class="col-md-2">
+												<div class='row'>
+													<div class="col-md-10">
+														<input id='date_maturity_reestr' class='form-control {{$errors->has("date_maturity_reestr") ? print("inputError ") : print("")}}' value='{{ old("date_maturity_reestr") ? old("date_maturity_reestr") : $reestr->date_maturity_reestr }}' readonly />
+													</div>
+													<div class='col-md-2'>
+														<input id='date_e_maturity_reestr' class='form-control {{$errors->has("date_e_maturity_reestr") ? print("inputError ") : print("")}}' value='{{ old("date_e_maturity_reestr") ? old("date_e_maturity_reestr") : $reestr->date_e_maturity_reestr }}' readonly />
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class='row'>
+												<div class="col-md-12">
+													<label for='amount_begin_reestr'>Цена при заключении Д/К</label>
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-4">
+													<input id='amount_begin_reestr' class='form-control check-number {{$errors->has("amount_begin_reestr") ? print("inputError ") : print("")}}' name='amount_begin_reestr' value='{{old("amount_begin_reestr") ? old("amount_begin_reestr") : $reestr->amount_begin_reestr}}' readonly />
+												</div>
+												<div class="col-md-4">
+													<select class='form-control {{$errors->has("unit_begin_reestr") ? print("inputError ") : print("")}}' name='unit_begin_reestr' disabled>
+														<option></option>
+														@foreach($units as $unit)
+															@if(old('unit_begin_reestr'))
+																<option value='{{$unit->id}}' selected>{{$unit->name_unit}}</option>
+															@else
+																@if($reestr->unit_begin_reestr == $unit->id)
+																	<option value='{{$unit->id}}' selected>{{$unit->name_unit}}</option>
+																@else
+																	<option value='{{$unit->id}}'>{{$unit->name_unit}}</option>
+																@endif
+															@endif
+														@endforeach
+													</select>
+												</div>
+												<div class='col-md-4'>
+													<label for='VAT_BEGIN'>НДС</label>
+													@if(old('vat_begin_reestr'))
+														<input id='VAT_BEGIN' class='form-check-input' name='vat_begin_reestr' type="checkbox" checked disabled />
+													@else
+														@if($reestr->vat_begin_reestr)
+															<input id='VAT_BEGIN' class='form-check-input' name='vat_begin_reestr' type="checkbox" checked disabled />
+														@else
+															<input id='VAT_BEGIN' class='form-check-input' name='vat_begin_reestr' type="checkbox" disabled />
+														@endif
+													@endif
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-6">
+													<label for='approximate_amount_begin_reestr'>Ориентировочная</label>
+													@if(old('approximate_amount_begin_reestr'))
+														<input id='approximate_amount_begin_reestr' class='form-check-input' name='approximate_amount_begin_reestr' type="checkbox" checked disabled />
+													@else
+														@if($reestr->approximate_amount_begin_reestr)
+															<input id='approximate_amount_begin_reestr' class='form-check-input' name='approximate_amount_begin_reestr' type="checkbox" checked disabled />
+														@else
+															<input id='approximate_amount_begin_reestr' class='form-check-input' name='approximate_amount_begin_reestr' type="checkbox" disabled />
+														@endif
+													@endif
+												</div>
+												<div class="col-md-6">
+													<label for='fixed_amount_begin_reestr'>Фиксированная</label>
+													@if(old('fixed_amount_begin_reestr'))
+														<input id='fixed_amount_begin_reestr' class='form-check-input' name='fixed_amount_begin_reestr' type="checkbox" checked disabled />
+													@else
+														@if($reestr->fixed_amount_begin_reestr)
+															<input id='fixed_amount_begin_reestr' class='form-check-input' name='fixed_amount_begin_reestr' type="checkbox" checked disabled />
+														@else
+															<input id='fixed_amount_begin_reestr' class='form-check-input' name='fixed_amount_begin_reestr' type="checkbox" disabled />
+														@endif
+													@endif
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class='row'>
+												<div class="col-md-12">
+													<label for='amount_reestr'>Сумма Д/К</label>
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-4">
 													<input id='amount_reestr' class='form-control check-number {{$errors->has("amount_reestr") ? print("inputError ") : print("")}}' name='amount_reestr' value='{{old("amount_reestr") ? old("amount_reestr") : $reestr->amount_reestr}}' readonly />
 												</div>
-												<div class="col-md-2">
+												<div class="col-md-3">
 													<select id="sel8" class='form-control {{$errors->has("unit_reestr") ? print("inputError ") : print("")}}' name='unit_reestr' disabled >
 														<option></option>
 														@foreach($units as $unit)
@@ -5222,7 +6733,7 @@
 														@endforeach
 													</select>
 												</div>
-												<div class="col-md-2">
+												<div class="col-md-3">
 													<label for='VAT'>НДС</label>
 													@if(old('vat_reestr'))
 														<input id='VAT' class='form-check-input' name='vat_reestr' type="checkbox" checked disabled />
@@ -5234,7 +6745,9 @@
 														@endif
 													@endif
 												</div>
-												<div class="col-md-3">
+											</div>
+											<div class='row'>
+												<div class="col-md-6">
 													<label for='approximate_amount_reestr'>Ориентировочная</label>
 													@if(old('approximate_amount_reestr'))
 														<input id='approximate_amount_reestr' class='form-check-input' name='approximate_amount_reestr' type="checkbox" checked disabled />
@@ -5246,24 +6759,50 @@
 														@endif
 													@endif
 												</div>
-											</div>
-											<div class='row'>
-												<div class="col-md-12">
-													<input class='form-control {{$errors->has("amount_comment_reestr") ? print("inputError ") : print("")}}' name='amount_comment_reestr' value='{{old("amount_comment_reestr") ? old("amount_comment_reestr") : $reestr->amount_comment_reestr}}' readonly />
+												<div class="col-md-6">
+													<label for='fixed_amount_reestr'>Фиксированная</label>
+													@if(old('fixed_amount_reestr'))
+														<input id='fixed_amount_reestr' class='form-check-input' name='fixed_amount_reestr' type="checkbox" checked disabled />
+													@else
+														@if($reestr->fixed_amount_reestr)
+															<input id='fixed_amount_reestr' class='form-check-input' name='fixed_amount_reestr' type="checkbox" checked disabled />
+														@else
+															<input id='fixed_amount_reestr' class='form-check-input' name='fixed_amount_reestr' type="checkbox" disabled />
+														@endif
+													@endif
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class='row'>
-										<div class="col-md-6">
+										<div class="col-md-12">
+											<input class='form-control {{$errors->has("amount_comment_reestr") ? print("inputError ") : print("")}}' name='amount_comment_reestr' value='{{old("amount_comment_reestr") ? old("amount_comment_reestr") : $reestr->amount_comment_reestr}}' readonly />
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-4">
 											<div class='row'>
-												<div class="col-md-2">
+												<div class="col-md-12">
+													<label for='end_term_repayment_reestr' class='small-text'>Конечный срок оплаты по Д/К</label>
+												</div>
+											</div>
+											<div class='row'>
+												<div class="col-md-9">
+													<input id='end_term_repayment_reestr' class='form-control {{$errors->has("end_term_repayment_reestr") ? print("inputError ") : print("")}}' name='end_term_repayment_reestr' value='{{old("end_term_repayment_reestr") ? old("end_term_repayment_reestr") : $reestr->end_term_repayment_reestr}}' readonly />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class='row'>
+												<div class="col-md-12">
 													<label for='nmcd_reestr'>НМЦД/НМЦК</label>
 												</div>
-												<div class="col-md-3">
+											</div>
+											<div class='row'>
+												<div class="col-md-7">
 													<input id='nmcd_reestr' class='form-control check-number {{$errors->has("nmcd_reestr") ? print("inputError ") : print("")}}' name='nmcd_reestr' value='{{old("nmcd_reestr") ? old("nmcd_reestr") : $reestr->nmcd_reestr}}' readonly />
 												</div>
-												<div class="col-md-3">
+												<div class="col-md-5">
 													<select class='form-control {{$errors->has("nmcd_unit_reestr") ? print("inputError ") : print("")}}' name='nmcd_unit_reestr' disabled>
 														<option></option>
 														@foreach($units as $unit)
@@ -5281,15 +6820,17 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class='row'>
-												<div class="col-md-2">
+												<div class="col-md-12">
 													<label for='economy_reestr'>Экономия</label>
 												</div>
-												<div class="col-md-3">
+											</div>
+											<div class='row'>
+												<div class="col-md-7">
 													<input id='economy_reestr' class='form-control check-number {{$errors->has("economy_reestr") ? print("inputError ") : print("")}}' name='economy_reestr' value='{{old("economy_reestr") ? old("economy_reestr") : $reestr->economy_reestr}}' readonly />
 												</div>
-												<div class="col-md-3">
+												<div class="col-md-5">
 													<select class='form-control {{$errors->has("economy_unit_reestr") ? print("inputError ") : print("")}}' name='economy_unit_reestr' disabled>
 														<option></option>
 														@foreach($units as $unit)
@@ -5309,7 +6850,7 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-md-10">
+										<div class="col-md-12">
 											<label>Порядок оплаты</label>
 											<div class='row'>
 												<div class="col-md-6">
@@ -5337,6 +6878,33 @@
 											@else
 												<input id='prolongation_reestr' class='form-check-input' type="checkbox" name='prolongation_reestr' disabled />
 											@endif
+										</div>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class='row'>
+										<div class="col-md-12">
+											<button class='btn btn-primary' data-toggle="modal" data-target="#scan" type='button' style='float: right; width: 184px;'>Сканы</button>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-12">
+											<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.peo.show_additional_documents', $contract->id)}}">Догов. мат</button>
+										</div>
+									</div>
+									<div class='row'>
+										<div class='col-md-12'>
+											<button class='btn btn-primary btn-href' type='button'  href="{{route('tree_map.show_contract',$contract->id)}}" style='float: right; width: 184px;'>Граф договора</button>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-12">
+											<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('department.reestr.show_obligation', $contract->id)}}">Исполнение Д/К</button>
+										</div>
+									</div>
+									<div class='row'>
+										<div class="col-md-12">
+											<button class='btn btn-primary btn-href' style='float: right; width: 184px;' type='button' href="{{route('ten.show_contract', $contract->id)}}">Комплектация</button>
 										</div>
 									</div>
 								</div>

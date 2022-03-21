@@ -102,6 +102,25 @@ class HomeController extends Controller
 				if($application->id_counterpartie_application == $counterpartie->id)
 					$application->counterpartie_name = $counterpartie->name;
 		//dd($new_my_applications);
+		
+		// Новые заявки
+		$new_applications = ReconciliationUser::select(['reconciliation_users.id',
+														'new_applications.id as appID',
+														'id_counterpartie_new_application',
+														'number_pp_new_application',
+														'item_new_application',
+														'name_work_new_application'
+														])
+														->leftJoin('new_applications', 'id_new_application', 'new_applications.id')
+														->where('id_user', Auth::User()->id)
+														->where('reconciliation_users.id_new_application', '!=', null)
+														->where('check_agree_reconciliation', 0)
+														->get();
+		foreach($new_applications as $new_application)
+			foreach($counterparties as $counterpartie)
+				if($new_application->id_counterpartie_new_application == $counterpartie->id)
+					$new_application->counterpartie_name = $counterpartie->name;
+		
 		//Договора
 		$new_my_contracts = ReconciliationUser::select(['reconciliation_users.id',
 															'contracts.number_contract',
@@ -285,7 +304,7 @@ class HomeController extends Controller
 												->where('check_agree_reconciliation', null)
 												->get();
 		//Отображаем протоколы за последнии 5 (4) дней для Марии из ОУД и для Админа (345600)
-		$time_see = 4 * 24 * 60 * 60;	// Дни * часы * минуты * секунды
+		$time_see = 19 * 24 * 60 * 60;	// Дни * часы * минуты * секунды
 		$new_additional_documents = [];
 		if(Auth::User())
 			if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->surname == 'Бастрыкова')
@@ -300,11 +319,11 @@ class HomeController extends Controller
 													->where('protocols.created_at', '>', date('Y-m-d 00:00:00', time()-$time_see))
 													->orderBy('protocols.id','desc')
 													->get();
-		//Отображение сканов за последнии 10 дней для Марии из ОУД и для Админа (864000)
-		$time_see = 10 * 24 * 60 * 60;
+		//Отображение сканов за последнии 10 дней для Марии из ОУД (теперь всего ОУД) и для Админа (864000)
+		$time_see = 19 * 24 * 60 * 60;
 		$new_scans_documents = [];
 		if(Auth::User())
-			if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->surname == 'Бастрыкова')
+			if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
 				$new_scans_documents = Resolution::select(['number_contract',
 													'contracts.id as id_contract',
 													'protocols.id_contract as id_contract_in_protocol',
@@ -325,6 +344,7 @@ class HomeController extends Controller
 		//dd();
         return view('welcome', ['new_my_applications'=>$new_my_applications, 
 								'my_applications'=>$my_applications, 
+								'new_applications'=>$new_applications,
 								'new_my_contracts'=>$new_my_contracts,
 								'my_contracts'=>$my_contracts,
 								'sort'=>$sort, 

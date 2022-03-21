@@ -186,6 +186,33 @@ class ChanceryController extends Controller
 		JournalController::store(Auth::User()->id,'Добавил новую заявку с id = ' . $application->id);
         return redirect()->back()->with('id_counterpartie_application', $id_contr);
     }
+	
+    public function store_for_new_application(Request $request, $id_new_application)
+    {
+        $val = Validator::make($request->all(),[
+			'id_counterpartie_application' => 'required',
+			'number_application' => 'required|unique:applications',
+			'date_outgoing' => 'nullable|date',
+			'date_incoming' => 'nullable|date',
+			'date_directed' => 'nullable|date',
+		])->validate();
+		$application = new Application;
+		$application->fill(['id_counterpartie_application' => $request['id_counterpartie_application'],
+					'id_new_application' => $id_new_application,
+					'number_application' => $request['number_application'],
+					'date_application' => date('Y-m-d', time()),
+					'number_outgoing' => $request['number_outgoing'],
+					'date_outgoing' => $request['date_outgoing'] ? date('Y-m-d', strtotime($request['date_outgoing'])) : date('Y-m-d', time()),
+					'number_incoming' => $request['number_incoming'],
+					'date_incoming' => $request['date_incoming'] ? date('Y-m-d', strtotime($request['date_incoming'])) : date('Y-m-d', time()),
+					'date_directed' => $request['date_directed'],
+					'theme_application' => $request['theme_application']
+		]);
+		$application->save();
+		ResolutionController::store_resol_new_app($request, $application->id);
+		JournalController::store(Auth::User()->id,'Добавил новое письмо для заявки с id = ' . $application->id);
+        return redirect()->back();
+    }
 
     /**
      * Display the specified resource.

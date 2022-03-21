@@ -34,14 +34,15 @@
 											<th>Вид договора</th>
 											<th>Наименование работ</th>
 											<th>Контрагент</th>
-											@if(Auth::User()->hasRole()->role == 'Администратор')
+											<th>Присвоение номера</th>
+											@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->surname == 'Бастрыкова' OR Auth::User()->surname == 'Гуринова' OR Auth::User()->surname == 'Едемская' OR Auth::User()->surname == 'Логунова' OR Auth::User()->surname == 'Морозова')
 												<th>Удаление</th>
 											@endif
 										</tr>
 									</thead>
 									<tbody>
 										@foreach($contracts as $contract)
-											<tr class='rowsContract cursorPointer btn-href' id_contact='{{$contract->id}}' href='{{route("department.reconciliation.show", $contract->id)}}'>
+											<tr class='rowsContract' id_contact='{{$contract->id}}'>
 												<td>
 													{{ $contract->number_contract }}
 												</td>
@@ -54,7 +55,10 @@
 												<td>
 													{{ $contract->name_counterpartie_contract }}
 												</td>
-												@if(Auth::User()->hasRole()->role == 'Администратор')
+												<td>
+													<button type='button' class='btn btn-primary btn-href' type='button' href='{{route("department.reconciliation.show", $contract->id)}}'>Присвоить номер</button>
+												</td>
+												@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->surname == 'Бастрыкова' OR Auth::User()->surname == 'Гуринова' OR Auth::User()->surname == 'Едемская' OR Auth::User()->surname == 'Логунова' OR Auth::User()->surname == 'Морозова')
 													<td>
 														<button type='button' class='btn btn-danger btn-href' type='button' href='{{route("department.ekonomic.delete",$contract->id)}}'>Удалить</button>
 													</td>

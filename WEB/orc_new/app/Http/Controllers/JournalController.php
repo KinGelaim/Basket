@@ -278,4 +278,24 @@ class JournalController extends Controller
 		}
 		return 'Unknown error';
 	}
+	
+    public function contract($id_contract)
+    {
+		$journals = Journal::select('message','users.name','users.surname','users.patronymic','roles.role','journal.created_at')
+							->join('users','journal.id_user','users.id')
+							->leftJoin('roles','roles.id','users.role')
+							->where('message', 'like', '%id%=%' . $id_contract . '%~%')
+							->orderBy('journal.id','desc')
+							->get();
+
+		foreach($journals as $journal)
+		{
+			$pr = explode('~',$journal->message);
+			if(count($pr) > 1){
+				$journal->comment = json_decode($pr[1]);
+				$journal->message = $pr[0];
+			}
+		}
+        return view('journal.contract', ['journals' => $journals]);
+    }
 }

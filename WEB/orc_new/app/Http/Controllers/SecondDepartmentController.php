@@ -375,8 +375,11 @@ class SecondDepartmentController extends Controller
 										'prepayment_score_contract','invoice_score_contract','prepayment_payment_contract','amount_payment_contract','date_contact','year_contract',
 										'reestr_contracts.number_counterpartie_contract_reestr','reestr_contracts.executor_reestr',
 										'reestr_contracts.amount_reestr','reestr_contracts.amount_contract_reestr',
-										'reestr_contracts.fix_amount_contract_reestr', 'reestr_contracts.vat_reestr',
-										'reestr_contracts.date_maturity_date_reestr', 'reestr_contracts.date_maturity_reestr', 'name_view_contract',
+										'reestr_contracts.amount_begin_reestr', 'reestr_contracts.vat_begin_reestr', 'reestr_contracts.approximate_amount_begin_reestr', 'reestr_contracts.fixed_amount_begin_reestr',
+										'reestr_contracts.fix_amount_contract_reestr', 'reestr_contracts.vat_reestr', 'reestr_contracts.approximate_amount_reestr', 'reestr_contracts.fixed_amount_reestr',
+										'reestr_contracts.date_b_contract_reestr', 'reestr_contracts.date_e_contract_reestr', 'reestr_contracts.date_contract_reestr', 
+										'reestr_contracts.date_maturity_date_reestr', 'reestr_contracts.date_e_maturity_reestr', 'reestr_contracts.date_maturity_reestr', 'name_view_contract',
+										'reestr_contracts.igk_reestr',
 										'item_contract','reestr_contracts.date_contract_on_first_reestr', 'executor_contract_reestr'])
 							->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')
 							->leftJoin('reestr_contracts', 'reestr_contracts.id_contract_reestr', 'contracts.id')
@@ -523,6 +526,13 @@ class SecondDepartmentController extends Controller
 											->where('name', 'Оплата')
 											->orderBy('invoices.number_invoice', 'asc')
 											->get();
+		$returns = Invoice::select(['*','invoices.id','view_invoices.name_view_invoice'])
+											->leftjoin('view_invoices', 'invoices.id_view_invoice', 'view_invoices.id')
+											->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+											->where('id_contract', $id)
+											->where('name', 'Возврат')
+											->orderBy('invoices.number_invoice', 'asc')
+											->get();
 		//Акты (последнии акты для отображения в таблице)
 		foreach($secondDepartmentTours as $tour){
 			$acts = SecondDepartmentAct::select()->where('id_second_tour', $tour->id)->get();
@@ -568,6 +578,8 @@ class SecondDepartmentController extends Controller
 		}
 		//Акты для Услуг ГН и Услуг ВН
 		$contract->acts = SecondDepartmentAct::select()->where('id_contract', $contract->id)->get();
+		//История договора
+		$states = State::select(['states.id','name_state','comment_state','date_state','users.surname','users.name','users.patronymic'])->join('users','users.id','states.id_user')->where('id_contract', $id)->where('is_work_state', null)->get();
 		//Стадии выполнения
 		$work_states = State::select(['states.id','name_state','comment_state','date_state','users.surname','users.name','users.patronymic'])->join('users','users.id','states.id_user')->where('id_contract', $id)->where('is_work_state', 1)->get();
 		return view('department.second.contract', ['contract'=>$contract,
@@ -592,6 +604,8 @@ class SecondDepartmentController extends Controller
 													'prepayments'=>$prepayments,
 													'invoices'=>$invoices,
 													'payments'=>$payments,
+													'returns'=>$returns,
+													'states'=>$states,
 													'work_states'=>$work_states,
 													'count_paginate' => (int)ceil($isp_count/$paginate_count),
 													'prev_page' => $prev_page,
@@ -780,9 +794,11 @@ class SecondDepartmentController extends Controller
 	{
 		$second_department_tours = [];
 		$second_department_units = SecondDepartmentUnit::select()->orderBy('name_unit')->get();
+		$elements = Element::select(['*'])->orderBy('elements.name_element')->get();
 		return view('department.second.tour_of_duty_exp', ['contractID'=>$id_contract,
 														'second_department_tours'=>$second_department_tours, 
-														'second_department_units'=>$second_department_units]);
+														'second_department_units'=>$second_department_units,
+														'elements'=>$elements]);
 	}
 	
 	public function new_tour_of_duty_sb($id_contract)
@@ -831,7 +847,8 @@ class SecondDepartmentController extends Controller
 			'count_elements' => $request['count_elements'],
 			'id_unit' => $request['id_unit'],
 			'date_incoming' => $request['date_incoming'],
-			'number_report' => $request['number_duty']
+			'number_report' => $request['number_duty'],
+			'add_information' => $request['add_information']
 		]);
 		$all_dirty = JournalController::getMyChanges($second_department_tour);
 		$second_department_tour->save();
@@ -844,17 +861,19 @@ class SecondDepartmentController extends Controller
 		//dump($request->all());
 		$val = Validator::make($request->all(),[
 			'number_duty' => 'required',
+			'theme_exp' => 'required',
 			'date_duty' => 'required|date'
 		])->validate();
 		$second_department_tour = new SecondDepartmentTour();
 		$second_department_tour->fill([
 			'id_contract' => $id_contract,
+			'theme_exp' => $request['theme_exp'],
 			'number_duty' => $request['number_duty'],
 			'date_duty' => $request['date_duty'],
 			'count_elements' => $request['count_elements'],
 			'id_unit' => $request['id_unit'],
 			'date_incoming' => $request['date_incoming'],
-			'number_report' => $request['number_duty']
+			'result_document_exp' => $request['result_document_exp']
 		]);
 		$all_dirty = JournalController::getMyChanges($second_department_tour);
 		$second_department_tour->save();
@@ -1004,6 +1023,7 @@ class SecondDepartmentController extends Controller
 			'renouncement' => $request['renouncement'],
 			'date_worked' => $request['date_worked'] ? date('Y-m-d', strtotime($request['date_worked'])) : null,
 			'id_result' => $request['id_result'],
+			'add_information' => $request['add_information'],
 			'number_telegram' => $request['number_telegram'],
 			'date_telegram' => $request['date_telegram'],
 			'number_report' => $request['number_report'],
@@ -1020,10 +1040,16 @@ class SecondDepartmentController extends Controller
 	public function update_tour_of_duty_exp(Request $request, $id_second_dep_duty)
 	{
 		$val = Validator::make($request->all(),[
+			'theme_exp' => 'required',
 			'number_duty' => 'required',
 			'date_duty' => 'required|date',
 			'count_elements' => 'required|numeric|min:0',
 			'date_incoming'	=> 'nullable|date',
+			'countable'	=> 'nullable|numeric|min:0',
+			'targeting'	=> 'nullable|numeric|min:0',
+			'warm'	=> 'nullable|numeric|min:0',
+			'uncountable'	=> 'nullable|numeric|min:0',
+			'renouncement'	=> 'nullable|numeric|min:0',
 			'date_worked'	=> 'nullable|date',
 			'date_telegram'	=> 'nullable|date',
 			'date_report'	=> 'nullable|date',
@@ -1031,18 +1057,19 @@ class SecondDepartmentController extends Controller
 		])->validate();
 		$second_department_tour = SecondDepartmentTour::findOrFail($id_second_dep_duty);
 		$second_department_tour->fill([
+			'theme_exp' => $request['theme_exp'],
 			'number_duty' => $request['number_duty'],
 			'date_duty' => $request['date_duty'],
 			'count_elements' => $request['count_elements'],
 			'id_unit' => $request['id_unit'],
 			'date_incoming' => $request['date_incoming'],
+			'countable' => $request['countable'],
+			'targeting' => $request['targeting'],
+			'warm' => $request['warm'],
+			'uncountable' => $request['uncountable'],
+			'renouncement' => $request['renouncement'],
 			'date_worked' => $request['date_worked'] ? date('Y-m-d', strtotime($request['date_worked'])) : null,
-			'number_telegram' => $request['number_telegram'],
-			'date_telegram' => $request['date_telegram'],
-			'number_report' => $request['number_report'],
-			'date_report' => $request['date_report'],
-			'number_act' => $request['number_act'],
-			'date_act' => $request['date_act'],
+			'result_document_exp' => $request['result_document_exp']
 		]);
 		$all_dirty = JournalController::getMyChanges($second_department_tour);
 		$second_department_tour->save();
@@ -1395,6 +1422,127 @@ class SecondDepartmentController extends Controller
 								break;
 						}
 					}
+					break;
+				case 'Выполнение за период по выходным и праздничным дням':
+					$date_begin = date('Y', time()) . '-' . '01' . '-' . '01';
+					$date_end = date('Y-m-d', time());
+					if($request['date_begin'])
+						if($request['date_begin'] != '')
+							$date_begin = $request['date_begin'];
+					if($request['date_end'])
+						if($request['date_end'] != '')
+							$date_end = $request['date_end'];
+					
+					if(date('Y', strtotime($date_begin)) != date('Y', strtotime($date_end)))
+						return redirect()->back()->with(['error'=>'Указывайте период в одном году!']);
+					
+					$year = date('Y', strtotime($date_end));
+					
+					if(!file_exists('calendar/' . $year . '.xml'))
+						return redirect()->back()->with(['error'=>'Не удалось найти файл календаря за ' . $year . ' год!']);
+					
+					$calendar = simplexml_load_file('calendar/' . $year . '.xml');
+					$calendar = $calendar->days->day;
+					
+					$holidays = [];
+					$workdays = [];
+					foreach($calendar as $day){
+						$d = (array)$day->attributes()->d;
+						$d = $d[0];
+						$d = $year . '-' . substr($d, 0, 2) . '-' . substr($d, 3, 2);
+						
+						if($day->attributes()->t == 1)
+							array_push($holidays, $d);
+						else
+							array_push($workdays, $d);
+					}
+
+					$counterparties = Counterpartie::select(['*'])->orderBy('name', 'asc')->get();
+					$second_department_tours = SecondDepartmentTour::Select(['*', 'second_department_tours.id as tourID'])
+															->join('contracts','second_department_tours.id_contract','contracts.id')
+															->leftjoin('elements','second_department_tours.id_element', 'elements.id')
+															->leftjoin('view_work_elements', 'second_department_tours.id_view_work_elements', 'view_work_elements.id')
+															->leftJoin('second_department_units', 'second_department_units.id', 'second_department_tours.id_unit')
+															->whereBetween('second_department_tours.date_worked', array(DATE('Y-m-d', strtotime($date_begin)),DATE('Y-m-d', strtotime($date_end))))
+															->orderBy('second_department_tours.date_worked')
+															->get();
+					$second_department_sb_tours = SecondDepartmentSbTour::Select(['*', 'second_department_sb_tours.id as tourID'])
+															->join('contracts','second_department_sb_tours.id_contract','contracts.id')
+															->leftjoin('elements','second_department_sb_tours.id_element', 'elements.id')
+															->leftjoin('view_work_elements', 'second_department_sb_tours.id_view_work_elements', 'view_work_elements.id')
+															->leftJoin('second_department_units', 'second_department_units.id', 'second_department_sb_tours.id_unit')
+															->whereBetween('second_department_sb_tours.date_worked', array(DATE('Y-m-d', strtotime($date_begin)),DATE('Y-m-d', strtotime($date_end))))
+															->orderBy('second_department_sb_tours.date_worked')
+															->get();
+					$second_department_us_tours = SecondDepartmentUsTour::Select(['*', 'second_department_us_tours.id as tourID'])
+															->join('contracts','second_department_us_tours.id_contract','contracts.id')
+															->whereBetween('second_department_us_tours.date_worked', array(DATE('Y-m-d', strtotime($date_begin)),DATE('Y-m-d', strtotime($date_end))))
+															->orderBy(DB::raw("(number_duty+0)"),'asc')
+															->orderBy('second_department_us_tours.date_worked')
+															->get();
+					
+					$results = [];
+					foreach($second_department_tours as $contract){
+						// Находим день до пятницы
+						if(date('N', strtotime($contract->date_worked)) < 6){
+							// Проверяем, выходной ли это
+							if(array_search($contract->date_worked, $holidays) === false)
+								continue;
+						}else{
+							// Проверяем рабочий ли это день в субботу или воскресенье
+							if(array_search($contract->date_worked, $workdays) !== false)
+								continue;
+						}
+					
+						foreach($counterparties as $counter)
+							if($contract->id_counterpartie_contract == $counter->id)
+								$contract->name_counterpartie_contract = $counter->name;
+						$pr_amount_acts = 0;
+						$contract->amount_acts = $pr_amount_acts;
+						
+						array_push($results, $contract);
+					}
+					foreach($second_department_sb_tours as $contract){
+						if(date('N', strtotime($contract->date_worked)) < 6){
+							if(array_search($contract->date_worked, $holidays) === false)
+								continue;
+						}else{
+							if(array_search($contract->date_worked, $workdays) !== false)
+								continue;
+						}
+						
+						foreach($counterparties as $counter)
+							if($contract->id_counterpartie_contract == $counter->id)
+								$contract->name_counterpartie_contract = $counter->name;
+						$pr_amount_acts = 0;
+						$contract->amount_acts = $pr_amount_acts;
+						
+						array_push($results, $contract);
+					}
+					foreach($second_department_us_tours as $contract){
+						if(date('N', strtotime($contract->date_worked)) < 6){
+							if(array_search($contract->date_worked, $holidays) === false)
+								continue;
+						}else{
+							if(array_search($contract->date_worked, $workdays) !== false)
+								continue;
+						}
+						
+						foreach($counterparties as $counter)
+							if($contract->id_counterpartie_contract == $counter->id)
+								$contract->name_counterpartie_contract = $counter->name;
+						$pr_amount_acts = 0;
+						$contract->amount_acts = $pr_amount_acts;
+						
+						array_push($results, $contract);
+					}
+					//dd($results);
+					return view('department.second.print_report', [
+																	'real_name_table'=>'Выполнение за период по выходным и праздничным дням',
+																	'date_begin'=>$date_begin,
+																	'date_end'=>$date_end,
+																	'results'=>$results
+																]);
 					break;
 				case 'Выполнение за период (испытания)':
 					$date_begin = date('Y', time()) . '-' . '01' . '-' . '01';
@@ -1919,12 +2067,26 @@ class SecondDepartmentController extends Controller
 															->leftJoin('second_department_calibers','id_caliber','second_department_calibers.id')
 															->leftJoin('second_department_name_elements','id_name_element','second_department_name_elements.id')
 															->whereBetween('second_department_tours.date_worked', array(DATE('Y-m-d', strtotime($date_begin)),DATE('Y-m-d', strtotime($date_end))))
-															->get()
-															->sortBy('number_duty');
-					$new_result = [];
+															->orderBy('name_caliber', 'asc')
+															->orderBy('number_duty', 'asc')
+															->get();
+															//->sortBy('number_duty');
+					// Костыль для сортировки
+					$new_result = ['снаряды, выстрелы, мины'=>['count'=>0],
+								'гильзы'=>['count'=>0],
+								'пороха, заряды'=>['count'=>0],
+								'СВ, взрыватели, трассера'=>['count'=>0],
+								'СББ'=>['count'=>0],
+								'авиционные средства поражения'=>['count'=>0],
+								'БЧ'=>['count'=>0],
+								'б/плиты'=>['count'=>0],
+								'военная техника'=>['count'=>0],
+								'инженерные боеприпасы'=>['count'=>0]];
 					$count_warm = 0;
 					$count_tour = 0;
 					foreach($second_department_tours as $tour){
+						if ($tour->name_element == '')	// Наряды по сборке и опытные
+							continue;
 						$count_shot = 0 + $tour->countable + $tour->targeting + $tour->uncountable + $tour->renouncement;
 						$count_warm += $tour->warm;
 						$count_tour++;
@@ -1967,10 +2129,25 @@ class SecondDepartmentController extends Controller
 															->leftJoin('second_department_calibers','id_caliber','second_department_calibers.id')
 															->leftJoin('second_department_name_elements','id_name_element','second_department_name_elements.id')
 															->whereBetween('second_department_tours.date_worked', array(DATE('Y-m-d', strtotime($date_begin)),DATE('Y-m-d', strtotime($date_end))))
-															->get()
-															->sortBy('number_duty');
-					$new_result = [];
+															//->orderBy('id_element', 'asc')
+															->orderBy('name_caliber', 'asc')
+															->orderBy('number_duty', 'asc')
+															->get();
+															//->sortBy('number_duty');
+					// Костыль для сортировки
+					$new_result = ['снаряды, выстрелы, мины'=>['elements'=>[]],
+								'гильзы'=>['elements'=>[]],
+								'пороха, заряды'=>['elements'=>[]],
+								'СВ, взрыватели, трассера'=>['elements'=>[]],
+								'СББ'=>['elements'=>[]],
+								'авиционные средства поражения'=>['elements'=>[]],
+								'БЧ'=>['elements'=>[]],
+								'б/плиты'=>['elements'=>[]],
+								'военная техника'=>['elements'=>[]],
+								'инженерные боеприпасы'=>['elements'=>[]]];	
 					foreach($second_department_tours as $tour){
+						if ($tour->name_element == '')	// Наряды по сборке и опытные
+							continue;
 						if(!in_array($tour->name_element, array_keys($new_result))){
 							if($tour->name_caliber != null){
 								$new_result += [$tour->name_element=>[$tour->name_caliber=>[$tour->nameElement]]];
@@ -1996,6 +2173,103 @@ class SecondDepartmentController extends Controller
 																	'date_begin'=>$date_begin,
 																	'date_end'=>$date_end,
 																	'contracts'=>$new_result
+																]);
+					break;
+				case 'Наряды за год по виду':
+					$view_isp = '0';
+					$view_isp_equal = '>';
+					if($request['view_isp'])
+						if($request['view_isp'] != '0')
+						{
+							$view_isp = $request['view_isp'];
+							$view_isp_equal = '=';
+						}
+					//dd($view_contract);
+					$year_contract = date('Y', time());
+					if(isset($request['year']))
+						if($request['year'] != '')
+							$year_contract = $request['year'];
+					$counterparties = Counterpartie::select(['*'])->orderBy('name', 'asc')->get();
+					$second_department_tours = SecondDepartmentTour::Select(['*', 'second_department_tours.id as tourID'])
+															->join('contracts','second_department_tours.id_contract','contracts.id')
+															->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')
+															->leftjoin('elements','second_department_tours.id_element', 'elements.id')
+															->leftjoin('view_work_elements', 'second_department_tours.id_view_work_elements', 'view_work_elements.id')
+															->leftJoin('second_department_units', 'second_department_units.id', 'second_department_tours.id_unit')
+															->where('second_department_tours.created_at', 'like', $year_contract . '%')
+															->where('view_work_elements.id', $view_isp_equal, $view_isp)
+															->get()
+															->sortBy('number_duty');
+					$second_department_sb_tours = SecondDepartmentSbTour::Select(['*', 'second_department_sb_tours.id as tourID'])
+															->join('contracts','second_department_sb_tours.id_contract','contracts.id')
+															->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')
+															->leftjoin('elements','second_department_sb_tours.id_element', 'elements.id')
+															->leftjoin('view_work_elements', 'second_department_sb_tours.id_view_work_elements', 'view_work_elements.id')
+															->leftJoin('second_department_units', 'second_department_units.id', 'second_department_sb_tours.id_unit')
+															->where('second_department_sb_tours.created_at', 'like', $year_contract . '%')
+															->where('view_work_elements.id', $view_isp_equal, $view_isp)
+															->get()
+															->sortBy('number_duty');
+					if($view_isp == '0')
+						$second_department_us_tours = SecondDepartmentUsTour::Select(['*', 'second_department_us_tours.id as tourID'])
+																->join('contracts','second_department_us_tours.id_contract','contracts.id')
+																->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')
+																->where('second_department_us_tours.created_at', 'like', $year_contract . '%')
+																->orderBy(DB::raw("(number_duty+0)"),'asc')
+																->get();
+					else
+						$second_department_us_tours = [];
+					foreach($second_department_tours as $contract){
+						foreach($counterparties as $counter)
+							if($contract->id_counterpartie_contract == $counter->id)
+								$contract->name_counterpartie_contract = $counter->name;
+						$pr_amount_acts = 0;
+						$acts = SecondDepartmentAct::select(['number_act','amount_act','date_act'])
+													->where('id_second_tour', $contract->tourID)
+													->get();
+						foreach($acts as $act){
+							$pr_amount_acts += $act->amount_act;
+							$contract->date_act = $act->date_act;
+							$contract->number_act = $act->number_act;
+						}
+						$contract->amount_acts = $pr_amount_acts;
+					}
+					foreach($second_department_sb_tours as $contract){
+						foreach($counterparties as $counter)
+							if($contract->id_counterpartie_contract == $counter->id)
+								$contract->name_counterpartie_contract = $counter->name;
+						$pr_amount_acts = 0;
+						$acts = SecondDepartmentAct::select(['number_act','amount_act','date_act'])
+													->where('id_second_sb_tour', $contract->tourID)
+													->get();
+						foreach($acts as $act){
+							$pr_amount_acts += $act->amount_act;
+							$contract->date_act = $act->date_act;
+							$contract->number_act = $act->number_act;
+						}
+						$contract->amount_acts = $pr_amount_acts;
+					}
+					foreach($second_department_us_tours as $contract){
+						foreach($counterparties as $counter)
+							if($contract->id_counterpartie_contract == $counter->id)
+								$contract->name_counterpartie_contract = $counter->name;
+						$pr_amount_acts = 0;
+						$acts = SecondDepartmentAct::select(['number_act','amount_act','date_act'])
+													->where('id_second_us_tour', $contract->tourID)
+													->get();
+						foreach($acts as $act){
+							$pr_amount_acts += $act->amount_act;
+							$contract->date_act = $act->date_act;
+							$contract->number_act = $act->number_act;
+						}
+						$contract->amount_acts = $pr_amount_acts;
+					}
+					return view('department.second.print_report', [
+																	'real_name_table'=>'Наряды за год по виду',
+																	'year'=>$year_contract,
+																	'second_department_tours'=>$second_department_tours,
+																	'second_department_sb_tours'=>$second_department_sb_tours,
+																	'second_department_us_tours'=>$second_department_us_tours
 																]);
 					break;
 				default:

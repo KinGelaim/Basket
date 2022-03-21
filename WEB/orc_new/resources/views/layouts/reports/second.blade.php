@@ -7,6 +7,7 @@
 			<option value='incomingPeriod'>Поступление за период</option>
 			<option value='completePeriod'>Выполнение за период</option>
 			<option value='completePeriodIsp'>Выполнение за период (вид испытания)</option>
+			<option value='completePeriodIspWeekend'>Выполнение за период по выходным и праздничным дням</option>
 			<!--<option value='completePeriodSb'>Выполнение за период (cборка)</option>
 			<option value='completePeriodUs'>Выполнение за период (услуги)</option>-->
 			<option value='paymentPeriod'>Оплата за период</option>
@@ -17,6 +18,7 @@
 			<option value='testPeriod'>Тестовый режим</option>
 			<option value='ispForPeriod'>Испытано за период</option>
 			<option value='nomenForPeriod'>Номенклатура за период</option>
+			<option value='tourForPeriod'>Наряды за год по виду (по дате добавления наряда)</option>
 		</select>
 	</div>
 	<div id='svPrintContract' class="col-md-12 closeDivSelect" style='display: none;'>
@@ -155,6 +157,26 @@
 				</div>
 			</div>
 			<input name='real_name_table' value='Выполнение за период (испытания)' style='display: none;'/>
+			<div class='row'>
+				<div class="col-md-12">
+					<button type="submit" class="btn btn-primary">Сформировать</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id='completePeriodIspWeekend' class="col-md-12 closeDivSelect" style='display: none;'>
+		<form method='POST' action='{{route("department.second.print_report")}}'>
+			{{csrf_field()}}
+			<div class='row'>
+				<div class="col-md-12">
+					<label>Выполнение за период</label>
+					<label>с</label>
+					<input class='datepicker form-control' type='text' name='date_begin'/>
+					<label>по</label>
+					<input class='datepicker form-control' type='text' name='date_end'/>
+				</div>
+			</div>
+			<input name='real_name_table' value='Выполнение за период по выходным и праздничным дням' style='display: none;'/>
 			<div class='row'>
 				<div class="col-md-12">
 					<button type="submit" class="btn btn-primary">Сформировать</button>
@@ -367,6 +389,38 @@
 				</div>
 			</div>
 			<input name='real_name_table' value='Номенклатура за период' style='display: none;'/>
+			<div class='row'>
+				<div class="col-md-12">
+					<button type="submit" class="btn btn-primary">Сформировать</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id='tourForPeriod' class="col-md-12 closeDivSelect" style='display: none;'>
+		<form method='POST' action='{{route("department.second.print_report")}}'>
+			{{csrf_field()}}
+			<div class='row'>
+				<div class="col-md-12">
+					<label>Выберите вид испытания</label>
+					<select class="form-control" name='view_isp'>
+						<option value='0'>Все виды испытаний</option>
+						@if(isset($viewWorkElements))
+							@if($viewWorkElements)
+								@foreach($viewWorkElements as $viewElement)
+									<option value='{{$viewElement->id}}'>{{ $viewElement->name_view_work_elements }}</option>
+								@endforeach
+							@endif
+						@endif
+					</select>
+				</div>
+			</div>
+			<div class='row'>
+				<div class="col-md-12">
+					<label>Введите год</label>
+					<input class='form-control' type='text' name='year'/>
+				</div>
+			</div>
+			<input name='real_name_table' value='Наряды за год по виду' style='display: none;'/>
 			<div class='row'>
 				<div class="col-md-12">
 					<button type="submit" class="btn btn-primary">Сформировать</button>

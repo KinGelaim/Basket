@@ -7,7 +7,7 @@
 @section('content')
 	<div class="flex-center position-ref full-height">
 		@if (Auth::User())
-			@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Десятый отдел')
+			@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Десятый отдел' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
 				<div class="content">
 					<div class="row">
 						<div class="col-md-12">
@@ -53,7 +53,7 @@
 												</thead>
 												<tbody>
 													@foreach($contracts as $contract)
-														<tr class='rowsContract cursorPointer btn-href' href="{{ route('department.ekonomic.contract_new_reestr', $contract->id)}}">
+														<tr class='rowsContract cursorPointer btn-href' href="{{ route('department.peo.show_contract', $contract->id)}}">
 															<td>
 																{{ $contract->number_contract }}
 															</td>

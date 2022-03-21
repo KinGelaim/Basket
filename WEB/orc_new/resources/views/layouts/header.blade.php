@@ -66,7 +66,16 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
 						<li><a href="{{ route('department.chancery') }}">Канцелярия</a></li>
-						<li><a>Заявки</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+								Заявки <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ route('department.reconciliation.new_incoming') }}">Входящие</a></li>
+								<li><a href="{{ route('new_applications.index') }}?method=dk">На заключение Д/К</a></li>
+								<li><a href="{{ route('new_applications.index') }}?method=rkm">РКМ и др.</a></li>
+							</ul>
+						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
 								Отделы <span class="caret"></span>

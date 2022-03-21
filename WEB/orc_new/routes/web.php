@@ -147,6 +147,24 @@ Route::get('/chancery', 'ChanceryController@index')->name('department.chancery')
 Route::post('/create_chancery', 'ChanceryController@store')->name('department.chancery.store');
 Route::post('/update_chancery/{id}', 'ChanceryController@update')->name('department.chancery.update');
 Route::get('/delete_chancery/{id}', 'ChanceryController@destroy')->name('department.chancery.delete');
+Route::post('/create_chancery_for_new_application/{id_new_application}', 'ChanceryController@store_for_new_application')->name('department.chancery.store_for_new_application');
+
+// Новые заявки
+Route::get('/new_reconciliation_incoming/', 'ReconciliationController@new_incoming')->name('department.reconciliation.new_incoming');
+Route::get('/reconciliation_create_new_application/{id_application}', 'ReconciliationController@create_new_application')->name('department.reconciliation.create_new_application');
+Route::get('/new_applications/', 'NewApplicationController@index')->name('new_applications.index');
+Route::get('/create_new_application/', 'NewApplicationController@create')->name('new_applications.create');
+Route::post('/store_new_application/', 'NewApplicationController@store')->name('new_applications.store');
+Route::get('/show_new_application/{id_new_application}', 'NewApplicationController@show')->name('new_applications.show');
+Route::post('/update_new_application/{id_new_application}', 'NewApplicationController@update')->name('new_applications.update');
+Route::post('/create_contract_from_new_application/{id_new_application}', 'NewApplicationController@create_contract')->name('new_applications.create_contract');
+Route::get('/copying_new_application/{id_new_application}', 'NewApplicationController@copying')->name('new_applications.copying');
+Route::get('/reconciliation_new_application/{id_new_application}', 'NewApplicationController@reconciliation')->name('new_applications.reconciliation');
+Route::post('/reconciliation_new_application_store/{id_new_application}', 'NewApplicationController@reconciliation_store')->name('new_applications.reconciliation_store');
+
+Route::post('/reconciliation_new_application_contraction_store/{id_new_application}', 'NewApplicationContractionController@store')->name('new_application_contractions.store');
+Route::post('/reconciliation_new_application_contraction_update/{id_new_application_contraction}', 'NewApplicationContractionController@update')->name('new_application_contractions.update');
+Route::get('/reconciliation_new_application_contraction_delete/{id_new_application_contraction}', 'NewApplicationContractionController@destroy')->name('new_application_contractions.destroy');
 
 //ПЭО 2
 Route::get('/peo', 'ContractController@peo')->name('department.peo');
@@ -155,6 +173,7 @@ Route::post('/store_peo_contract', 'ContractController@store_peo_contract')->nam
 Route::get('/show_peo_contract/{id_contract}', 'ContractController@show_peo_contract')->name('department.peo.show_contract');
 Route::post('/update_peo_contract/{id_contract}', 'ContractController@update_peo_contract')->name('department.peo.update_contract');
 Route::get('/show_additional_documents/{id_contract}', 'ContractController@show_additional_documents')->name('department.peo.show_additional_documents');
+Route::post('/update_position_additional_documents/{id_contract}', 'ContractController@update_position_additional_documents')->name('update_position_additional_documents');
 //Согласование новых протоколов и доп. соглашений
 Route::get('/reconciliation_additional_document/{id_additional_document}', 'ReconciliationProtocolController@show')->name('reconciliation.additional_document.show');
 Route::post('/reconciliation_additional_document_store/{id_additional_document}', 'ReconciliationProtocolController@store')->name('reconciliation.additional_document.store');
@@ -182,7 +201,7 @@ Route::post('/store_contract/{number_document}', 'ContractController@store')->na
 Route::post('/update_contract_reestr/{id}', 'ContractController@update_reestr')->name('department.ekonomic.update_reestr');
 Route::post('/update_contract_peo/{id}', 'ContractController@update_peo')->name('department.ekonomic.update_peo');
 Route::post('/add_new_state/{id}', 'ContractController@new_state')->name('department.ekonomic.new_state');
-Route::get('/destroy_state/{id}', 'ContractController@destroy_state')->name('department.ekonomic.destroy_state');
+Route::post('/destroy_state/{id}', 'ContractController@destroy_state')->name('department.ekonomic.destroy_state');
 Route::post('/update_state/{id}', 'ContractController@update_state')->name('department.ekonomic.update_state');
 Route::get('/delete_contract/{id}', 'ContractController@destroy')->name('department.ekonomic.delete');
 //Резолюция
@@ -249,6 +268,10 @@ Route::get('/contract_new_reestr/amount_invoices/{id_contract}', 'ReestrInvoiceC
 Route::post('/contract_new_reestr/store_amount_invoices/{id_contract}', 'ReestrInvoiceController@store')->name('department.reestr.store_amount_invoice');
 Route::post('/contract_new_reestr/update_amount_invoices/{id_invoice}', 'ReestrInvoiceController@update')->name('department.reestr.update_amount_invoice');
 
+Route::get('/contract_new_reestr/specifies/{id_contract}', 'ReestrSpecifyController@show')->name('department.reestr.show_specify');
+Route::post('/contract_new_reestr/store_specifies/{id_contract}', 'ReestrSpecifyController@store')->name('department.reestr.store_specify');
+Route::post('/contract_new_reestr/update_specifies/{id_specify}', 'ReestrSpecifyController@update')->name('department.reestr.update_specify');
+
 Route::get('/contract_new_reestr/obligation/{id_contract}', 'ObligationController@show_obligation')->name('department.reestr.show_obligation');
 Route::post('/contract_new_reestr/update_obligation/{id_contract}', 'ObligationController@update_obligation')->name('department.reestr.update_obligation');
 Route::post('/contract_new_reestr/create_obligation_invoice/{id_contract}', 'ObligationController@create_obligation_invoice')->name('department.reestr.create_obligation_invoice');
@@ -258,6 +281,21 @@ Route::get('/contract_new_reestr/delete_obligation_invoice/{id_obligation_invoic
 Route::post('/contract_new_reestr/search_counterpartie', 'CounterpartieController@search_counterpartie')->name('department.reestr.search_counterpartie');
 
 Route::get('/print_reestr', 'ContractController@print_reestr')->name('department.reestr.print_reestr');
+
+// Реестр (срок действия Д/К)
+Route::post('/new_reestr_date_contract/{id_contract}', 'ReestrDateContractController@store')->name('reestr.date_contract.store');
+Route::post('/update_reestr_date_contract/{id_date_contract}', 'ReestrDateContractController@update')->name('reestr.date_contract.update');
+Route::get('/delete_reestr_date_contract/{id_contract}', 'ReestrDateContractController@destroy')->name('reestr.date_contract.destroy');
+
+// Реестр (срок исполнения обязательств)
+Route::post('/new_reestr_date_maturity/{id_contract}', 'ReestrDateMaturityController@store')->name('reestr.date_maturity.store');
+Route::post('/update_reestr_date_maturity/{id_date_contract}', 'ReestrDateMaturityController@update')->name('reestr.date_maturity.update');
+Route::get('/delete_reestr_date_maturity/{id_contract}', 'ReestrDateMaturityController@destroy')->name('reestr.date_maturity.destroy');
+
+// Реестр (суммы)
+Route::post('/new_reestr_amount/{id_contract}', 'ReestrAmountController@store')->name('reestr.amount.store');
+Route::post('/update_reestr_amount/{id_date_contract}', 'ReestrAmountController@update')->name('reestr.amount.update');
+Route::get('/delete_reestr_amount/{id_contract}', 'ReestrAmountController@destroy')->name('reestr.amount.destroy');
 
 //Финансовый отдел
 Route::get('/invoice', 'InvoiceController@index')->name('department.invoice');
@@ -365,6 +403,8 @@ Route::get('/leadership', 'LeadershipDepartmentController@index')->name('departm
 Route::get('/print_peo', 'LeadershipDepartmentController@peo')->name('department.leadership.peo');
 Route::get('/print_peo_noexecute', 'LeadershipDepartmentController@peoNoExecute')->name('department.leadership.peoNoExecute');
 Route::get('/peo_backpack', 'LeadershipDepartmentController@peoBackpack')->name('department.leadership.peoBackpack');
+Route::get('/peo_act_complete', 'LeadershipDepartmentController@peo_act_complete')->name('department.leadership.peo_act_complete');
+Route::get('/peo_isp_period_complete', 'LeadershipDepartmentController@peo_isp_period_complete')->name('department.leadership.peo_isp_period_complete');
 Route::get('/print_invoice', 'LeadershipDepartmentController@invoice')->name('department.leadership.invoice');
 Route::get('/print_duty', 'LeadershipDepartmentController@duty')->name('department.leadership.duty');
 Route::get('/build_report', 'LeadershipDepartmentController@create_report')->name('department.leadership.create_report');
@@ -376,6 +416,7 @@ Route::get('/archive', 'ArchiveController@index')->name('archive.main');
 //Журнал событий
 Route::get('/journal', 'JournalController@index')->name('journal.main');
 Route::get('/journal_report', 'JournalController@report')->name('journal.report');
+Route::get('/journal_contract/{id_contract}', 'JournalController@contract')->name('journal.contract');
 
 //Древо заявки
 Route::get('/tree_map/{id}', 'TreeController@show')->name('tree_map.show');

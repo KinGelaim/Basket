@@ -7,7 +7,7 @@
 @section('content')
 	<div class="flex-center position-ref full-height">
 		@if (Auth::User())
-			@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Второй отдел' OR Auth::User()->hasRole()->role == 'Администрация' OR Auth::User()->surname == 'Бастрыкова' OR Auth::User()->surname == 'Гуринова')
+			@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Второй отдел' OR Auth::User()->hasRole()->role == 'Второй отдел (просмотр)' OR Auth::User()->hasRole()->role == 'Администрация' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
 				<div class="content">
 					<div class="row">
 						<div class="col-md-3">

@@ -29,6 +29,10 @@ use App\OudCurator;
 use App\ViewContract;
 use App\ReestrInvoice;
 use App\Invoice;
+use App\ReestrDateContract;
+use App\ReestrDateMaturity;
+use App\ReestrAmount;
+use App\ObligationInvoice;
 //use App\ReconciliationUser;
 
 class ContractController extends Controller
@@ -96,6 +100,18 @@ class ContractController extends Controller
 				$sql_like = '%‐' . $view_department . '‐%';
 			}
 		}
+		// ГОЗ, экспорт и тд
+		$goz_work_str = "contracts.id_counterpartie_contract";
+		$goz_work_equal = ">";
+		$goz_work = '';
+		if(isset($_GET['goz_work'])) {
+			if(strlen($_GET['goz_work']) > 0) {
+				$goz_work = $_GET['goz_work'];
+				$goz_work_str = "name_works_goz";
+				$goz_work_equal = "=";
+				$link .= "&goz_work=" . $_GET['goz_work'];
+			}
+		}
 		//Поиск
 		if(isset($_GET['search_name'])) {
 			$search_name = $_GET['search_name'];
@@ -138,141 +154,75 @@ class ContractController extends Controller
 		$start = ($page-1) * $paginate_count;
 		//$contracts = Contract::paginate($paginate_count);
 		$is_sip_contract = 0;
-		if(Route::current()->uri() == 'ekonomic_sip'){
-			if(isset($_GET['search_value']) && isset($_GET['search_name']) && $search_name != '' && $search_value != ''){
-				$contracts = Contract::select(['contracts.id','id_counterpartie_contract','number_contract','name_work_contract','id_goz_contract','name_works_goz','id_view_work_contract', 'view_works.name_view_work',
-												'all_count_contract','concluded_count_contract','amount_concluded_contract','formalization_count_contract',
-												'amount_formalization_contract','big_deal_contract','amoun_implementation_contract','comment_implementation_contract',
-												'prepayment_score_contract','invoice_score_contract','prepayment_payment_contract','amount_payment_contract','date_contact','year_contract',
-												'name_view_contract','amount_reestr','item_contract', 
-												'app_outgoing_number_reestr', 'date_entry_into_force_reestr', 'renouncement_contract', DB::raw('CAST(number_pp as UNSIGNED) as cast_number_pp')])
-								->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')
-								->leftJoin('reestr_contracts', 'reestr_contracts.id_contract_reestr', 'contracts.id')
-								->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', '=', 'view_contracts.id')
-								->leftJoin('goz_works', 'contracts.id_goz_contract','goz_works.id')
-								/*->where('contracts.number_contract','!=', null)*/
-								->where($search_name, 'like', '%' . $search_value . '%')
-								->where('is_sip_contract', 1)
-								->where('contracts.id_counterpartie_contract','>','-1')
-								->where($year_str, $year_equal, $year)
-								//->where($view_department_str, $view_department_equal, $view_department)
-								->where($counterpartie_str, $counterpartie_equal, $counterpartie)
-								->where('contracts.number_contract', 'like', $sql_like)
-								->where('archive_contract', 0)
-								->orderBy($sort_year, $sort_p)
-								->orderBy($sort, $sort_p)
-								->offset($start)
-								->limit($paginate_count)
-								->get();
-				$contract_count = Contract::select()->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', '=', 'view_contracts.id')->where('contracts.id_counterpartie_contract','>',-1)->where($year_str, $year_equal, $year)
-													//->where($view_department_str, $view_department_equal, $view_department)
-													->where($search_name, 'like', '%' . $search_value . '%')
-													->where($counterpartie_str, $counterpartie_equal, $counterpartie)
-													->where('is_sip_contract', 1)
-													->where('contracts.number_contract', 'like', $sql_like)
-													->where('archive_contract', 0)
-													->count();
-				
-			}else{
-				$contracts = Contract::select(['contracts.id','id_counterpartie_contract','number_contract','name_work_contract','id_goz_contract','name_works_goz','id_view_work_contract', 'view_works.name_view_work',
-												'all_count_contract','concluded_count_contract','amount_concluded_contract','formalization_count_contract',
-												'amount_formalization_contract','big_deal_contract','amoun_implementation_contract','comment_implementation_contract',
-												'prepayment_score_contract','invoice_score_contract','prepayment_payment_contract','amount_payment_contract','date_contact','year_contract',
-												'name_view_contract','amount_reestr','item_contract',
-												'app_outgoing_number_reestr', 'date_entry_into_force_reestr', 'renouncement_contract', DB::raw('CAST(number_pp as UNSIGNED) as cast_number_pp')])
-								->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')
-								->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')
-								->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', '=', 'view_contracts.id')
-								->leftJoin('goz_works', 'contracts.id_goz_contract','goz_works.id')
-								/*->where('contracts.number_contract','!=', null)*/
-								->where('is_sip_contract', 1)
-								->where('contracts.id_counterpartie_contract','>','-1')
-								->where($year_str, $year_equal, $year)
-								//->where($view_department_str, $view_department_equal, $view_department)
-								->where($counterpartie_str, $counterpartie_equal, $counterpartie)
-								->where('contracts.number_contract', 'like', $sql_like)
-								->where('archive_contract', 0)
-								->orderBy($sort_year, $sort_p)
-								->orderBy($sort, $sort_p)
-								->offset($start)
-								->limit($paginate_count)
-								->get();
-				$contract_count = Contract::select()->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')->where('contracts.id_counterpartie_contract','>',-1)->where($year_str, $year_equal, $year)
-													//->where($view_department_str, $view_department_equal, $view_department)
-													->where($counterpartie_str, $counterpartie_equal, $counterpartie)
-													->where('is_sip_contract', 1)
-													->where('contracts.number_contract', 'like', $sql_like)
-													->where('archive_contract', 0)
-													->count();
-			}
+		if(Route::current()->uri() == 'ekonomic_sip') {
 			$is_sip_contract = 1;
 		}
-		else{
-			if(isset($_GET['search_value']) && isset($_GET['search_name']) && $search_name != '' && $search_value != ''){
-				$contracts = Contract::select(['contracts.id','id_counterpartie_contract','number_contract','name_work_contract','id_goz_contract','name_works_goz','id_view_work_contract', 'view_works.name_view_work',
-												'all_count_contract','concluded_count_contract','amount_concluded_contract','formalization_count_contract',
-												'amount_formalization_contract','big_deal_contract','amoun_implementation_contract','comment_implementation_contract',
-												'prepayment_score_contract','invoice_score_contract','prepayment_payment_contract','amount_payment_contract','date_contact','year_contract',
-												'name_view_contract','amount_reestr','item_contract',
-												'app_outgoing_number_reestr', 'date_entry_into_force_reestr', 'renouncement_contract', DB::raw('CAST(number_pp as UNSIGNED) as cast_number_pp')])
-								->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')
-								->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')
-								->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', '=', 'view_contracts.id')
-								->leftJoin('goz_works', 'contracts.id_goz_contract','goz_works.id')
-								/*->where('contracts.number_contract','!=', null)*/
-								->where($search_name, 'like', '%' . $search_value . '%')
-								->where('is_sip_contract', 0)
-								->where('contracts.id_counterpartie_contract','>','-1')
-								->where($year_str, $year_equal, $year)
-								//->where($view_department_str, $view_department_equal, $view_department)
-								->where($counterpartie_str, $counterpartie_equal, $counterpartie)
-								->where('contracts.number_contract', 'like', $sql_like)
-								->where('archive_contract', 0)
-								->orderBy($sort_year, $sort_p)
-								->orderBy($sort, $sort_p)
-								->offset($start)
-								->limit($paginate_count)
-								->get();
-				$contract_count = Contract::select()->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', '=', 'view_contracts.id')->where('contracts.id_counterpartie_contract','>',-1)->where($year_str, $year_equal, $year)
-													//->where($view_department_str, $view_department_equal, $view_department)
-													->where($search_name, 'like', '%' . $search_value . '%')
-													->where($counterpartie_str, $counterpartie_equal, $counterpartie)
-													->where('is_sip_contract', 0)
-													->where('contracts.number_contract', 'like', $sql_like)
-													->where('archive_contract', 0)
-													->count();
-			}else{
-				$contracts = Contract::select(['contracts.id','id_counterpartie_contract','number_contract','name_work_contract','id_goz_contract','name_works_goz','id_view_work_contract', 'view_works.name_view_work',
-												'all_count_contract','concluded_count_contract','amount_concluded_contract','formalization_count_contract',
-												'amount_formalization_contract','big_deal_contract','amoun_implementation_contract','comment_implementation_contract',
-												'prepayment_score_contract','invoice_score_contract','prepayment_payment_contract','amount_payment_contract','date_contact','year_contract',
-												'name_view_contract','amount_reestr','item_contract', 
-												'app_outgoing_number_reestr', 'date_entry_into_force_reestr', 'renouncement_contract', DB::raw('CAST(number_pp as UNSIGNED) as cast_number_pp')])
-								->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')
-								->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')
-								->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', '=', 'view_contracts.id')
-								->leftJoin('goz_works', 'contracts.id_goz_contract','goz_works.id')
-								/*->where('contracts.number_contract','!=', null)*/
-								->where('is_sip_contract', 0)
-								->where('contracts.id_counterpartie_contract','>','-1')
-								->where($year_str, $year_equal, $year)
-								//->where($view_department_str, $view_department_equal, $view_department)
-								->where($counterpartie_str, $counterpartie_equal, $counterpartie)
-								->where('contracts.number_contract', 'like', $sql_like)
-								->where('archive_contract', 0)
-								->orderBy($sort_year, $sort_p)
-								->orderBy($sort, $sort_p)
-								->offset($start)
-								->limit($paginate_count)
-								->get();
-				$contract_count = Contract::select()->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')->where('contracts.id_counterpartie_contract','>',-1)->where($year_str, $year_equal, $year)
-													//->where($view_department_str, $view_department_equal, $view_department)
-													->where($counterpartie_str, $counterpartie_equal, $counterpartie)
-													->where('is_sip_contract', 0)
-													->where('contracts.number_contract', 'like', $sql_like)
-													->where('archive_contract', 0)
-													->count();
-			}
+		if(isset($_GET['search_value']) && isset($_GET['search_name']) && $search_name != '' && $search_value != ''){
+			$contracts = Contract::select(['contracts.id','id_counterpartie_contract','number_contract','name_work_contract','id_goz_contract','name_works_goz','id_view_work_contract', 'view_works.name_view_work',
+											'all_count_contract','concluded_count_contract','amount_concluded_contract','formalization_count_contract',
+											'amount_formalization_contract','big_deal_contract','amoun_implementation_contract','comment_implementation_contract',
+											'prepayment_score_contract','invoice_score_contract','prepayment_payment_contract','amount_payment_contract','date_contact','year_contract',
+											'name_view_contract','amount_reestr','item_contract',
+											'app_outgoing_number_reestr', 'date_entry_into_force_reestr', 'renouncement_contract', DB::raw('CAST(number_pp as UNSIGNED) as cast_number_pp')])
+							->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')
+							->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')
+							->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', '=', 'view_contracts.id')
+							->leftJoin('goz_works', 'contracts.id_goz_contract','goz_works.id')
+							/*->where('contracts.number_contract','!=', null)*/
+							->where($search_name, 'like', '%' . $search_value . '%')
+							->where('is_sip_contract', $is_sip_contract)
+							->where('contracts.id_counterpartie_contract','>','-1')
+							->where($year_str, $year_equal, $year)
+							->where($goz_work_str, $goz_work_equal, $goz_work)
+							//->where($view_department_str, $view_department_equal, $view_department)
+							->where($counterpartie_str, $counterpartie_equal, $counterpartie)
+							->where('contracts.number_contract', 'like', $sql_like)
+							->where('archive_contract', 0)
+							->orderBy($sort_year, $sort_p)
+							->orderBy($sort, $sort_p)
+							->offset($start)
+							->limit($paginate_count)
+							->get();
+			$contract_count = Contract::select()->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', '=', 'view_contracts.id')->leftJoin('goz_works', 'contracts.id_goz_contract','goz_works.id')->where('contracts.id_counterpartie_contract','>',-1)->where($year_str, $year_equal, $year)->where($goz_work_str, $goz_work_equal, $goz_work)
+												//->where($view_department_str, $view_department_equal, $view_department)
+												->where($search_name, 'like', '%' . $search_value . '%')
+												->where($counterpartie_str, $counterpartie_equal, $counterpartie)
+												->where('is_sip_contract', $is_sip_contract)
+												->where('contracts.number_contract', 'like', $sql_like)
+												->where('archive_contract', 0)
+												->count();
+		}else{
+			$contracts = Contract::select(['contracts.id','id_counterpartie_contract','number_contract','name_work_contract','id_goz_contract','name_works_goz','id_view_work_contract', 'view_works.name_view_work',
+											'all_count_contract','concluded_count_contract','amount_concluded_contract','formalization_count_contract',
+											'amount_formalization_contract','big_deal_contract','amoun_implementation_contract','comment_implementation_contract',
+											'prepayment_score_contract','invoice_score_contract','prepayment_payment_contract','amount_payment_contract','date_contact','year_contract',
+											'name_view_contract','amount_reestr','item_contract', 
+											'app_outgoing_number_reestr', 'date_entry_into_force_reestr', 'renouncement_contract', DB::raw('CAST(number_pp as UNSIGNED) as cast_number_pp')])
+							->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')
+							->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')
+							->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', '=', 'view_contracts.id')
+							->leftJoin('goz_works', 'contracts.id_goz_contract','goz_works.id')
+							/*->where('contracts.number_contract','!=', null)*/
+							->where('is_sip_contract', $is_sip_contract)
+							->where('contracts.id_counterpartie_contract','>','-1')
+							->where($year_str, $year_equal, $year)
+							->where($goz_work_str, $goz_work_equal, $goz_work)
+							//->where($view_department_str, $view_department_equal, $view_department)
+							->where($counterpartie_str, $counterpartie_equal, $counterpartie)
+							->where('contracts.number_contract', 'like', $sql_like)
+							->where('archive_contract', 0)
+							->orderBy($sort_year, $sort_p)
+							->orderBy($sort, $sort_p)
+							->offset($start)
+							->limit($paginate_count)
+							->get();
+			$contract_count = Contract::select()->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')->leftJoin('goz_works', 'contracts.id_goz_contract','goz_works.id')->where('contracts.id_counterpartie_contract','>',-1)->where($year_str, $year_equal, $year)->where($goz_work_str, $goz_work_equal, $goz_work)
+												//->where($view_department_str, $view_department_equal, $view_department)
+												->where($counterpartie_str, $counterpartie_equal, $counterpartie)
+												->where('is_sip_contract', $is_sip_contract)
+												->where('contracts.number_contract', 'like', $sql_like)
+												->where('archive_contract', 0)
+												->count();
 		}
 		$prev_page = $page - 1 > 0 ? (int)($page-1) : '';
 		$next_page = $page + 1 <= (int)ceil($contract_count/$paginate_count) ? (int)($page+1) : '';
@@ -293,6 +243,7 @@ class ContractController extends Controller
         return view('department.planekonom.main',['contracts' => $contracts,
 													'years' => $years,
 													'year' => $year,
+													'goz_work' => $goz_work,
 													'viewWorks' => $view_works,
 													'viewWork' => "",//$view_work,
 													'viewContracts' => $view_contracts,
@@ -699,6 +650,45 @@ class ContractController extends Controller
 		]);
 		$all_dirty = JournalController::getMyChanges($reestr, $all_dirty);
 		$reestr->save();
+		// Создаём срок действия Д/К
+		if ($request['date_contract_reestr'] || $request['date_e_contract_reestr'])
+		{
+			$date_contract = new ReestrDateContract();
+			$date_contract->fill([
+				'id_contract' => $contract->id,
+				'name_date_contract' => 'Д/К',
+				'term_date_contract' => $request['date_contract_reestr'] ? $request['date_contract_reestr'] : '',
+				'end_date_contract' => $request['date_e_contract_reestr']
+			]);
+			$date_contract->save();
+		}
+		// Создаём срок исполнения обязательств
+		if ($request['date_maturity_reestr'] || $request['date_e_maturity_reestr'])
+		{
+			$date_maturity = new ReestrDateMaturity();
+			$date_maturity->fill([
+				'id_contract' => $contract->id,
+				'name_date_maturity' => 'Д/К',
+				'term_date_maturity' => $request['date_maturity_reestr'],
+				'end_date_maturity' => $request['date_e_maturity_reestr']
+			]);
+			$date_maturity->save();
+		}
+		// Создаём сумму
+		if ($request['amount_reestr'])
+		{
+			$amount = new ReestrAmount();
+			$amount->fill([
+				'id_contract' => $contract->id,
+				'name_amount' => 'Д/К',
+				'value_amount' => $request['amount_reestr'],
+				'unit_amount' => $request['unit_reestr'],
+				'vat_amount' => $request['vat_reestr'] ? 1 : 0,
+				'approximate_amount' => $request['approximate_amount_reestr'] ? 1 : 0,
+				'fixed_amount' => $request['fixed_amount_reestr'] ? 1 : 0
+			]);
+			$amount->save();
+		}
 		JournalController::store(Auth::User()->id,'Создание ПЭО контракта с id = ' . $contract->id . '~' . json_encode($all_dirty));
 		if($request->file('new_file_resolution'))
 			ResolutionController::store_resol_new_app($request, $contract->id);
@@ -778,6 +768,13 @@ class ContractController extends Controller
 											->where('name', 'Оплата')
 											->orderBy('invoices.number_invoice', 'asc')
 											->get();
+		$returns = Invoice::select(['*','invoices.id','view_invoices.name_view_invoice'])
+											->leftjoin('view_invoices', 'invoices.id_view_invoice', 'view_invoices.id')
+											->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+											->where('id_contract', $id_contract)
+											->where('name', 'Возврат')
+											->orderBy('invoices.number_invoice', 'asc')
+											->get();
 		$amount_invoice_contract_reestr = 0;
 		$year_amount_invoice_contract_reestr = 0;
 		foreach($invoices as $in_invoice){
@@ -812,12 +809,17 @@ class ContractController extends Controller
 				$amount_payments += $score->amount_p_invoice;
 			else if($score->name == 'Возврат')
 				$amount_returns += $score->amount_p_invoice;
-		$debet = ($amount_invoices - ($amount_payments) + $amount_returns) > 0 ? $amount_invoices - ($amount_payments) + $amount_returns : 0;
-		$kredit = ($amount_payments - $amount_invoices - $amount_returns) > 0 ? ($amount_payments) - $amount_invoices - $amount_returns : 0;
+		$debet = ($amount_invoices - $amount_payments + $amount_returns) > 0 ? $amount_invoices - $amount_payments + $amount_returns : 0;
+		$kredit = ($amount_payments - $amount_invoices - $amount_returns) > 0 ? $amount_payments - $amount_invoices - $amount_returns : 0;
 		//История выполнения работ
 		$work_states = State::select(['states.id','name_state','comment_state','date_state','users.surname','users.name','users.patronymic'])->join('users','users.id','states.id_user')->where('id_contract', $id_contract)->where('is_work_state', 1)->get();
         //Типы резолюций
-		$type_resolutions = DB::SELECT('SELECT * FROM type_resolutions');		
+		$type_resolutions = DB::SELECT('SELECT * FROM type_resolutions');
+		// Срок исполнения обязательств Д/К
+		$all_reest_date_maturity = ReestrDateMaturity::select()->where('id_contract', $id_contract)->get();
+		// Суммы по Д/К
+		$units = DB::SELECT('SELECT * FROM units');
+		$all_reestr_amount = ReestrAmount::select(['*','reestr_amounts.id'])->leftJoin('units', 'unit_amount', 'units.id')->where('id_contract', $id_contract)->get();
 		return view('department.peo.show_contract', ['reestr'=>$reestr,
 															'contract'=>$contract, 
 															'viewContracts'=>$view_contracts, 
@@ -829,9 +831,18 @@ class ContractController extends Controller
 															'prepayments'=>$prepayments,
 															'invoices'=>$invoices,
 															'payments'=>$payments,
+															'returns'=>$returns,
+															'amount_scores'=>$amount_scores,
+															'amount_prepayments'=>$amount_prepayments,
+															'amount_invoices'=>$amount_invoices,
+															'amount_payments'=>$amount_payments,
+															'amount_returns'=>$amount_returns,
 															'debet'=>$debet,
 															'kredit'=>$kredit,
-															'work_states'=>$work_states
+															'work_states'=>$work_states,
+															'all_reest_date_maturity'=>$all_reest_date_maturity,
+															'units'=>$units,
+															'all_reestr_amount'=>$all_reestr_amount
 															]);
 	}
 	
@@ -894,7 +905,7 @@ class ContractController extends Controller
 	}
 	
 	public function show_additional_documents($id_contract)
-	{
+	{	
 		$contract = Contract::select(['contracts.id','number_contract','item_contract','app_outgoing_number_reestr','date_maturity_reestr','amount_reestr','amount_year_reestr'])
 							->leftJoin('reestr_contracts', 'contracts.id','reestr_contracts.id_contract_reestr')
 							->where('contracts.id',$id_contract)->get()[0];
@@ -903,7 +914,7 @@ class ContractController extends Controller
 			$contract->amount_reestr = number_format($contract->amount_reestr, 2, '.', '&nbsp;');
 		if(is_numeric($contract->amount_year_reestr))
 			$contract->amount_year_reestr = number_format($contract->amount_year_reestr, 2, '.', '&nbsp;');
-		$additional_documents = Protocol::select()->where('id_contract', $id_contract)->get();
+		$additional_documents = Protocol::select()->where('id_contract', $id_contract)->orderBy('position_additional_document')->orderBy('id')->get();
 		foreach($additional_documents as $additional_document)
 		{
 			$resolutions_add = Resolution::select(['*'])->where('id_protocol_resolution', $additional_document->id)->where('deleted_at', null)->orderBy('resolutions.id','desc')->get();
@@ -918,6 +929,18 @@ class ContractController extends Controller
 		$type_resolutions = DB::SELECT('SELECT * FROM type_resolutions');		
 		return view('department.peo.additional_documents', ['id_contract'=>$id_contract, 'resolutions'=>$resolutions, 'additional_documents'=>$additional_documents, 'type_resolutions'=>$type_resolutions, 'contract'=>$contract, 'states'=>$states]);
 	}
+	
+	public function update_position_additional_documents(Request $request, $id_contract)
+	{
+		foreach($request['additional_document_position'] as $key=>$value)
+		{
+			$additional_document = Protocol::select()->where('id_contract', $id_contract)->where('id', $key)->first();
+			$additional_document->position_additional_document = $value;
+			$additional_document->save();
+		}
+		JournalController::store(Auth::User()->id, 'Изменён порядок дог. мат. для контракта с id=' . $id_contract);
+		return redirect()->back()->with(['success'=>'Порядок изменён!']);
+	}
 
     /**
      * Show the form for creating a new resource.
@@ -925,7 +948,7 @@ class ContractController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create($number_document)
-    {		
+    {
 		$counterparties = Counterpartie::select(['*'])->orderBy('name', 'asc')->get();
 		$view_works = ViewWork::all();
 		$view_contracts = ViewContract::select('*')->where('is_sip_view_contract', 1)->get();
@@ -1153,7 +1176,7 @@ class ContractController extends Controller
 			$isFixTime = true;
 		if($isFixTime)
 			$time_start_1 = microtime(1);
-		$contract = Contract::select(['contracts.id','id_counterpartie_contract','number_contract','name_work_contract','item_contract','is_sip_contract','id_goz_contract','goz_works.name_works_goz','id_view_work_contract', 'view_works.name_view_work',
+		$contract = Contract::select(['contracts.id','id_new_application_contract','id_counterpartie_contract','number_contract','name_work_contract','item_contract','is_sip_contract','id_goz_contract','goz_works.name_works_goz','id_view_work_contract', 'view_works.name_view_work',
 										'all_count_contract','concluded_count_contract','amount_concluded_contract','formalization_count_contract',
 										'amount_formalization_contract','big_deal_contract','amoun_implementation_contract','comment_implementation_contract',
 										'prepayment_score_contract','invoice_score_contract','prepayment_payment_contract','amount_payment_contract','renouncement_contract','date_renouncement_contract','document_success_renouncement_reestr','number_aftair_renouncement_reestr',
@@ -1199,6 +1222,8 @@ class ContractController extends Controller
 			$reestr->amount_contract_reestr = number_format($reestr->amount_contract_reestr, 2, '.', ' ');
 		if(is_numeric($reestr->amount_bank_reestr))
 			$reestr->amount_bank_reestr = number_format($reestr->amount_bank_reestr, 2, '.', ' ');
+		if(is_numeric($reestr->amount_begin_reestr))
+			$reestr->amount_begin_reestr = number_format($reestr->amount_begin_reestr, 2, '.', ' ');
 		if(is_numeric($reestr->amount_reestr))
 			$reestr->amount_reestr = number_format($reestr->amount_reestr, 2, '.', ' ');
 		if(is_numeric($reestr->nmcd_reestr))
@@ -1267,6 +1292,16 @@ class ContractController extends Controller
 				}
 			}
 		}
+		
+		// Сроки действия договора
+		$all_reest_date_contract = ReestrDateContract::select()->where('id_contract', $id)->get();
+		
+		// Срок исполнения обязательств Д/К
+		$all_reest_date_maturity = ReestrDateMaturity::select()->where('id_contract', $id)->get();
+		
+		// Суммы по Д/К
+		$all_reestr_amount = ReestrAmount::select(['*','reestr_amounts.id'])->leftJoin('units', 'unit_amount', 'units.id')->where('id_contract', $id)->get();
+		
 		if($isFixTime)
 			$time_end_5 = microtime(1);
 		//Сумма по счетам
@@ -1371,6 +1406,13 @@ class ContractController extends Controller
 												->where('name', 'Оплата')
 												->orderBy('invoices.number_invoice', 'asc')
 												->get();
+			$returns = Invoice::select(['*','invoices.id','view_invoices.name_view_invoice'])
+												->leftjoin('view_invoices', 'invoices.id_view_invoice', 'view_invoices.id')
+												->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+												->where('id_contract', $id)
+												->where('name', 'Возврат')
+												->orderBy('invoices.number_invoice', 'asc')
+												->get();
 			if($isFixTime){
 				$time_end_8 = microtime(1);
 				echo 'Время на получение инфы о контракте: ' . ($time_end_1-$time_start_1) . '<br/>';
@@ -1399,6 +1441,9 @@ class ContractController extends Controller
 																'departments'=>$departments,
 																'big_date_protocol'=>$big_date_protocol,
 																'big_date_add_agreement'=>$big_date_add_agreement,
+																'all_reest_date_contract'=>$all_reest_date_contract,
+																'all_reest_date_maturity'=>$all_reest_date_maturity,
+																'all_reestr_amount'=>$all_reestr_amount,
 																'prev_contract'=>$prev_contract,
 																'next_contract'=>$next_contract,
 																'amount_scores'=>$amount_scores,
@@ -1409,7 +1454,8 @@ class ContractController extends Controller
 																'scores'=>$scores,
 																'prepayments'=>$prepayments,
 																'invoices'=>$invoices,
-																'payments'=>$payments
+																'payments'=>$payments,
+																'returns'=>$returns
 																]);
 		}
 		if($isFixTime){
@@ -1437,6 +1483,9 @@ class ContractController extends Controller
 															'departments'=>$departments,
 															'big_date_protocol'=>$big_date_protocol,
 															'big_date_add_agreement'=>$big_date_add_agreement,
+															'all_reest_date_contract'=>$all_reest_date_contract,
+															'all_reest_date_maturity'=>$all_reest_date_maturity,
+															'all_reestr_amount'=>$all_reestr_amount,
 															'prev_contract'=>$prev_contract,
 															'next_contract'=>$next_contract
 															]);
@@ -1671,6 +1720,8 @@ class ContractController extends Controller
 			$reestr->amount_contract_reestr = str_replace(' ','',$reestr->amount_contract_reestr);
 		if($request['amount_bank_reestr'])
 			$reestr->amount_bank_reestr = str_replace(' ','',$reestr->amount_bank_reestr);
+		if($request['amount_begin_reestr'])
+			$reestr->amount_begin_reestr = str_replace(' ','',$reestr->amount_begin_reestr);
 		if($request['amount_reestr']){
 			$reestr->amount_reestr = str_replace(' ','',$reestr->amount_reestr);
 			if(!$request['amount_contract_reestr'])
@@ -1700,12 +1751,55 @@ class ContractController extends Controller
 						'procurement_goz_reestr' => $request['procurement_goz_reestr'] ? 1 : 0,
 						'other_reestr' => $request['other_reestr'] ? 1 : 0,
 						'mob_reestr' => $request['mob_reestr'] ? 1 : 0,
+						'vat_begin_reestr' => $request['vat_begin_reestr'] ? 1 : 0,
+						'approximate_amount_begin_reestr' => $request['approximate_amount_begin_reestr'] ? 1 : 0,
+						'fixed_amount_begin_reestr' => $request['fixed_amount_begin_reestr'] ? 1 : 0,
 						'vat_reestr' => $request['vat_reestr'] ? 1 : 0,
 						'approximate_amount_reestr' => $request['approximate_amount_reestr'] ? 1 : 0,
+						'fixed_amount_reestr' => $request['fixed_amount_reestr'] ? 1 : 0,
 						'prolongation_reestr' => $request['prolongation_reestr'] ? 1 : 0
 		]);
 		$all_dirty = JournalController::getMyChanges($reestr, $all_dirty);
 		$reestr->save();
+		// Создаём срок действия Д/К
+		if ($request['date_contract_reestr'] || $request['date_e_contract_reestr'])
+		{
+			$date_contract = new ReestrDateContract();
+			$date_contract->fill([
+				'id_contract' => $contract->id,
+				'name_date_contract' => 'Д/К',
+				'term_date_contract' => $request['date_contract_reestr'] ? $request['date_contract_reestr'] : '',
+				'end_date_contract' => $request['date_e_contract_reestr']
+			]);
+			$date_contract->save();
+		}
+		// Создаём срок исполнения обязательств
+		if ($request['date_maturity_reestr'] || $request['date_e_maturity_reestr'])
+		{
+			$date_maturity = new ReestrDateMaturity();
+			$date_maturity->fill([
+				'id_contract' => $contract->id,
+				'name_date_maturity' => 'Д/К',
+				'term_date_maturity' => $request['date_maturity_reestr'],
+				'end_date_maturity' => $request['date_e_maturity_reestr']
+			]);
+			$date_maturity->save();
+		}
+		// Создаём сумму
+		if ($request['amount_reestr'])
+		{
+			$amount = new ReestrAmount();
+			$amount->fill([
+				'id_contract' => $contract->id,
+				'name_amount' => 'Д/К',
+				'value_amount' => $request['amount_reestr'],
+				'unit_amount' => $request['unit_reestr'],
+				'vat_amount' => $request['vat_reestr'] ? 1 : 0,
+				'approximate_amount' => $request['approximate_amount_reestr'] ? 1 : 0,
+				'fixed_amount' => $request['fixed_amount_reestr'] ? 1 : 0
+			]);
+			$amount->save();
+		}
 		JournalController::store(Auth::User()->id,'Создание контракта из реестра с id = ' . $contract->id . '~' . json_encode($all_dirty));
 		if($request->file('new_file_resolution'))
 			ResolutionController::store_resol_new_app($request, $contract->id);
@@ -1766,6 +1860,8 @@ class ContractController extends Controller
 			$reestr->amount_contract_reestr = str_replace(' ','',$reestr->amount_contract_reestr);
 		if($request['amount_bank_reestr'])
 			$reestr->amount_bank_reestr = str_replace(' ','',$reestr->amount_bank_reestr);
+		if($request['amount_begin_reestr'])
+			$reestr->amount_begin_reestr = str_replace(' ','',$reestr->amount_begin_reestr);
 		if($request['amount_reestr'])
 			$reestr->amount_reestr = str_replace(' ','',$reestr->amount_reestr);
 		if($request['nmcd_reestr'])
@@ -1798,6 +1894,45 @@ class ContractController extends Controller
 		]);
 		$all_dirty = JournalController::getMyChanges($reestr, $all_dirty);
 		$reestr->save();
+		// Создаём срок действия Д/К
+		if ($request['date_contract_reestr'] || $request['date_e_contract_reestr'])
+		{
+			$date_contract = new ReestrDateContract();
+			$date_contract->fill([
+				'id_contract' => $contract->id,
+				'name_date_contract' => 'Д/К',
+				'term_date_contract' => $request['date_contract_reestr'] ? $request['date_contract_reestr'] : '',
+				'end_date_contract' => $request['date_e_contract_reestr']
+			]);
+			$date_contract->save();
+		}
+		// Создаём срок исполнения обязательств
+		if ($request['date_maturity_reestr'] || $request['date_e_maturity_reestr'])
+		{
+			$date_maturity = new ReestrDateMaturity();
+			$date_maturity->fill([
+				'id_contract' => $contract->id,
+				'name_date_maturity' => 'Д/К',
+				'term_date_maturity' => $request['date_maturity_reestr'],
+				'end_date_maturity' => $request['date_e_maturity_reestr']
+			]);
+			$date_maturity->save();
+		}
+		// Создаём сумму
+		if ($request['amount_reestr'])
+		{
+			$amount = new ReestrAmount();
+			$amount->fill([
+				'id_contract' => $contract->id,
+				'name_amount' => 'Д/К',
+				'value_amount' => $request['amount_reestr'],
+				'unit_amount' => $request['unit_reestr'],
+				'vat_amount' => $request['vat_reestr'] ? 1 : 0,
+				'approximate_amount' => $request['approximate_amount_reestr'] ? 1 : 0,
+				'fixed_amount' => $request['fixed_amount_reestr'] ? 1 : 0
+			]);
+			$amount->save();
+		}
 		JournalController::store(Auth::User()->id,'Создание СИП контракта из реестра с id = ' . $contract->id . '~' . json_encode($all_dirty));
 		if($request->file('new_file_resolution'))
 			ResolutionController::store_resol_new_app($request, $contract->id);
@@ -1904,7 +2039,9 @@ class ContractController extends Controller
 			$link .= "&view=" . $_GET['view'];
 		} else
 			$view_contract = '';
+		
 		$counterparties = Counterpartie::select(['*'])->orderBy('name', 'asc')->get();
+		$sip_counterparties = Counterpartie::select(['*'])->where('is_sip_counterpartie', 1)->orderBy('name', 'asc')->get();
 		$counterpartie = '';
 		$counerpartie_name = '';
 		if(isset($_GET['counterpartie'])) {
@@ -1948,6 +2085,11 @@ class ContractController extends Controller
 						$link .= "&department=05";
 						break;
 					case 'Второй отдел':
+						$sql_like = '%‐22‐%';
+						$department = '22';
+						$link .= "&department=22";
+						break;
+					case 'Второй отдел (просмотр)':
 						$sql_like = '%‐22‐%';
 						$department = '22';
 						$link .= "&department=22";
@@ -2119,6 +2261,7 @@ class ContractController extends Controller
 		$next_page = $page + 1 <= (int)ceil($contract_count/$paginate_count) ? (int)($page+1) : '';
 		$years = DB::SELECT('SELECT year_contract FROM contracts GROUP BY year_contract ORDER BY year_contract DESC');
 		$view_works = ViewWork::all();
+		$all_view_contracts = ViewContract::select('*')->get();
 		$view_contracts = ViewContract::select()->orderBy('name_view_contract','asc')->get();
 		foreach($contracts as $contract)
 			foreach($counterparties as $counter)
@@ -2136,10 +2279,12 @@ class ContractController extends Controller
 													'year' => $year,
 													'viewWorks' => $view_works,
 													'viewWork' => '',//$view_work,
+													'all_view_contracts' => $all_view_contracts,
 													'viewContracts' => $view_contracts,
 													'viewContract' => $view_contract,
 													'counterparties' => $counterparties,
 													'counterpartie' => $counterpartie,
+													'sip_counterparties' => $sip_counterparties,
 													'department' => $department,
 													'departments' => $departments,
 													'search_name' => $search_name,
@@ -2246,6 +2391,7 @@ class ContractController extends Controller
 						'renouncement_contract' => $request['renouncement_contract'] ? 1 : 0,
 						'date_renouncement_contract' => $request['date_renouncement_contract'],
 						'archive_contract' => $request['archive_contract'] ? 1 : 0,
+						// TODO: нужно подправить! Для сохранения пустого значения!
 						'document_success_renouncement_reestr' => $request['document_success_renouncement_reestr'] ? $request['document_success_renouncement_reestr'] : $contract->document_success_renouncement_reestr,
 						'number_aftair_renouncement_reestr' => $request['number_aftair_renouncement_reestr'] ? $request['number_aftair_renouncement_reestr'] : $contract->number_aftair_renouncement_reestr
 		]);
@@ -2262,8 +2408,12 @@ class ContractController extends Controller
 			$reestr->amount_contract_reestr = str_replace(' ','',$reestr->amount_contract_reestr);
 		if($request['amount_bank_reestr'])
 			$reestr->amount_bank_reestr = str_replace(' ','',$reestr->amount_bank_reestr);
+		if($request['amount_begin_reestr'])
+			$reestr->amount_begin_reestr = str_replace(' ','',$reestr->amount_begin_reestr);
 		if($request['amount_reestr'])
 			$reestr->amount_reestr = str_replace(' ','',$reestr->amount_reestr);
+		if($request['amount_begin_reestr'])
+			$reestr->amount_begin_reestr = str_replace(' ','',$reestr->amount_begin_reestr);
 		if($request['nmcd_reestr'])
 			$reestr->nmcd_reestr = str_replace(' ','',$reestr->nmcd_reestr);
 		if($request['economy_reestr'])
@@ -2288,8 +2438,12 @@ class ContractController extends Controller
 							'procurement_goz_reestr' => $request['procurement_goz_reestr'] ? 1 : 0,
 							'other_reestr' => $request['other_reestr'] ? 1 : 0,
 							'mob_reestr' => $request['mob_reestr'] ? 1 : 0,
-							'vat_reestr' => $request['vat_reestr'] ? 1 : 0,
-							'approximate_amount_reestr' => $request['approximate_amount_reestr'] ? 1 : 0,
+							//'vat_reestr' => $request['vat_reestr'] ? 1 : 0,
+							//'approximate_amount_reestr' => $request['approximate_amount_reestr'] ? 1 : 0,
+							//'fixed_amount_reestr' => $request['fixed_amount_reestr'] ? 1 : 0,
+							'vat_begin_reestr' => $request['vat_begin_reestr'] ? 1 : 0,
+							'approximate_amount_begin_reestr' => $request['approximate_amount_begin_reestr'] ? 1 : 0,
+							'fixed_amount_begin_reestr' => $request['fixed_amount_begin_reestr'] ? 1 : 0,
 							'prolongation_reestr' => $request['prolongation_reestr'] ? 1 : 0
 			]);
 		else
@@ -2305,8 +2459,12 @@ class ContractController extends Controller
 							'cash_contract_reestr' => $request['cash_contract_reestr'] ? 1 : 0,
 							'non_cash_order_reestr' => $request['non_cash_order_reestr'] ? 1 : 0,
 							'non_cash_contract_reestr' => $request['non_cash_contract_reestr'] ? 1 : 0,
-							'vat_reestr' => $request['vat_reestr'] ? 1 : 0,
-							'approximate_amount_reestr' => $request['approximate_amount_reestr'] ? 1 : 0,
+							//'vat_reestr' => $request['vat_reestr'] ? 1 : 0,
+							//'approximate_amount_reestr' => $request['approximate_amount_reestr'] ? 1 : 0,
+							//'fixed_amount_reestr' => $request['fixed_amount_reestr'] ? 1 : 0,
+							'vat_begin_reestr' => $request['vat_begin_reestr'] ? 1 : 0,
+							'approximate_amount_begin_reestr' => $request['approximate_amount_begin_reestr'] ? 1 : 0,
+							'fixed_amount_begin_reestr' => $request['fixed_amount_begin_reestr'] ? 1 : 0,
 							'prolongation_reestr' => $request['prolongation_reestr'] ? 1 : 0,
 							're_registration_reestr' => $request['re_registration_reestr'] ? 1 : 0,
 			]);
@@ -2394,6 +2552,8 @@ class ContractController extends Controller
 					return view('reestr.print_k', $forming_arr_for_print);
 				case 'итоги по виду договора':
 					return view('reestr.print_l', $forming_arr_for_print);
+				case 'справка по виду договоров':
+					return view('reestr.print_sp_view_dep', $forming_arr_for_print);
 				case 'статистика по количеству':
 					return view('reestr.print_statistic_a', $forming_arr_for_print);
 				case 'статистика по сумме':
@@ -2426,9 +2586,88 @@ class ContractController extends Controller
 					return view('reestr.print_spravka_fz', $forming_arr_for_print);
 				case 'договоры сданные 44':
 					return view('reestr.print_spravka_fz', $forming_arr_for_print);
-					break;
 				case 'срок исполнения пэо':
 					return view('reestr.print_srok', $forming_arr_for_print);
+				case 'сведения о количестве и об общей стоимости договоров':
+					return view('reestr.print_sv_count_and_amount', $forming_arr_for_print);
+				
+				// ---- FORMS ----
+				case 'форма проекты на сбыт за период':
+					return view('reestr.forms.print_1_1', $forming_arr_for_print);
+				case 'форма заключенные на сбыт за период':
+					return view('reestr.forms.print_1_2', $forming_arr_for_print);
+				case 'форма отказы на сбыт за период':
+					return view('reestr.forms.print_1_3', $forming_arr_for_print);
+				case 'форма банковские гарантии на сбыт за период':
+					return view('reestr.forms.print_1_4', $forming_arr_for_print);
+				case 'форма отчет по подразделению по исполнителю на сбыт':
+					return view('reestr.forms.print_1_5', $forming_arr_for_print);
+				case 'форма список исполненных договоров на сбыт':
+					return view('reestr.forms.print_1_6', $forming_arr_for_print);
+				case 'форма список договоров вступивших в силу на сбыт':
+					return view('reestr.forms.print_1_7', $forming_arr_for_print);
+				case 'форма проекты на закуп за период':
+					return view('reestr.forms.print_2_1', $forming_arr_for_print);
+				case 'форма заключенные на закуп за период':
+					return view('reestr.forms.print_2_2', $forming_arr_for_print);
+				case 'форма отказы на закуп за период':
+					return view('reestr.forms.print_2_3', $forming_arr_for_print);	
+				case 'форма банковские гарантии на закуп за период':
+					return view('reestr.forms.print_2_4', $forming_arr_for_print);
+				case 'форма отчет об исполнении с единственным поставщиком':
+					return view('reestr.forms.print_2_5', $forming_arr_for_print);
+				case 'форма информация о запросах котировки в электронной форме':
+					return view('reestr.forms.print_2_6', $forming_arr_for_print);
+				case 'форма отчет об исполнении на закуп по итогам электронного аукциона':
+					return view('reestr.forms.print_2_7', $forming_arr_for_print);
+				case 'форма отчет по подразделению по исполнителю на закуп':
+					return view('reestr.forms.print_2_8', $forming_arr_for_print);
+				case 'форма справка о контрагентах на закуп за период':
+					return view('reestr.forms.print_3_1', $forming_arr_for_print);
+				case 'форма справка о контрагентах на сбыт за период':
+					return view('reestr.forms.print_3_2', $forming_arr_for_print);
+				// TODO: form 3.3.
+				// TODO: form 3.4.
+				case 'форма договоры сданные 223':
+					return view('reestr.forms.print_4_1', $forming_arr_for_print);
+				case 'форма договоры сданные 44':
+					return view('reestr.forms.print_4_2', $forming_arr_for_print);
+				// TODO: form 4.3.
+				// TODO: form 4.4.
+				case 'форма пролонгированные за период':
+					return view('reestr.forms.print_5_1', $forming_arr_for_print);
+				case 'форма отчет по иным за период':
+					return view('reestr.forms.print_5_2', $forming_arr_for_print);
+				case 'форма справка о крупных сделках':
+					return view('reestr.forms.print_5_3', $forming_arr_for_print);
+				// TODO: form 5.4.
+				// TODO: form 5.4.1.
+				case 'форма договора по подразделению':
+					return view('reestr.forms.print_5_5', $forming_arr_for_print);
+				case 'форма статистика по количеству':
+					return view('reestr.forms.print_5_6', $forming_arr_for_print);
+				case 'форма итоги по действующим':
+					return view('reestr.forms.print_5_7', $forming_arr_for_print);
+				case 'форма статистика по сумме':
+					return view('reestr.forms.print_5_8', $forming_arr_for_print);
+				case 'форма просроченое по подразделению':
+					return view('reestr.forms.print_5_9', $forming_arr_for_print);
+				case 'форма итоги по реестру':
+					return view('reestr.forms.print_5_10', $forming_arr_for_print);
+				case 'форма итоги по введенным договорам':
+					return view('reestr.forms.print_5_11', $forming_arr_for_print);
+				case 'форма справка по договорам ПЭО':
+					return view('reestr.forms.print_5_12', $forming_arr_for_print);
+				// TODO: form 5.13.
+				case 'форма участник в закупках 223':
+					return view('reestr.forms.print_6_1', $forming_arr_for_print);
+				case 'форма участник в закупках 44':
+					return view('reestr.forms.print_6_2', $forming_arr_for_print);
+				case 'справка по срокам оплаты':
+					return view('reestr.forms.print_7_1', $forming_arr_for_print);
+					
+					
+					
 				default:
 					dd($_GET['real_name_table']);
 					return redirect()->back()->with('error',  $forming_arr_for_print);
@@ -2469,6 +2708,7 @@ class ContractController extends Controller
 												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr 
 												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
 												WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' AND procurement_reestr=1 
+												AND date_entry_into_force_reestr IS NULL 
 												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
 												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
 												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
@@ -2499,6 +2739,7 @@ class ContractController extends Controller
 					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
 												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr 
 												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' 
+												AND date_entry_into_force_reestr IS NULL 
 												AND marketing_reestr=1 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
 												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
 												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
@@ -2527,10 +2768,12 @@ class ContractController extends Controller
 								$fil_dep = $sel_dep->index_department;
 						}
 					}
+					// AND date_signing_contract_reestr IS NOT NULL AND date_signing_contract_counterpartie_reestr IS NOT NULL 
 					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
-												date_maturity_reestr,amount_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr,payment_order_reestr,date_contract_reestr 
+												date_maturity_reestr,amount_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr,payment_order_reestr,date_contract_reestr,
+												is_sip_contract,executor_contract_reestr 
 												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' 
-												AND procurement_reestr=1 AND date_signing_contract_reestr IS NOT NULL AND date_signing_contract_counterpartie_reestr IS NOT NULL 
+												AND procurement_reestr=1 
 												AND (STR_TO_DATE(date_entry_into_force_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
 												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
 												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
@@ -2546,6 +2789,13 @@ class ContractController extends Controller
 						$contract->protocols = $protocols;
 						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
 						$contract->add_agreements = $add_agreements;
+						
+						// Исполнитель
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
 						
 						//Распределяем по подразделениям
 						$split_str = explode('‐',$contract->number_contract);
@@ -2576,10 +2826,12 @@ class ContractController extends Controller
 								$fil_dep = $sel_dep->index_department;
 						}
 					}
+					// AND date_signing_contract_reestr IS NOT NULL AND date_signing_contract_counterpartie_reestr IS NOT NULL 
 					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
-												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr 
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr,
+												is_sip_contract, executor_contract_reestr 
 												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' 
-												AND marketing_reestr=1 AND date_signing_contract_reestr IS NOT NULL AND date_signing_contract_counterpartie_reestr IS NOT NULL 
+												AND marketing_reestr=1 
 												AND (STR_TO_DATE(date_entry_into_force_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
 												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
 												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
@@ -2595,6 +2847,13 @@ class ContractController extends Controller
 						$contract->protocols = $protocols;
 						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
 						$contract->add_agreements = $add_agreements;
+						
+						// Исполнитель
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
 						
 						//Распределяем по подразделениям
 						$split_str = explode('‐',$contract->number_contract);
@@ -2626,7 +2885,8 @@ class ContractController extends Controller
 						}
 					}
 					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
-												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr 
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr,
+												executor_contract_reestr, is_sip_contract 
 												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' 
 												AND procurement_reestr=1 AND (date_signing_contract_reestr IS NULL OR date_signing_contract_counterpartie_reestr IS NULL) 
 												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
@@ -2644,6 +2904,13 @@ class ContractController extends Controller
 						$contract->protocols = $protocols;
 						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
 						$contract->add_agreements = $add_agreements;
+						
+						// Исполнитель
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
 						
 						//Распределяем по подразделениям
 						$split_str = explode('‐',$contract->number_contract);
@@ -2676,7 +2943,7 @@ class ContractController extends Controller
 					}
 					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
 												date_maturity_reestr,amount_contract_reestr,amount_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,
-												score_order_reestr FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+												score_order_reestr, is_sip_contract, executor_contract_reestr FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
 												WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' AND marketing_reestr=1 
 												AND (date_signing_contract_reestr IS NULL OR date_signing_contract_counterpartie_reestr IS NULL) 
 												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
@@ -2694,6 +2961,13 @@ class ContractController extends Controller
 						$contract->protocols = $protocols;
 						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
 						$contract->add_agreements = $add_agreements;
+						
+						// Исполнитель
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
 						
 						//Распределяем по подразделениям
 						$split_str = explode('‐',$contract->number_contract);
@@ -3388,6 +3662,73 @@ class ContractController extends Controller
 								'result'=>$result,
 								'view_contract'=>$view_contract,
 								'lider'=>$lider];
+				case 'справка по виду договоров':
+					$view_contract_str = "contracts.id_counterpartie_contract";
+					$view_contract_equal = ">";
+					$view_contract = '';
+					if(isset($request['view']))
+						if($request['view'] != 'Все виды работ')
+						{
+							$view_contract = $request['view'];
+							$view_contract_str = "view_contracts.id";
+							$view_contract_equal = "=";
+						}
+					$fil_dep = '%';
+					if(isset($request['department'])){
+						if(strlen($request['department']) > 0){
+							$sel_dep = Department::select('index_department')->where('id',$request['department'])->first();
+							if($sel_dep != null)
+								$fil_dep = $sel_dep->index_department;
+						}
+					}
+					$counterparties = Counterpartie::select(['*'])->orderBy('name', 'asc')->get();
+					$contracts = Contract::select(['contracts.id',
+													'id_counterpartie_contract',
+													'number_contract',
+													'name_work_contract',
+													'item_contract',
+													'id_goz_contract',
+													'goz_works.name_works_goz',
+													'id_view_contract', 
+													'view_contracts.name_view_contract',
+													'reestr_contracts.amount_reestr',
+													'reestr_contracts.amount_contract_reestr',
+													'reestr_contracts.date_maturity_date_reestr',
+													'reestr_contracts.date_maturity_reestr',
+													'reestr_contracts.number_counterpartie_contract_reestr',
+													DB::raw('CAST(number_pp as UNSIGNED) as cast_number_pp'),
+													'reestr_contracts.date_contract_reestr',
+													'reestr_contracts.date_entry_into_force_reestr',
+													'executor_contract_reestr',
+													'is_sip_contract'])
+									->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')
+									->join('view_contracts', 'reestr_contracts.id_view_contract', '=', 'view_contracts.id')
+									->join('goz_works', 'contracts.id_goz_contract', '=', 'goz_works.id')
+									->where('number_contract', 'LIKE', '%‐' . $fil_dep . '‐%')
+									->where('contracts.id_counterpartie_contract','>','-1')
+									->where($view_contract_str, $view_contract_equal, $view_contract)
+									->where('archive_contract', 0)
+									->orderBy('year_contract', 'asc')
+									->orderBy('cast_number_pp', 'asc')
+									->get();
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter)
+							if($contract->id_counterpartie_contract == $counter->id)
+								$contract->name_counterpartie_contract = $counter->name;
+
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
+
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+					}
+					return ['contracts'=>$contracts];
 				case 'статистика по количеству':
 					foreach($departments as $department)
 					{
@@ -3906,6 +4247,1183 @@ class ContractController extends Controller
 							array_push($result[$contract->counterpartie_name_full],$contract);
 					}
 					return ['text'=>$text1,'result'=>$result,'lider'=>$lider];
+				case 'сведения о количестве и об общей стоимости договоров':
+					$text1 = 'Сведения о количестве и об общей стоимости договоров, заключенных заказчиком по результатам закупки товаров, работ, услуг ';
+					if($request['fz'] == '223-ФЗ'){
+						$filter_fz = '(marketing_fz_223_reestr=1 OR procurement_fz_223_reestr=1)';
+						$text1 .= 'в рамках "223-ФЗ"';
+					}
+					else if($request['fz'] == '44-ФЗ'){
+						$filter_fz = '(marketing_fz_44_reestr=1 OR procurement_fz_44_reestr=1)';
+						$text1 .= 'в рамках "44-ФЗ"';
+					}
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,id_counterpartie_contract,item_contract,date_registration_project_reestr, 
+											amount_contract_reestr, amount_reestr, okpd_2_reestr, reestr_number_reestr, purchase_reestr, selection_suppliers.name_selection_supplier, 
+											date_entry_into_force_reestr 
+											FROM contracts 
+											LEFT JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+											LEFT JOIN selection_suppliers ON reestr_contracts.selection_supplier_reestr=selection_suppliers.id 
+											WHERE " . $filter_fz . "  
+											AND (STR_TO_DATE(date_entry_into_force_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+											AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+											AND reestr_number_reestr IS NOT NULL 
+											AND reestr_number_reestr != '' 
+											ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract){
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						// Исполнение
+						$amount_av = 0;
+						$amount_nakl = 0;
+						$amount_pp = 0;
+						$obligations = ObligationInvoice::select('*')->where('id_contract', $contract->id)->get();
+						foreach($obligations as $obligation)
+							if($obligation->type_invoice == 5)			// Счёт-фактура
+								$amount_av += $obligation->amount;
+							else if ($obligation->type_invoice == 6)	// Товарные накладные
+								$amount_nakl += $obligation->amount;
+							else if ($obligation->type_invoice == 8)	// Акты (для услуг)
+								$amount_nakl += $obligation->amount;
+							else if ($obligation->type_invoice == 7)	// Платежные поручения
+								$amount_pp += $obligation->amount;
+						$contract->amount_st = $amount_av + $amount_nakl;
+						$contract->amount_pp = $amount_pp;
+					}
+					return ['text'=>$text1,'contracts'=>$contracts,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'lider'=>$lider];
+				
+				// ---- FORMS ----
+				case 'форма проекты на сбыт за период':
+					$text1 = 'Справка по подразделению на сбыт: проекты Договоров (Контрактов) за период: ';
+					$fil_dep = '%';
+					if(isset($request['department'])){
+						if(strlen($request['department']) > 0){
+							$sel_dep = Department::select('index_department')->where('id',$request['department'])->first();
+							if($sel_dep != null)
+								$fil_dep = $sel_dep->index_department;
+						}
+					}
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr, 
+												is_sip_contract,executor_contract_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' 
+												AND date_entry_into_force_reestr IS NULL 
+												AND marketing_reestr=1 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					
+					$result = [];
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+						
+						// Исполнитель
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
+						
+						//Распределяем по подразделениям
+						$split_str = explode('‐',$contract->number_contract);
+						if(count($split_str) > 1)
+							foreach($departments as $department)
+							{
+								if($split_str[1] == $department->index_department)
+								{
+									if(!in_array($department->name_department,array_keys($result)))
+										$result += [$department->name_department => [$contract]];
+									else
+										array_push($result[$department->name_department],$contract);
+									break;
+								}
+							}
+						else
+							$result += ['' => [$contract]];
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'result'=>$result,'lider'=>$lider];
+				case 'форма заключенные на сбыт за период':
+					$text1 = 'Справка на сбыт: заключенные Договора (Контракты) (предприятия, подразделения) за период';
+					$result = [];
+					$fil_dep = '%';
+					if(isset($request['department'])){
+						if(strlen($request['department']) > 0){
+							$sel_dep = Department::select('index_department')->where('id',$request['department'])->first();
+							if($sel_dep != null)
+								$fil_dep = $sel_dep->index_department;
+						}
+					}
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr,
+												is_sip_contract,executor_contract_reestr,date_entry_into_force_reestr  
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' 
+												AND marketing_reestr=1 AND date_signing_contract_reestr IS NOT NULL AND date_signing_contract_counterpartie_reestr IS NOT NULL 
+												AND (STR_TO_DATE(date_entry_into_force_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+						
+						// Исполнитель
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
+						
+						//Распределяем по подразделениям
+						$split_str = explode('‐',$contract->number_contract);
+						if(count($split_str) > 1)
+							foreach($departments as $department)
+							{
+								if($split_str[1] == $department->index_department)
+								{
+									if(!in_array($department->name_department,array_keys($result)))
+										$result += [$department->name_department => [$contract]];
+									else
+										array_push($result[$department->name_department],$contract);
+									break;
+								}
+							}
+						else
+							$result += ['' => [$contract]];
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'result'=>$result,'count_contracts'=>count($contracts),'lider'=>$lider];
+				case 'форма отказы на сбыт за период':
+					$text1 = 'Справка по подразделению на сбыт: ОТКАЗЫ по Договорам (Контрактам) за период';
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr WHERE marketing_reestr=1 AND renouncement_contract=1 
+												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								$contract->counterpartie_name_full = $counter->name_full;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'contracts'=>$contracts,'lider'=>$lider];
+				case 'форма банковские гарантии на сбыт за период':
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,amount_bank_reestr,date_bank_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr 
+												FROM contracts LEFT JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+												WHERE marketing_reestr=1 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												AND amount_bank_reestr IS NOT NULL AND amount_bank_reestr != '' 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+					}
+					return ['period1'=>$request['date_begin'],'period2'=>$request['date_end'],'contracts'=>$contracts,'count_contracts'=>count($contracts),'lider'=>$lider];
+				case 'форма отчет по подразделению по исполнителю на сбыт':
+					$text1 = 'Отчет о Договорах/Контрактов по подразделению по Исполнителю';
+					$result = [];
+					$department = Department::select('index_department','name_department')->where('id',$request['department'])->first();
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr,
+												oud_curators.FIO as executor,executor_contract_reestr,executor_reestr,is_sip_contract 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr LEFT JOIN oud_curators ON executor_reestr=oud_curators.id 
+												WHERE marketing_reestr=1 AND number_contract LIKE '%‐" . $department->index_department . "‐%' 
+												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+						
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
+						
+						//Распределяем по исполнителям
+						$key_executor = str_replace('.', '', str_replace(' ', '', $contract->executor_contract_reestr));
+						if(!in_array($key_executor,array_keys($result)))
+							$result += [$key_executor => [$contract]];
+						else
+							array_push($result[$key_executor],$contract);
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'result'=>$result,'count_contracts'=>count($contracts),'lider'=>$lider];
+				case 'форма список исполненных договоров на сбыт':
+					$fil_dep = '%';
+					if(isset($request['department'])){
+						if(strlen($request['department']) > 0){
+							$sel_dep = Department::select('index_department')->where('id',$request['department'])->first();
+							if($sel_dep != null)
+								$fil_dep = $sel_dep->index_department;
+						}
+					}
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,id_counterpartie_contract,is_sip_contract,executor_contract_reestr,
+											date_contract_on_first_reestr,item_contract,amount_contract_reestr,amount_reestr,date_maturity_reestr,date_signing_contract_reestr,
+											date_signing_contract_counterpartie_reestr,date_entry_into_force_reestr,date_save_contract_reestr,id_goz_contract,goz_works.name_works_goz 
+											FROM contracts 
+											JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+											LEFT JOIN goz_works ON contracts.id_goz_contract=goz_works.id 
+											WHERE marketing_reestr=1 AND number_contract LIKE '%‐" . $fil_dep . "‐%' AND (date_entry_into_force_reestr IS NOT NULL) 
+											AND (STR_TO_DATE(date_entry_into_force_reestr, '%d.%m.%Y') <= '" . $period2 . "') 
+											AND ((STR_TO_DATE(date_signing_contract_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "' OR STR_TO_DATE(date_signing_contract_counterpartie_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')) 
+											AND is_sip_contract=1 
+											ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					$result = [];
+					foreach($contracts as $contract){
+						//Исполнение
+						$amount_scores = 0;
+						$amount_prepayments = 0;
+						$amount_invoices = 0;
+						$amount_payments = 0;
+						$amount_returns = 0;
+						$invoices = Invoice::select(['invoices.amount_p_invoice', 'name_invoices.name', 'is_prepayment_invoice'])
+													->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+													->where('id_contract', $contract->id)
+													->get();
+						foreach($invoices as $score)
+							if($score->name == 'Счет на оплату')
+								$amount_scores += $score->amount_p_invoice;
+							else if($score->name == 'Счет-фактура')
+								$amount_invoices += $score->amount_p_invoice;
+							else if($score->name == 'Оплата')
+								if($score->is_prepayment_invoice == 0)
+									$amount_payments += $score->amount_p_invoice;
+								else
+									$amount_prepayments += $score->amount_p_invoice;
+							else if($score->name == 'Возврат')
+								$amount_returns += $score->amount_p_invoice;
+						$contract->amount_scores = $amount_scores;
+						$contract->amount_prepayments = $amount_prepayments;
+						$contract->amount_invoices = $amount_invoices;
+						$contract->amount_payments = $amount_payments;
+						$contract->amount_returns = $amount_returns;
+						
+						// Проверка на исполнение по сумме оплат
+						if($amount_payments + $amount_prepayments - $amount_invoices - $amount_returns != 0)
+							continue;
+
+						// Проверка на исполнение по статусу работы
+						$states = State::select(['*'])->where('id_contract', $contract->id)->where('is_work_state', 1)->get();
+						if(count($states) > 0){
+							if($states[count($states) - 1]->name_state != 'Выполнен')
+								continue;
+						}else
+							continue;
+						
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
+						if(!in_array($contract->counterpartie_name,array_keys($result)))
+							$result += [$contract->counterpartie_name => [$contract]];
+						else
+							array_push($result[$contract->counterpartie_name],$contract);
+					}
+					return ['period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'result'=>$result,
+								'lider'=>$lider];
+				case 'форма список договоров вступивших в силу на сбыт':
+					$fil_dep = '%';
+					if(isset($request['department'])){
+						if(strlen($request['department']) > 0){
+							$sel_dep = Department::select('index_department')->where('id',$request['department'])->first();
+							if($sel_dep != null)
+								$fil_dep = $sel_dep->index_department;
+						}
+					}
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,id_counterpartie_contract,is_sip_contract,executor_contract_reestr,
+											date_contract_on_first_reestr,item_contract,amount_contract_reestr,amount_reestr,date_maturity_reestr,date_signing_contract_reestr,
+											date_signing_contract_counterpartie_reestr,date_entry_into_force_reestr,date_save_contract_reestr 
+											FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+											WHERE marketing_reestr=1 AND number_contract LIKE '%‐" . $fil_dep . "‐%' AND (date_entry_into_force_reestr IS NOT NULL) 
+											AND (STR_TO_DATE(date_entry_into_force_reestr, '%d.%m.%Y') <= '" . $period2 . "') 
+											AND ((STR_TO_DATE(date_signing_contract_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "' OR STR_TO_DATE(date_signing_contract_counterpartie_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')) 
+											AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+											AND is_sip_contract=1 
+											ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					$result = [];
+					foreach($contracts as $contract){
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
+						if(!in_array($contract->counterpartie_name,array_keys($result)))
+							$result += [$contract->counterpartie_name => [$contract]];
+						else
+							array_push($result[$contract->counterpartie_name],$contract);
+						//Исполнение
+						$amount_scores = 0;
+						$amount_prepayments = 0;
+						$amount_invoices = 0;
+						$amount_payments = 0;
+						$amount_returns = 0;
+						$invoices = Invoice::select(['invoices.amount_p_invoice', 'name_invoices.name', 'is_prepayment_invoice'])
+													->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+													->where('id_contract', $contract->id)
+													->get();
+						foreach($invoices as $score)
+							if($score->name == 'Счет на оплату')
+								$amount_scores += $score->amount_p_invoice;
+							else if($score->name == 'Счет-фактура')
+								$amount_invoices += $score->amount_p_invoice;
+							else if($score->name == 'Оплата')
+								if($score->is_prepayment_invoice == 0)
+									$amount_payments += $score->amount_p_invoice;
+								else
+									$amount_prepayments += $score->amount_p_invoice;
+							else if($score->name == 'Возврат')
+								$amount_returns += $score->amount_p_invoice;
+						$contract->amount_scores = $amount_scores;
+						$contract->amount_prepayments = $amount_prepayments;
+						$contract->amount_invoices = $amount_invoices;
+						$contract->amount_payments = $amount_payments;
+						$contract->amount_returns = $amount_returns;
+					}
+					return ['period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'result'=>$result,
+								'lider'=>$lider];
+				case 'форма проекты на закуп за период':
+					$text1 = 'Справка: проекты Договоров (Контрактов) на закуп';
+					//dd(DATE('Y-m-d', strtotime($period1)));
+					/*$contracts = Contract::select('contracts.id','contracts.number_contract','number_counterpartie_contract_reestr','id_counterpartie_contract','item_contract',
+													'date_maturity_reestr','amount_contract_reestr','payment_order_reestr','date_contract_reestr')
+										->join('reestr_contracts','contracts.id','reestr_contracts.id_contract_reestr')
+										->whereBetween('date_registration_project_reestr', array(DATE('Y-m-d', strtotime($period1)),DATE('Y-m-d', strtotime($period2))))
+										->get();*/
+					$fil_dep = '%';
+					if(isset($request['department'])){
+						if(strlen($request['department']) > 0){
+							$sel_dep = Department::select('index_department')->where('id',$request['department'])->first();
+							if($sel_dep != null)
+								$fil_dep = $sel_dep->index_department;
+						}
+					}
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+												WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' AND procurement_reestr=1 
+												AND date_entry_into_force_reestr IS NULL 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'contracts'=>$contracts,'lider'=>$lider];
+				case 'форма заключенные на закуп за период':
+					$text1 = 'Справка на закуп: заключенные Договора (Контракты) (предприятия, подразделения) за период';
+					$result = [];
+					$fil_dep = '%';
+					if(isset($request['department'])){
+						if(strlen($request['department']) > 0){
+							$sel_dep = Department::select('index_department')->where('id',$request['department'])->first();
+							if($sel_dep != null)
+								$fil_dep = $sel_dep->index_department;
+						}
+					}
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' 
+												AND procurement_reestr=1 AND date_signing_contract_reestr IS NOT NULL AND date_signing_contract_counterpartie_reestr IS NOT NULL 
+												AND (STR_TO_DATE(date_entry_into_force_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+						
+						//Распределяем по подразделениям
+						$split_str = explode('‐',$contract->number_contract);
+						if(count($split_str) > 1)
+							foreach($departments as $department)
+							{
+								if($split_str[1] == $department->index_department)
+								{
+									if(!in_array($department->name_department,array_keys($result)))
+										$result += [$department->name_department => [$contract]];
+									else
+										array_push($result[$department->name_department],$contract);
+									break;
+								}
+							}
+						else
+							$result += ['' => [$contract]];
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'result'=>$result,'count_contracts'=>count($contracts),'lider'=>$lider];
+				case 'форма отказы на закуп за период':
+					$text1 = 'Справка по подразделению на закуп: ОТКАЗЫ по Договорам (Контрактам) за период';
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr WHERE procurement_reestr=1 AND renouncement_contract=1 
+												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								$contract->counterpartie_name_full = $counter->name_full;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'contracts'=>$contracts,'lider'=>$lider];
+				case 'форма банковские гарантии на закуп за период':
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,amount_bank_reestr,date_bank_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr 
+												FROM contracts LEFT JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+												WHERE procurement_reestr=1 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												AND amount_bank_reestr IS NOT NULL AND amount_bank_reestr != '' 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+					}
+					return ['period1'=>$request['date_begin'],'period2'=>$request['date_end'],'contracts'=>$contracts,'count_contracts'=>count($contracts),'lider'=>$lider];
+				case 'форма отчет об исполнении с единственным поставщиком':
+					$text = 'Отчет об исполнении Договоров (Контрактов) с Единственным поставщиком в рамках ' . $request['fz'];
+					if($request['fz'] == '223-ФЗ')
+						$filter_fz = '(marketing_fz_223_reestr=1 OR procurement_fz_223_reestr=1)';
+					else if($request['fz'] == '44-ФЗ')
+						$filter_fz = '(marketing_fz_44_reestr=1 OR procurement_fz_44_reestr=1)';
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,id_counterpartie_contract,executor_reestr,oud_curators.FIO,item_contract,date_registration_project_reestr,
+											amount_contract_reestr,nmcd_reestr,economy_reestr 
+											FROM contracts LEFT JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+											JOIN selection_suppliers ON reestr_contracts.selection_supplier_reestr=selection_suppliers.id 
+											LEFT JOIN oud_curators ON reestr_contracts.executor_reestr=oud_curators.id 
+											WHERE " . $filter_fz . " AND name_selection_supplier='Единственный поставщик' 
+											AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+											AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+											ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract){
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+					}
+					return ['fz'=>$request['fz'],
+								'period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'contracts'=>$contracts,
+								'text'=>$text,
+								'lider'=>$lider];
+				case 'форма информация о запросах котировки в электронной форме':
+					$text = 'Отчет о проведенных запросах котировок в электронной форме в рамках ' . $request['fz'];
+					if($request['fz'] == '223-ФЗ')
+						$filter_fz = '(marketing_fz_223_reestr=1 OR procurement_fz_223_reestr=1)';
+					else if($request['fz'] == '44-ФЗ')
+						$filter_fz = '(marketing_fz_44_reestr=1 OR procurement_fz_44_reestr=1)';
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,id_counterpartie_contract,executor_reestr,oud_curators.FIO,item_contract,date_registration_project_reestr,
+											amount_contract_reestr,nmcd_reestr,economy_reestr 
+											FROM contracts LEFT JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+											JOIN selection_suppliers ON reestr_contracts.selection_supplier_reestr=selection_suppliers.id 
+											LEFT JOIN oud_curators ON reestr_contracts.executor_reestr=oud_curators.id 
+											WHERE " . $filter_fz . " AND (name_selection_supplier='Запрос котировки в эл. форме для СМСП' OR name_selection_supplier='Запрос котировки в эл. форме') 
+											AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+											AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+											ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract){
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+					}
+					return ['fz'=>$request['fz'],
+								'period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'contracts'=>$contracts,
+								'text'=>$text,
+								'lider'=>$lider];
+				case 'форма отчет об исполнении на закуп по итогам электронного аукциона':
+					$text = 'Отчет об исполнении Договора на закуп товаров, работ, услуг заключенного по итогам электронного аукциона в рамках ' . $request['fz'];
+					if($request['fz'] == '223-ФЗ')
+						$filter_fz = '(marketing_fz_223_reestr=1 OR procurement_fz_223_reestr=1)';
+					else if($request['fz'] == '44-ФЗ')
+						$filter_fz = '(marketing_fz_44_reestr=1 OR procurement_fz_44_reestr=1)';
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,id_counterpartie_contract,executor_reestr,oud_curators.FIO,item_contract,date_registration_project_reestr,
+											amount_contract_reestr,nmcd_reestr,economy_reestr 
+											FROM contracts LEFT JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+											JOIN selection_suppliers ON reestr_contracts.selection_supplier_reestr=selection_suppliers.id 
+											LEFT JOIN oud_curators ON reestr_contracts.executor_reestr=oud_curators.id 
+											WHERE " . $filter_fz . " AND (name_selection_supplier='Эл. аукцион' OR name_selection_supplier='Эл. аукцион для СМСП') 
+											AND procurement_reestr=1 
+											AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+											AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+											ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract){
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+					}
+					return ['fz'=>$request['fz'],
+								'period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'contracts'=>$contracts,
+								'text'=>$text,
+								'lider'=>$lider];
+				case 'форма отчет по подразделению по исполнителю на закуп':
+					$text1 = 'Отчет о Договорах/Контрактов по подразделению по Исполнителю';
+					$result = [];
+					$department = Department::select('index_department','name_department')->where('id',$request['department'])->first();
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr,
+												oud_curators.FIO as executor,executor_contract_reestr,executor_reestr,is_sip_contract 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr LEFT JOIN oud_curators ON executor_reestr=oud_curators.id 
+												WHERE procurement_reestr=1 AND number_contract LIKE '%‐" . $department->index_department . "‐%' 
+												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+						
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
+						
+						//Распределяем по исполнителям
+						$key_executor = str_replace('.', '', str_replace(' ', '', $contract->executor_contract_reestr));
+						if(!in_array($key_executor,array_keys($result)))
+							$result += [$key_executor => [$contract]];
+						else
+							array_push($result[$key_executor],$contract);
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'result'=>$result,'count_contracts'=>count($contracts),'lider'=>$lider];
+				case 'форма справка о контрагентах на закуп за период':
+					$text1 = 'Справка о Договорах/Контрактах по контрагентам';
+					$result = [];
+					$fil_dep = '%';
+					if(isset($request['department'])){
+						if(strlen($request['department']) > 0){
+							$sel_dep = Department::select('index_department')->where('id',$request['department'])->first();
+							if($sel_dep != null)
+								$fil_dep = $sel_dep->index_department;
+						}
+					}
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' 
+												AND procurement_reestr=1 
+												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								$contract->counterpartie_name_full = $counter->name_full;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+						
+						//Распределяем по контрагентам
+						if(!in_array($contract->counterpartie_name_full,array_keys($result)))
+							$result += [$contract->counterpartie_name_full => [$contract]];
+						else
+							array_push($result[$contract->counterpartie_name_full],$contract);
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'result'=>$result,'count_contracts'=>count($contracts),'lider'=>$lider];
+				case 'форма справка о контрагентах на сбыт за период':
+					$text1 = 'Справка о Договорах/Контрактах по контрагентам';
+					$result = [];
+					$fil_dep = '%';
+					if(isset($request['department'])){
+						if(strlen($request['department']) > 0){
+							$sel_dep = Department::select('index_department')->where('id',$request['department'])->first();
+							if($sel_dep != null)
+								$fil_dep = $sel_dep->index_department;
+						}
+					}
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' 
+												AND marketing_reestr=1 
+												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								$contract->counterpartie_name_full = $counter->name_full;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+						
+						//Распределяем по контрагентам
+						if(!in_array($contract->counterpartie_name_full,array_keys($result)))
+							$result += [$contract->counterpartie_name_full => [$contract]];
+						else
+							array_push($result[$contract->counterpartie_name_full],$contract);
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'result'=>$result,'count_contracts'=>count($contracts),'lider'=>$lider];
+				case 'форма договоры сданные 223':
+					$query = "SELECT contracts.id,contracts.number_contract,date_save_contract_reestr,number_counterpartie_contract_reestr,amount_contract_reestr,amount_reestr 
+								FROM contracts LEFT JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+								WHERE marketing_fz_223_reestr=1 AND procurement_reestr=1 AND (STR_TO_DATE(date_save_contract_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+								AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+								ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC";
+					$contracts = DB::SELECT($query);
+					return ['number_fz'=>223,
+								'period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'contracts'=>$contracts,
+								'lider'=>$lider
+								];
+				case 'форма договоры сданные 44':
+					$query = "SELECT contracts.id,contracts.number_contract,date_save_contract_reestr,number_counterpartie_contract_reestr,amount_contract_reestr,amount_reestr 
+								FROM contracts LEFT JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+								WHERE marketing_fz_44_reestr=1 AND procurement_reestr=1 AND (STR_TO_DATE(date_save_contract_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+								AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+								ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC";
+					$contracts = DB::SELECT($query);
+					return ['number_fz'=>44,
+								'period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'contracts'=>$contracts,
+								'lider'=>$lider
+								];
+				case 'форма пролонгированные за период':
+					$text1 = 'Пролонгированные Договора (Контракты)';
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+												WHERE prolongation_reestr=1 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								$contract->counterpartie_name_full = $counter->name_full;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'contracts'=>$contracts,'lider'=>$lider];
+				case 'форма отчет по иным за период':
+					$text1 = 'Список - иные Договора (Контракты)';
+					$result = [];
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,name_view_contract,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+												JOIN view_contracts ON reestr_contracts.id_view_contract=view_contracts.id 
+												WHERE other_reestr=1 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								$contract->counterpartie_name_full = $counter->name_full;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+						
+						//Распределяем по видам договоров
+						if(!in_array($contract->name_view_contract,array_keys($result)))
+							$result += [$contract->name_view_contract => [$contract]];
+						else
+							array_push($result[$contract->name_view_contract],$contract);
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'result'=>$result,'count_contracts'=>count($contracts),'lider'=>$lider];
+				case 'форма справка о крупных сделках':
+					$query = "SELECT contracts.id,contracts.number_contract,date_registration_project_reestr,item_contract,number_inquiry_reestr,date_inquiry_reestr,number_answer_reestr,
+							date_answer_reestr,amount_contract_reestr,amount_reestr,date_contract_reestr,date_maturity_reestr 
+							FROM contracts LEFT JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+							WHERE (number_inquiry_reestr IS NOT NULL OR number_answer_reestr IS NOT NULL) 
+							AND (STR_TO_DATE(date_inquiry_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+							AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+							ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC";
+					$contracts = DB::SELECT($query);
+					return ['period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'contracts'=>$contracts,
+								'lider'=>$lider,
+								'mini_title'=>'Справка о согласованиях крупных сделок',
+								'title'=>'Справка о согласованиях, полученных в текущем и предшествующем году, с указанием условий совершения соответствующих сделок',
+								'query'=>$query];
+				case 'форма договора по подразделению':
+					$department = Department::select('index_department','name_department')->where('id',$request['department'])->first();
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,id_counterpartie_contract,amount_contract_reestr,renouncement_contract,
+											date_entry_into_force_reestr,procurement_reestr,marketing_reestr,investments_reestr,other_reestr,item_contract,archive_contract 
+											FROM contracts LEFT JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+											WHERE number_contract LIKE '%‐" . $department->index_department . "‐%' 
+											AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+											AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL)
+											ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract){
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+					}
+					return ['period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'contracts'=>$contracts,
+								'lider'=>$lider];
+				case 'форма статистика по количеству':
+					foreach($departments as $department)
+					{
+						$procurement_count = DB::SELECT("SELECT count(*) as count FROM statics_count_contract WHERE number_contract like '%‐" . $department->index_department . "‐%' AND procurement_reestr=1 AND renouncement_contract=0 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$department->procurement_count = $procurement_count;
+						$marketing_count = DB::SELECT("SELECT count(*) as count FROM statics_count_contract WHERE number_contract like '%‐" . $department->index_department . "‐%' AND marketing_reestr=1 AND renouncement_contract=0 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$department->marketing_count = $marketing_count;
+						$procurement_marketing_count = DB::SELECT("SELECT count(*) as count FROM statics_count_contract WHERE number_contract like '%‐" . $department->index_department . "‐%' AND procurement_reestr=1 AND marketing_reestr=1 AND renouncement_contract=0 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$department->procurement_marketing_count = $procurement_marketing_count;
+						$other_count = DB::SELECT("SELECT count(*) as count FROM statics_count_contract WHERE number_contract like '%‐" . $department->index_department . "‐%' AND other_reestr=1 AND renouncement_contract=0 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$department->other_count = $other_count;
+						$break_count = DB::SELECT("SELECT count(*) as count FROM statics_count_contract WHERE number_contract like '%‐" . $department->index_department . "‐%' AND renouncement_contract=1 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$department->break_count = $break_count;
+						$department->all_count = $procurement_count + $marketing_count + $procurement_marketing_count + $other_count + $break_count;
+					}
+					return ['period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'departments'=>$departments,
+								'lider'=>$lider];
+				case 'форма итоги по действующим':
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,amount_contract_reestr,amount_reestr,procurement_reestr,marketing_reestr,investments_reestr,other_reestr 
+											FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+											WHERE date_entry_into_force_reestr IS NOT NULL 
+											AND (STR_TO_DATE(date_entry_into_force_reestr, '%d.%m.%Y') <= '" . $period2 . "') 
+											AND ((STR_TO_DATE(date_signing_contract_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "' OR STR_TO_DATE(date_signing_contract_counterpartie_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')) 
+											ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					$result = [];
+					foreach($contracts as $contract){
+						//Исполнение
+						$amount_scores = 0;
+						$amount_prepayments = 0;
+						$amount_invoices = 0;
+						$amount_payments = 0;
+						$amount_returns = 0;
+						$invoices = Invoice::select(['invoices.amount_p_invoice', 'name_invoices.name', 'is_prepayment_invoice'])
+													->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+													->where('id_contract', $contract->id)
+													->get();
+						foreach($invoices as $score)
+							if($score->name == 'Счет на оплату')
+								$amount_scores += $score->amount_p_invoice;
+							else if($score->name == 'Счет-фактура')
+								$amount_invoices += $score->amount_p_invoice;
+							else if($score->name == 'Оплата')
+								if($score->is_prepayment_invoice == 0)
+									$amount_payments += $score->amount_p_invoice;
+								else
+									$amount_prepayments += $score->amount_p_invoice;
+							else if($score->name == 'Возврат')
+								$amount_returns += $score->amount_p_invoice;
+						$contract->amount_scores = $amount_scores;
+						$contract->amount_prepayments = $amount_prepayments;
+						$contract->amount_invoices = $amount_invoices;
+						$contract->amount_payments = $amount_payments;
+						$contract->amount_returns = $amount_returns;
+						
+						// Проверка на исполнение по статусу работы
+						$status = true;
+						$states = State::select(['*'])->where('id_contract', $contract->id)->where('is_work_state', 1)->get();
+						if(count($states) > 0){
+							if($states[count($states) - 1]->name_state != 'Выполнен')
+								$status = false;
+							else
+								continue;
+						}else
+							$status = false;
+						
+						// Проверка на исполнение по сумме оплат
+						if($amount_payments + $amount_prepayments - $amount_invoices - $amount_returns != 0 && $status == true)
+							continue;
+						
+						//Распределяем по подразделениям
+						$split_str = explode('‐',$contract->number_contract);
+						if(count($split_str) > 1)
+							foreach($departments as $department)
+							{
+								if($split_str[1] == $department->index_department)
+								{
+									if(!in_array($department->name_department,array_keys($result)))
+										$result += [$department->name_department => [$contract]];
+									else
+										array_push($result[$department->name_department],$contract);
+									break;
+								}
+							}
+						else
+							$result += ['' => [$contract]];
+					}
+					return ['period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'result'=>$result,
+								'lider'=>$lider];
+				case 'форма статистика по сумме':
+					foreach($departments as $department)
+					{
+						$count_100 = DB::SELECT("SELECT count(contracts.id) as count FROM contracts LEFT JOIN reestr_contracts ON reestr_contracts.id_contract_reestr=contracts.id WHERE contracts.number_contract like '%‐" . $department->index_department . "‐%' AND procurement_reestr=1 AND amount_reestr<100000 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$department->count_100 = $count_100;
+						$count_300 = DB::SELECT("SELECT count(contracts.id) as count FROM contracts LEFT JOIN reestr_contracts ON reestr_contracts.id_contract_reestr=contracts.id WHERE contracts.number_contract like '%‐" . $department->index_department . "‐%' AND procurement_reestr=1 AND amount_reestr<500000 AND amount_reestr>100000 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$department->count_300 = $count_300;
+						$count_700 = DB::SELECT("SELECT count(contracts.id) as count FROM contracts LEFT JOIN reestr_contracts ON reestr_contracts.id_contract_reestr=contracts.id WHERE contracts.number_contract like '%‐" . $department->index_department . "‐%' AND procurement_reestr=1 AND amount_reestr<1000000 AND amount_reestr>500000 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$department->count_700 = $count_700;
+						$count_lyam = DB::SELECT("SELECT count(contracts.id) as count FROM contracts LEFT JOIN reestr_contracts ON reestr_contracts.id_contract_reestr=contracts.id WHERE contracts.number_contract like '%‐" . $department->index_department . "‐%' AND procurement_reestr=1 AND amount_reestr>1000000 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$department->count_lyam = $count_lyam;
+						$count_null = DB::SELECT("SELECT count(contracts.id) as count FROM contracts LEFT JOIN reestr_contracts ON reestr_contracts.id_contract_reestr=contracts.id WHERE contracts.number_contract like '%‐" . $department->index_department . "‐%' AND procurement_reestr=1 AND amount_reestr IS NULL AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$department->count_null = $count_null;
+						$department->all_count = $count_100 + $count_300 + $count_700 + $count_lyam + $count_null;
+					}
+					return ['period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'departments'=>$departments,
+								'lider'=>$lider];
+				case 'форма просроченое по подразделению':
+					$department = Department::select('index_department','name_department')->where('id',$request['department'])->first();
+					if($department != null)
+						$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+													date_maturity_reestr,amount_contract_reestr,amount_reestr,payment_order_reestr,date_contract_reestr,oud_curators.FIO as executor,executor_contract_reestr,executor_reestr,is_sip_contract FROM contracts JOIN reestr_contracts ON 
+													contracts.id=reestr_contracts.id_contract_reestr LEFT JOIN oud_curators ON executor_reestr=oud_curators.id WHERE number_contract LIKE '%‐" . $department->index_department . "‐%' 
+													AND ((renouncement_contract IS NULL OR renouncement_contract=0) AND date_save_contract_reestr IS NULL AND date_registration_project_reestr IS NOT NULL AND ".time()."-STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') > 2592000)
+													AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+													AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+													ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					else
+						$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+													date_maturity_reestr,amount_contract_reestr,amount_reestr,payment_order_reestr,date_contract_reestr,oud_curators.FIO as executor,executor_contract_reestr,executor_reestr,is_sip_contract FROM contracts JOIN reestr_contracts ON 
+													contracts.id=reestr_contracts.id_contract_reestr LEFT JOIN oud_curators ON executor_reestr=oud_curators.id WHERE 
+													((renouncement_contract IS NULL OR renouncement_contract=0) AND date_save_contract_reestr IS NULL AND date_registration_project_reestr IS NOT NULL AND " . time() . "-STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') > 2592000)
+													AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+													AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+													ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					$result = [];
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name_full;
+								break;
+							}
+						}
+						
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
+						
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+						
+						//Распределяем по подразделениям
+						$split_str = explode('‐',$contract->number_contract);
+						if(count($split_str) > 1)
+							foreach($departments as $department)
+							{
+								if($split_str[1] == $department->index_department)
+								{
+									//Записываем в контракт информацию о том кто начальник
+									$contract->lider_department = User::select('surname','name','patronymic','position_department')->where('id',$department->lider_department)->first();
+									if(!in_array($department->name_department,array_keys($result)))
+										$result += [$department->name_department => [$contract]];
+									else
+										array_push($result[$department->name_department],$contract);
+									break;
+								}
+							}
+						else
+							$result += ['' => [$contract]];
+					}
+					return ['result'=>$result,'count_contracts'=>count($contracts),'lider'=>$lider];
+				case 'форма итоги по реестру':
+					$proekt_t = 0;
+					$registr_t = 0;
+					$break_t = 0;
+					$proekt_p = 0;
+					$registr_p = 0;
+					$break_p = 0;
+					foreach($departments as $department)
+					{
+						$t_proekt_count_contracts = DB::SELECT("SELECT count(contracts.id) as count FROM contracts LEFT JOIN reestr_contracts ON reestr_contracts.id_contract_reestr=contracts.id WHERE contracts.year_contract='" . date('Y',time()) . "' AND contracts.number_contract like '%‐" . $department->index_department . "‐%' AND (date_signing_contract_reestr IS NULL OR date_signing_contract_counterpartie_reestr IS NULL) AND renouncement_contract=0 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$t_registr_count_contracts = DB::SELECT("SELECT count(contracts.id) as count FROM contracts LEFT JOIN reestr_contracts ON reestr_contracts.id_contract_reestr=contracts.id WHERE contracts.year_contract='" . date('Y',time()) . "' AND contracts.number_contract like '%‐" . $department->index_department . "‐%' AND (date_signing_contract_reestr IS NOT NULL AND date_signing_contract_counterpartie_reestr IS NOT NULL) AND renouncement_contract=0 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						//$t_break_count_contracts = Contract::select('id')->where('year_contract', date('Y',time()))->where('renouncement_contract', 1)->count();
+						$t_break_count_contracts = DB::SELECT("SELECT count(contracts.id) as count FROM contracts LEFT JOIN reestr_contracts ON reestr_contracts.id_contract_reestr=contracts.id WHERE contracts.year_contract='" . date('Y',time()) . "' AND contracts.number_contract like '%‐" . $department->index_department . "‐%' AND renouncement_contract=1 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$p_proekt_count_contracts = DB::SELECT("SELECT count(contracts.id) as count FROM contracts LEFT JOIN reestr_contracts ON reestr_contracts.id_contract_reestr=contracts.id WHERE contracts.year_contract!='" . date('Y',time()) . "' AND contracts.number_contract like '%‐" . $department->index_department . "‐%' AND (date_signing_contract_reestr IS NULL OR date_signing_contract_counterpartie_reestr IS NULL) AND renouncement_contract=0 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$p_registr_count_contracts = DB::SELECT("SELECT count(contracts.id) as count FROM contracts LEFT JOIN reestr_contracts ON reestr_contracts.id_contract_reestr=contracts.id WHERE contracts.year_contract!='" . date('Y',time()) . "' AND contracts.number_contract like '%‐" . $department->index_department . "‐%' AND (date_signing_contract_reestr IS NOT NULL AND date_signing_contract_counterpartie_reestr IS NOT NULL) AND renouncement_contract=0 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						$p_break_count_contracts = DB::SELECT("SELECT count(contracts.id) as count FROM contracts LEFT JOIN reestr_contracts ON reestr_contracts.id_contract_reestr=contracts.id WHERE contracts.year_contract!='" . date('Y',time()) . "' AND contracts.number_contract like '%‐" . $department->index_department . "‐%' AND renouncement_contract=1 AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')")[0]->count;
+						
+						$proekt_t += $t_proekt_count_contracts;
+						$registr_t += $t_registr_count_contracts;
+						$break_t += $t_break_count_contracts;
+						$proekt_p += $p_proekt_count_contracts;
+						$registr_p += $p_registr_count_contracts;
+						$break_p += $p_break_count_contracts;
+						
+						$department->t_all_count_contracts = $t_proekt_count_contracts + $t_registr_count_contracts + $t_break_count_contracts;
+						$department->t_proekt_count_contracts = $t_proekt_count_contracts;
+						$department->t_registr_count_contracts = $t_registr_count_contracts;
+						$department->t_break_count_contracts = $t_break_count_contracts;
+						
+						$department->p_all_count_contracts = $p_proekt_count_contracts + $p_registr_count_contracts + $p_break_count_contracts;
+						$department->p_proekt_count_contracts = $p_proekt_count_contracts;
+						$department->p_registr_count_contracts = $p_registr_count_contracts;
+						$department->p_break_count_contracts = $p_break_count_contracts;
+						//break;
+					}
+					//dd($departments);
+					return ['period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'departments'=>$departments,
+								'proekt_t'=>$proekt_t,
+								'registr_t'=>$registr_t,
+								'break_t'=>$break_t,
+								'proekt_p'=>$proekt_p,
+								'registr_p'=>$registr_p,
+								'break_p'=>$break_p,
+								'lider'=>$lider];
+				case 'форма справка по договорам ПЭО':
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,id_counterpartie_contract,amount_contract_reestr,renouncement_contract,
+											date_entry_into_force_reestr,procurement_reestr,marketing_reestr,investments_reestr,other_reestr,item_contract,archive_contract, 
+											is_sip_contract,executor_contract_reestr,date_contract_on_first_reestr,id_goz_contract,goz_works.name_works_goz 
+											FROM contracts 
+											LEFT JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+											LEFT JOIN goz_works ON contracts.id_goz_contract=goz_works.id 
+											WHERE (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+											AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL)
+											ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract){
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						
+						// Исполнитель
+						if($contract->is_sip_contract == 1){
+							$pr_executor = Curator::select()->where('id', $contract->executor_contract_reestr)->first();
+							if($pr_executor != null)
+								$contract->executor_contract_reestr = $pr_executor->FIO;
+						}
+					}
+					return ['period1'=>$request['date_begin'],
+								'period2'=>$request['date_end'],
+								'contracts'=>$contracts,
+								'lider'=>$lider];
+				case 'форма участник в закупках 223':
+					$text1 = 'Филиал "НТИИМ" - участник в закупках по 223-ФЗ';
+					$fil_dep = '%';
+					if(isset($request['department'])){
+						if(strlen($request['department']) > 0){
+							$sel_dep = Department::select('index_department')->where('id',$request['department'])->first();
+							if($sel_dep != null)
+								$fil_dep = $sel_dep->index_department;
+						}
+					}
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+												WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' AND procurement_reestr=1 AND marketing_fz_223_reestr=1 
+												AND date_entry_into_force_reestr IS NULL 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'contracts'=>$contracts,'lider'=>$lider];
+				case 'форма участник в закупках 44':
+					$text1 = 'Филиал "НТИИМ" - участник в закупках по 44-ФЗ';
+					$fil_dep = '%';
+					if(isset($request['department'])){
+						if(strlen($request['department']) > 0){
+							$sel_dep = Department::select('index_department')->where('id',$request['department'])->first();
+							if($sel_dep != null)
+								$fil_dep = $sel_dep->index_department;
+						}
+					}
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+												WHERE number_contract LIKE '%‐" . $fil_dep . "‐%' AND procurement_reestr=1 AND marketing_fz_44_reestr=1 
+												AND date_entry_into_force_reestr IS NULL 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+						$protocols = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_protocol', 1)->get();
+						$contract->protocols = $protocols;
+						$add_agreements = Protocol::select('name_protocol','date_on_first_protocol')->where('id_contract', $contract->id)->where('is_additional_agreement', 1)->get();
+						$contract->add_agreements = $add_agreements;
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'contracts'=>$contracts,'lider'=>$lider];
+				case 'справка по срокам оплаты':
+					$text1 = 'Справка по срокам оплаты Договоров (Контрактов) для финансового отдела';
+					$contracts = DB::SELECT("SELECT contracts.id,contracts.number_contract,number_counterpartie_contract_reestr,id_counterpartie_contract,item_contract,date_contract_on_first_reestr,
+												date_maturity_reestr,amount_contract_reestr,payment_order_reestr,date_contract_reestr,amount_reestr,prepayment_order_reestr,score_order_reestr, 
+                                                end_term_repayment_reestr,date_entry_into_force_reestr 
+												FROM contracts JOIN reestr_contracts ON contracts.id=reestr_contracts.id_contract_reestr 
+												WHERE procurement_reestr=1 
+												AND (renouncement_contract=0 OR renouncement_contract IS NULL) AND (archive_contract=0 OR archive_contract IS NULL) 
+												AND (STR_TO_DATE(date_registration_project_reestr,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "') 
+												ORDER BY contracts.year_contract DESC, contracts.number_pp+0 DESC");
+					foreach($contracts as $contract)
+					{
+						foreach($counterparties as $counter){
+							if($counter->id == $contract->id_counterpartie_contract){
+								$contract->counterpartie_name = $counter->name;
+								break;
+							}
+						}
+					}
+					return ['text'=>$text1,'period1'=>$request['date_begin'],'period2'=>$request['date_end'],'contracts'=>$contracts,'lider'=>$lider];
+					
+					
+					
+					
+					
+
 				default:
 					return 'Неизвестный тип таблицы! (' . $request['real_name_table'] . ')';
 			}

@@ -25,6 +25,8 @@
 							Поступление за период с {{date('d.m.Y', strtotime($date_begin))}} по {{date('d.m.Y', strtotime($date_end))}}
 						@elseif($real_name_table == 'Выполнение за период')
 							Выполнение за период с {{date('d.m.Y', strtotime($date_begin))}} по {{date('d.m.Y', strtotime($date_end))}}
+						@elseif($real_name_table == 'Выполнение за период по выходным и праздничным дням')
+							Выполнение за период по выходным и праздничным дням с {{date('d.m.Y', strtotime($date_begin))}} по {{date('d.m.Y', strtotime($date_end))}}
 						@elseif($real_name_table == 'Выполнение за период (испытания)')
 							Выполнение за период (испытания) с {{date('d.m.Y', strtotime($date_begin))}} по {{date('d.m.Y', strtotime($date_end))}}
 						@elseif($real_name_table == 'Выполнение за период (сборка)')
@@ -43,6 +45,8 @@
 							Испытано за период с {{$date_begin}} по {{$date_end}}
 						@elseif($real_name_table == 'Номенклатура за период')
 							Номенклатура за период с {{$date_begin}} по {{$date_end}}
+						@elseif($real_name_table == 'Наряды за год по виду')
+							Наряды за {{$year}} год по виду
 						@endif
 					</div>
 				</div>
@@ -199,6 +203,53 @@
 								</tr>
 							@endforeach
 						</tbody>
+					@elseif($real_name_table == 'Выполнение за период по выходным и праздничным дням')
+						<thead style='text-align: center;'>
+							<tr>
+								<th>Контрагент</th>
+								<th>№ дог.</th>
+								<th>№ наряда</th>
+								<th>Изд-е</th>
+								<th>Вид испытания/работы</th>
+								<th>Кол-во</th>
+								<th>Дата отработки/сдачи</th>
+								<th>ФИО</th>
+								<th>Должность, категория</th>
+								<th>Часы</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php $k=0; ?>
+							@foreach($results as $isp)
+								<tr>
+									<td>{{$isp->name_counterpartie_contract}}</td>
+									<td style='text-align: center;'>{{$isp->number_contract}}</td>
+									<td style='text-align: center;'>{{$isp->number_duty}}</td>
+									<td style='text-align: center;'>{{$isp->name_element}}</td>
+									<td style='text-align: center;'>{{$isp->name_view_work_elements}}</td>
+									<td style='text-align: center;'>{{$isp->count_elements}} {{$isp->name_unit}}</td>
+									<td style='text-align: center;'>{{$isp->date_worked ? date('d.m.Y', strtotime($isp->date_worked)) : ''}}</td>
+									<td style='text-align: center; min-width: 120px;'></td>
+									<td style='text-align: center;'></td>
+									<td style='text-align: center;'></td>
+								</tr>
+								<?php
+									$k++;
+								?>
+							@endforeach
+							<tr>
+								<td></td>
+								<td style='text-align: right;'>Всего нарядов:</td>
+								<td style='text-align: center;'>{{$k}}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
 					@elseif($real_name_table == 'Выполнение за период (испытания)')
 						<thead style='text-align: center;'>
 							<tr>
@@ -260,6 +311,11 @@
 									$count_renouncement += $isp->renouncement;
 									$full_amount_acts += $isp->amount_acts;
 								?>
+								@if(isset($isp->add_information))
+									<tr>
+										<td colspan='21'>Доп. информация к наряду №{{$isp->number_duty}}: {{$isp->add_information}}</td>
+									</tr>
+								@endif
 							@endforeach
 							<tr>
 								<td colspan='2' style='text-align: right;'>Всего нарядов:</td>
@@ -414,7 +470,7 @@
 						<tbody>
 							<?php $k=0; ?>
 							@foreach($contracts as $key=>$value)
-								<tr><td colspan='2'>{{$key}}</td><tr>
+								<tr><td colspan='2'>{{$key}}</td></tr>
 								@foreach($value as $counterpartie)
 									<tr>
 										<td>{{++$k}}</td>
@@ -673,17 +729,80 @@
 								<tr>
 									<td><b>{{$count++}}.</b></td>
 									<td><b>{{$key}}</b></td>
-									<td>@if(isset($contracts[$key]['elements'])){{implode(',',$contracts[$key]['elements'])}}@endif</td>
+									<td>@if(isset($contracts[$key]['elements'])){{implode(', ',$contracts[$key]['elements'])}}@endif</td>
 								</tr>
 								@foreach($value as $key2=>$value2)
 									@if($key2 != 'elements')
 										<tr>
 											<td></td>
 											<td>{{$key2}}</td>
-											<td>{{implode(',',$value2)}}</td>
+											<td>{{implode(', ',$value2)}}</td>
 										</tr>
 									@endif
 								@endforeach
+							@endforeach
+						</tbody>
+					@elseif($real_name_table == 'Наряды за год по виду')
+						<thead style='text-align: center;'>
+							<tr>
+								<th>Контрагент</th>
+								<th>№ дог.</th>
+								<th>Дата договора на 1 листе</th>
+								<th>№ наряда</th>
+								<th>Изд-е</th>
+								<th>Вид испытания/работы</th>
+								<th>Кол-во</th>
+								<th>Дата отработки/сдачи</th>
+								<th>№ акта</th>
+								<th>Дата акта</th>
+								<th>Сумма акта</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($second_department_tours as $isp)
+								<tr>
+									<td>{{$isp->name_counterpartie_contract}}</td>
+									<td style='text-align: center;'>{{$isp->number_contract}}</td>
+									<td style='text-align: center;'>{{$isp->date_contract_on_first_reestr}}</td>
+									<td style='text-align: center;'>{{$isp->number_duty}}</td>
+									<td style='text-align: center;'>{{$isp->name_element}}</td>
+									<td style='text-align: center;'>{{$isp->name_view_work_elements}}</td>
+									<td style='text-align: center;'>{{$isp->count_elements}} {{$isp->name_unit}}</td>
+									<td style='text-align: center;'>{{$isp->date_worked ? date('d.m.Y', strtotime($isp->date_worked)) : ''}}</td>
+									<td style='text-align: center;'>{{$isp->number_act}}</td>
+									<td style='text-align: center;'>{{$isp->date_act}}</td>
+									<td style='text-align: center;'>{{is_numeric($isp->amount_acts) ? number_format($isp->amount_acts, 2, ',', '&nbsp;') : $isp->amount_acts}}</td>
+								</tr>
+							@endforeach
+							@foreach($second_department_sb_tours as $isp)
+								<tr>
+									<td>{{$isp->name_counterpartie_contract}}</td>
+									<td style='text-align: center;'>{{$isp->number_contract}}</td>
+									<td style='text-align: center;'>{{$isp->date_contract_on_first_reestr}}</td>
+									<td style='text-align: center;'>{{$isp->number_duty}}</td>
+									<td style='text-align: center;'>{{$isp->name_element}}</td>
+									<td style='text-align: center;'>{{$isp->name_view_work_elements}}</td>
+									<td style='text-align: center;'>{{$isp->count_elements}} {{$isp->name_unit}}</td>
+									<td style='text-align: center;'>{{$isp->date_worked ? date('d.m.Y', strtotime($isp->date_worked)) : ''}}</td>
+									<td style='text-align: center;'>{{$isp->number_act}}</td>
+									<td style='text-align: center;'>{{$isp->date_act}}</td>
+									<td style='text-align: center;'>{{is_numeric($isp->amount_acts) ? number_format($isp->amount_acts, 2, ',', '&nbsp;') : $isp->amount_acts}}</td>
+								</tr>
+							@endforeach
+							@foreach($second_department_us_tours as $isp)
+								<tr>
+									<td>{{$isp->name_counterpartie_contract}}</td>
+									<td style='text-align: center;'>{{$isp->number_contract}}</td>
+									<td style='text-align: center;'>{{$isp->date_contract_on_first_reestr}}</td>
+									<td style='text-align: center;'>{{$isp->number_duty}}</td>
+									<td></td>
+									<td style='text-align: center;'>{{$isp->item_contract}}</td>
+									<td></td>
+									<td style='text-align: center;'>{{$isp->date_worked ? date('d.m.Y', strtotime($isp->date_worked)) : ''}}</td>
+									<td style='text-align: center;'>{{$isp->number_act}}</td>
+									<td style='text-align: center;'>{{$isp->date_act}}</td>
+									<td style='text-align: center;'>{{is_numeric($isp->amount_acts) ? number_format($isp->amount_acts, 2, ',', '&nbsp;') : $isp->amount_acts}}</td>
+								</tr>
 							@endforeach
 						</tbody>
 					@endif

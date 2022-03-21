@@ -27,6 +27,16 @@
 										</a>
 									</li>
 									<li>
+										<a data-toggle='tab' href='#new_applications'>Заявки 									
+											<?php
+												//$count_message = App\ReconciliationUser::select('reconciliation_users.id')->join('applications','id_application', 'applications.id')->where('id_user',Auth::user()->id)->where('check_reconciliation', 0)->where('applications.is_protocol', 0)->where('applications.deleted_at', null)->get()->count();
+												$count_message = count($new_applications);
+												if($count_message)
+													echo "<span class='badge badge-pill badge-danger'>" . $count_message . "</span>";
+											?>
+										</a>
+									</li>
+									<li>
 										<a data-toggle='tab' href='#contract'>Договоры
 											<?php
 												$count_message = App\ReconciliationUser::select('reconciliation_users.id')->join('contracts','id_contract', 'contracts.id')->where('id_user',Auth::user()->id)->where('check_reconciliation', 0)->where('contracts.deleted_at', null)->get()->count();
@@ -72,7 +82,7 @@
 											<a data-toggle='tab' href='#new_additional_documents'>Новые договорные материалы</a>
 										</li>
 									@endif
-									@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->surname == 'Бастрыкова')
+									@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
 										<li>
 											<a data-toggle='tab' href='#new_scans_documents'>Новые сканы документов</a>
 										</li>
@@ -143,6 +153,38 @@
 														</td>
 														<td>
 															{{ $application->theme_application }}
+														</td>
+													</tr>
+												@endforeach
+											</tbody>
+										</table>
+									</div>
+									<div id='new_applications' class='tab-pane fade'>
+										<table class="table" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
+											<thead>
+												<tr>
+													<th style='min-width: 60px;'></th>
+													<th>№ записи</th>
+													<th>Контрагент</th>
+													<th>Предмет (содержание заявки)</th>
+													<th>Цель (если указана)</th>
+												</tr>
+											</thead>
+											<tbody>
+												@foreach($new_applications as $new_application)
+													<tr class="rowsContract cursorPointer btn-href" href='{{route("new_applications.reconciliation", $new_application->appID)}}'>
+														<td style='color: red;'>Новое</td>
+														<td>
+															{{ $new_application->number_pp_new_application }}
+														</td>
+														<td>
+															{{ $new_application->counterpartie_name }}
+														</td>
+														<td>
+															{{ $new_application->item_new_application }}
+														</td>
+														<td>
+															{{ $new_application->name_work_new_application }}
 														</td>
 													</tr>
 												@endforeach

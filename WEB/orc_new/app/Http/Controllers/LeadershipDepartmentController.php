@@ -14,6 +14,9 @@ use App\ViewContract;
 use App\Department;
 use App\Protocol;
 use App\SecondDepartmentAct;
+use App\SecondDepartmentTour;
+use App\SecondDepartmentSbTour;
+use App\SecondDepartmentUsTour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -868,6 +871,233 @@ class LeadershipDepartmentController extends Controller
 		return view('department.leadership.peo_backpack',['contracts'=>$new_contracts]);
 	}
 	
+	public function peo_act_complete(Request $request)
+	{		
+		$number_contract = str_replace('-','‐',$request['number_contract']);
+		
+		$contracts = Contract::select(['contracts.id','id_counterpartie_contract','number_contract','name_work_contract','id_goz_contract',
+										'number_counterpartie_contract_reestr', 'date_contract_on_first_reestr', 'vat_reestr', 'fixed_amount_reestr', 'approximate_amount_reestr', 'amount_reestr'])
+						->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')
+						->leftJoin('reestr_contracts', 'contracts.id', 'reestr_contracts.id_contract_reestr')
+						->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', '=', 'view_contracts.id')
+						->leftJoin('goz_works', 'contracts.id_goz_contract','goz_works.id')
+						->where('is_sip_contract', 1)
+						->where('contracts.id_counterpartie_contract','>','-1')
+						->where('contracts.number_contract', '=', $number_contract)
+						->where('archive_contract', 0)
+						->get();
+		$counterparties = Counterpartie::select(['*'])->where('is_sip_counterpartie', 1)->orderBy('name', 'asc')->get();
+		foreach($contracts as $contract) {
+			foreach($counterparties as $counter)
+				if($contract->id_counterpartie_contract == $counter->id){
+					$contract->full_name_counterpartie_contract = $counter->name_full;
+					$contract->name_counterpartie_contract = $counter->name;
+					$contract->inn_counterpartie_contract = $counter->inn;
+					break;
+				}
+				
+			// Сумма в текст
+			$amount_reestr_text = LeadershipDepartmentController::num2str($contract->amount_reestr);
+			$contract->amount_reestr_text = $amount_reestr_text;
+			
+			// Находим НДС
+			if ($contract->vat_reestr && $contract->amount_reestr) {
+				$vat = $contract->amount_reestr / 1.2 * 0.2;
+				$contract->vat = $vat;
+				$contract->vat_text = LeadershipDepartmentController::num2str($vat);
+			}
+			
+			//Аванс
+			$prepayments = Invoice::select(['*','invoices.id','view_invoices.name_view_invoice'])
+												->leftjoin('view_invoices', 'invoices.id_view_invoice', 'view_invoices.id')
+												->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+												->where('id_contract', $contract->id)
+												->where('name', 'Оплата')
+												->where('is_prepayment_invoice', 1)
+												->orderBy('invoices.number_invoice', 'asc')
+												->get();
+			$amount_prepayment = 0;
+			foreach ($prepayments as $prepayment)
+			{
+				$amount_prepayment += $prepayment->amount_p_invoice;
+			}
+			$contract->prepayment = $amount_prepayment;
+			
+			// Осталось перечислить
+			$contract->remainder = $contract->amount_reestr - $contract->prepayment;
+			$contract->remainder_text = LeadershipDepartmentController::num2str($contract->remainder);
+			
+			if ($contract->vat_reestr && $contract->amount_reestr) {
+				$vat_remainder = $contract->remainder / 1.2 * 0.2;
+				$contract->vat_remainder = $vat_remainder;
+				$contract->vat_remainder_text = LeadershipDepartmentController::num2str($vat_remainder);
+			}
+		}
+		// Акты
+		$results = [];
+		foreach($contracts as $contract)
+		{
+			$secondDepartmentTours = SecondDepartmentTour::select(['*', 'second_department_tours.id', DB::RAW('CAST(second_department_tours.number_duty AS UNSIGNED) AS cast_number_duty')])
+																	->where('second_department_tours.id_contract', $contract->id)
+																	->orderBy('cast_number_duty', 'asc')
+																	->orderBy('second_department_tours.number_duty', 'asc')
+																	->get();
+			$secondDepartmentSbTours = SecondDepartmentSbTour::select(['*', 'second_department_sb_tours.id'])
+																	->where('second_department_sb_tours.id_contract', $contract->id)
+																	->orderBy(DB::raw('(second_department_sb_tours.number_duty+0)'), 'asc')
+																	->get();
+			$secondDepartmentUsTours = SecondDepartmentUsTour::select(['*'])
+																	->where('second_department_us_tours.id_contract', $contract->id)
+																	->orderBy(DB::raw("(second_department_us_tours.number_duty+0)"), 'asc')
+																	->get();
+			foreach($secondDepartmentTours as $tour){
+				$acts = SecondDepartmentAct::select()->where('id_second_tour', $tour->id)->get();
+				$acts->number_duty = $tour->number_duty;
+				$acts->number_telegram = $tour->number_telegram;
+				$acts->date_telegram = $tour->date_telegram;
+				array_push($results, $acts);
+			}
+			foreach($secondDepartmentSbTours as $tour){
+				$acts_sb = SecondDepartmentAct::select()->where('id_second_sb_tour', $tour->id)->get();
+				$acts_sb->number_duty = $tour->number_duty;
+				$acts_sb->number_telegram = $tour->number_telegram;
+				$acts_sb->date_telegram = $tour->date_telegram;
+				array_push($results, $acts_sb);
+			}
+			foreach($secondDepartmentUsTours as $tour){
+				$acts_us = SecondDepartmentAct::select()->where('id_second_us_tour', $tour->id)->get();
+				$acts_us->number_duty = $tour->number_duty;
+				$acts_us->number_telegram = $tour->number_telegram;
+				$acts_us->date_telegram = $tour->date_telegram;
+				array_push($results, $acts_us);
+			}
+			//Акты для Услуг ГН и Услуг ВН
+			$acts = SecondDepartmentAct::select()->where('id_contract', $contract->id)->get();
+			array_push($results, $acts);
+			$contract->results = $results;
+		}
+
+		return view('department.leadership.peo_act_complete', ['contracts'=>$contracts]);
+	}
+	
+	public function peo_isp_period_complete(Request $request)
+	{
+		$contracts = Contract::select(['contracts.id','id_counterpartie_contract','number_contract','item_contract','id_goz_contract','goz_works.name_works_goz','id_view_contract', 'view_contracts.name_view_contract',
+										'big_deal_reestr','amoun_implementation_contract','comment_implementation_contract',
+										'amount_contract_reestr','amount_reestr', 'vat_reestr', 'amount_year_reestr','amount_contract_year_reestr',
+										'date_contact','year_contract','prepayment_reestr','percent_prepayment_reestr','date_maturity_reestr'])
+						->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')
+						->leftJoin('reestr_contracts', 'reestr_contracts.id_contract_reestr', 'contracts.id')
+						->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', 'view_contracts.id')
+						->join('goz_works', 'contracts.id_goz_contract', '=', 'goz_works.id')
+						->where('is_sip_contract', 1)
+						->where('archive_contract', 0)
+						->where('renouncement_contract', '!=', 1)
+						->where('contracts.id_counterpartie_contract','>','-1')
+						->where('contracts.number_contract', 'not like', '%‐23‐%')
+						->where('name_view_contract', 'Испытания контрольные')
+						->orderBy('reestr_contracts.id_view_contract', 'asc')
+						->orderBy('contracts.id_counterpartie_contract', 'asc')
+						->orderBy('contracts.id', 'desc')
+						->get();
+
+		$period1 = isset($request['date_begin']) ? DATE('Y-m-d', strtotime($request['date_begin'])) : date('Y', time()) . '-01-01';
+		$period2 = isset($request['date_end']) ? DATE('Y-m-d', strtotime($request['date_end'])) : date('Y-m-d', time());
+
+		$new_contracts = [];
+		$counterparties = Counterpartie::select(['*'])->where('is_sip_counterpartie', 1)->orderBy('name', 'asc')->get();
+		foreach($contracts as $contract){
+			foreach($counterparties as $counter)
+				if($contract->id_counterpartie_contract == $counter->id){
+					$contract->full_name_counterpartie_contract = $counter->name_full;
+					$contract->name_counterpartie_contract = $counter->name;
+					$contract->inn_counterpartie_contract = $counter->inn;
+					break;
+				}
+
+			$query = "SELECT * 
+						FROM states
+						WHERE id_contract='" . $contract->id . "'
+						AND is_work_state=1
+						AND (STR_TO_DATE(date_state,'%d.%m.%Y') BETWEEN '" . $period1 . "' AND '" . $period2 . "')";
+			$states = DB::SELECT($query);
+			//$states = State::select(['*'])->where('id_contract', $contract->id)->where('is_work_state', 1)->get();
+			if(count($states) > 0){
+				if($states[count($states) - 1]->name_state == 'Выполнен')
+					array_push($new_contracts, $contract);
+			}
+		}
+		
+		$all_amount_reestr = 0;
+		$itogs = [];
+		foreach($new_contracts as $contract){
+			$secondDepartmentTours = SecondDepartmentTour::select(['*', 'second_department_tours.id', DB::RAW('CAST(second_department_tours.number_duty AS UNSIGNED) AS cast_number_duty')])
+																	->leftJoin('second_department_units', 'id_unit', 'second_department_units.id')
+																	->where('second_department_tours.id_contract', $contract->id)
+																	->orderBy('cast_number_duty', 'asc')
+																	->orderBy('second_department_tours.number_duty', 'asc')
+																	->get();
+			$secondDepartmentSbTours = SecondDepartmentSbTour::select(['*', 'second_department_sb_tours.id'])
+																	->leftJoin('second_department_units', 'id_unit', 'second_department_units.id')
+																	->where('second_department_sb_tours.id_contract', $contract->id)
+																	->orderBy(DB::raw('(second_department_sb_tours.number_duty+0)'), 'asc')
+																	->get();
+			$secondDepartmentUsTours = SecondDepartmentUsTour::select(['*'])
+																	->where('second_department_us_tours.id_contract', $contract->id)
+																	->orderBy(DB::raw("(second_department_us_tours.number_duty+0)"), 'asc')
+																	->get();
+			$number_duty = '';
+			$count_duty = [];
+			foreach($secondDepartmentTours as $tour){
+				$number_duty .= $tour->number_duty . ', ';
+				if (!in_array($tour->name_unit, array_keys($count_duty)))
+					$count_duty += [$tour->name_unit => $tour->count_elements];
+				else
+					$count_duty[$tour->name_unit] += $tour->count_elements;
+			}
+			foreach($secondDepartmentSbTours as $tour){
+				$number_duty .= $tour->number_duty . ', ';
+				if (!in_array($tour->name_unit, array_keys($count_duty)))
+					$count_duty += [$tour->name_unit => $tour->count_elements];
+				else
+					$count_duty[$tour->name_unit] += $tour->count_elements;
+			}
+			foreach($secondDepartmentUsTours as $tour){
+				$number_duty .= $tour->number_duty . ', ';
+				if (!in_array($tour->name_unit, array_keys($count_duty)))
+					$count_duty += [$tour->name_unit => $tour->count_elements];
+				else
+					$count_duty[$tour->name_unit] += $tour->count_elements;
+			}
+			$number_duty = trim($number_duty);
+			if(strlen($number_duty) > 0)
+				if($number_duty[strlen($number_duty) - 1] == ',')
+					$number_duty = substr($number_duty, 0, strlen($number_duty) - 1);
+			$contract->number_duty = $number_duty;
+			
+			$count_duty_text = '';
+			foreach($count_duty as $key=>$value)
+				$count_duty_text .= $value . ' ' . $key . ', ';
+			$count_duty_text = trim($count_duty_text);
+			if (strlen($count_duty_text) > 0)
+				if ($count_duty_text[strlen($count_duty_text) - 1] == ',')
+					$count_duty_text = substr($count_duty_text, 0, strlen($count_duty_text) - 1);
+			$contract->count_duty = $count_duty_text;
+			
+			// Суммы
+			if ($contract->vat_reestr)
+				$contract->amount_reestr = $contract->amount_reestr / 1.2;
+			$all_amount_reestr += $contract->amount_reestr;
+			
+			if(!in_array($contract->name_works_goz, array_keys($itogs)))
+				$itogs += [$contract->name_works_goz => $contract->amount_reestr];
+			else
+				$itogs[$contract->name_works_goz] += $contract->amount_reestr;
+		}
+		
+		return view('department.leadership.peo_isp_period_complete',['period1'=>$period1, 'period2'=>$period2, 'contracts'=>$new_contracts, 'all_amount_reestr'=>$all_amount_reestr, 'itogs'=>$itogs]);
+	}
+	
 	public function invoice()
 	{
 		$year_str = "contracts.id_counterpartie_contract";
@@ -1227,5 +1457,178 @@ class LeadershipDepartmentController extends Controller
 			$arr_select = '';
 		}
 		return view('department.leadership.print_report',['result'=>$select, 'headers'=>$arr_select]);
+	}
+	
+	public function num2str($num)
+	{
+		$nul = 'ноль';
+		$ten = array(
+			array('', 'один', 'два', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять'),
+			array('', 'одна', 'две', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять')
+		);
+		$a20 = array('десять', 'одиннадцать', 'двенадцать', 'тринадцать', 'четырнадцать', 'пятнадцать', 'шестнадцать', 'семнадцать', 'восемнадцать', 'девятнадцать');
+		$tens = array(2=>'двадцать', 'тридцать', 'сорок', 'пятьдесят', 'шестьдесят', 'семьдесят', 'восемьдесят', 'девяносто');
+		$hundred = array('', 'сто', 'двести', 'триста', 'четыреста', 'пятьсот', 'шестьсот', 'семьсот', 'восемьсот', 'девятьсот');
+		$unit = array(
+			array('копейка', 'копейки', 'копеек', 1),
+			array('рубль', 'рубля', 'рублей', 0),
+			array('тысяча', 'тысячи', 'тысяч', 1),
+			array('миллион', 'миллиона', 'миллионов', 0),
+			array('миллиард', 'миллиарда', 'миллиардов', 0)
+		);
+		
+		$parts = explode('.', sprintf("%015.2f", floatval($num)));
+		$rub = $parts[0];
+		$kop = $parts[1];
+		
+		$out = array();
+		if (intval($rub) > 0) {
+			foreach (str_split($rub, 3) as $uk=>$v) {
+				if (!intval($v))
+					continue;
+				$uk = sizeof($unit)-$uk-1;
+				$gender = $unit[$uk][3];
+				list($i1, $i2, $i3) = array_map('intval', str_split($v, 1));
+				
+				$out[] = $hundred[$i1];
+				if ($i2 > 1)
+					$out[] = $tens[$i2] . ' ' . $ten[$gender][$i3];
+				else
+					$out[] = $i2 > 0 ? $a20[$i3] : $ten[$gender][$i3];
+				
+				if ($uk > 1)
+					$out[] = LeadershipDepartmentController::morph($v, $unit[$uk][0], $unit[$uk][1], $unit[$uk][2]);
+			}
+		}
+		else
+			$out[] = $nul;
+			
+		$out[] = LeadershipDepartmentController::morph(intval($rub), $unit[1][0], $unit[1][1], $unit[1][2]);
+		$out[] = $kop . ' ' . LeadershipDepartmentController::morph($kop, $unit[0][0], $unit[0][1], $unit[0][2]);
+		return trim(preg_replace('/ {2,}/', ' ', join(' ', $out)));
+	}
+	
+	private function morph($n, $f1, $f2, $f5)
+	{
+		$n = abs(intval($n)) % 100;
+		if ($n > 10 && $n < 20)
+			return $f5;
+		$n = $n % 10;
+		if ($n > 1 && $n < 5)
+			return $f2;
+		if ($n == 1)
+			return $f1;
+		return $f5;
+	}
+	
+	public function doublenumber2string($number)
+	{
+		// Ошибка!! (Например, 80182.75);
+		dd('asd');
+		$parts = explode('.', $number);
+		$first = LeadershipDepartmentController::number2string($parts[0]);
+		$second = LeadershipDepartmentController::number2string($parts[1], false) . ' коп.';
+		return $first . ' ' . $second;
+	}
+	
+	public function number2string($number, $isName = true)
+	{
+		static $dic = array(
+			array(
+				-2 => 'две',
+				-1 => 'одна',
+				1 => 'один',
+				2 => 'два',
+				3 => 'три',
+				4 => 'четыре',
+				5 => 'пять',
+				6 => 'шесть',
+				7 => 'семь',
+				8 => 'восемь',
+				9 => 'девять',
+				10 => 'десять',
+				11 => 'одиннадцать',
+				12 => 'двенадцать',
+				13 => 'тринадцать',
+				14 => 'четырнадцать',
+				15 => 'пятнадцать',
+				16 => 'шестнадцать',
+				17 => 'семнадцать',
+				18 => 'восемнадцать',
+				19 => 'девятнадцать',
+				20 => 'двадцать',
+				30 => 'тридцать',
+				40 => 'сорок',
+				50 => 'пятьдесят',
+				60 => 'шестьдесят',
+				70 => 'семьдесят',
+				80 => 'восемьдесят',
+				90 => 'девяносто',
+				100 => 'сто',
+				200 => 'двести',
+				300 => 'триста',
+				400 => 'четыреста',
+				500 => 'пятьсот',
+				600 => 'шестьсот',
+				700 => 'семьсот',
+				800 => 'восемьсот',
+				900 => 'девятьсот'
+			),
+			
+			array(
+				array('рубль', 'рубля', 'рублей'),
+				array('тысяча', 'тысячи', 'тысяч'),
+				array('миллион', 'миллиона', 'миллионов'),
+				array('миллиард', 'миллиарда', 'миллиардов'),
+				array('триллион', 'триллиона', 'триллионов'),
+				array('квадриллион', 'квадриллиона', 'квадриллионов')
+			),
+			
+			array(
+				2, 0, 1, 1, 1, 2
+			)
+		);
+		
+		$string = array();
+		
+		$number = str_pad($number, ceil(strlen($number)/3)*3, 0, STR_PAD_LEFT);
+		
+		$parts = array_reverse(str_split($number, 3));
+		
+		foreach ($parts as $i=>$part) {
+			if ($part > 0) {
+				$digits = array();
+				
+				if ($part > 99) {
+					$digits[] = floor($part / 100) * 100;
+				}
+				
+				if ($mod1=$part%100) {
+					$mod2 = $part % 10;
+					$flag = $i==1 && $mod1 != 11 && $mod1 != 12 && $mod2 < 3 ? -1 : 1;
+					
+					if ($mod1 < 20 || !$mod2) {
+						$digits[] = $flag * $mod1;
+					}
+					else {
+						$digits[] = floor($mod1 / 10) * 10;
+						$digits[] = $flag * $mod2;
+					}
+				}
+				
+				$last = abs(end($digits));
+				
+				foreach ($digits as $j=>$digit) {
+					$digits[$j] = $dic[0][$digit];
+				}
+				
+				if ($isName)
+					$digits[] = $dic[1][$i][(($last%=100)>4 && $last<20) ? 2 : $dic[2][min($last%10,5)]];
+				
+				array_unshift($string, join(' ', $digits));
+			}
+		}
+		
+		return join(' ', $string);
 	}
 }

@@ -59,12 +59,22 @@
 					</div>
 					<div class='row'>
 						<div class="col-md-1">
-							<label>Дата сдачи на хранение</label>
+							<label>Дата сдачи на хранение в ОУД</label>
 						</div>
 						<div class="col-md-2">
 							<div class='row'>
 								<div class="col-md-12">
-									<label>ОУД</label>
+									<label>скан (эл. вариант)</label>
+									@if($additional_agreement->is_oud_el)
+										<input class='form-check-input' name='is_oud_el' type="checkbox" checked />
+									@else
+										<input class='form-check-input' name='is_oud_el' type="checkbox"/>
+									@endif
+								</div>
+							</div>
+							<div class='row'>
+								<div class="col-md-12">
+									<label>оригинал</label>
 									@if($additional_agreement->is_oud)
 										<input class='form-check-input' name='is_oud' type="checkbox" checked />
 									@else
@@ -72,9 +82,38 @@
 									@endif
 								</div>
 							</div>
+						</div>
+						<div class="col-md-7">
 							<div class='row'>
 								<div class="col-md-12">
-									<label>Отдел №31</label>
+									<input class='form-control' type='text' value='{{$additional_agreement->date_oud_el_protocol}}' readonly />
+								</div>
+							</div>
+							<div class='row'>
+								<div class="col-md-12">
+									<input class='form-control' type='text' value='{{$additional_agreement->date_oud_protocol}}' readonly />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class='row'>
+						<div class="col-md-1">
+							<label>Дата сдачи на хранение в отдел №31</label>
+						</div>
+						<div class="col-md-2">
+							<div class='row'>
+								<div class="col-md-12">
+									<label>скан (эл. вариант)</label>
+									@if($additional_agreement->is_dep_el)
+										<input class='form-check-input' name='is_dep_el' type="checkbox" checked />
+									@else
+										<input class='form-check-input' name='is_dep_el' type="checkbox" />
+									@endif
+								</div>
+							</div>
+							<div class='row'>
+								<div class="col-md-12">
+									<label>оригинал</label>
 									@if($additional_agreement->is_dep)
 										<input class='form-check-input' name='is_dep' type="checkbox" checked />
 									@else
@@ -86,7 +125,7 @@
 						<div class="col-md-7">
 							<div class='row'>
 								<div class="col-md-12">
-									<input class='form-control' type='text' value='{{$additional_agreement->date_oud_protocol}}' readonly />
+									<input class='form-control' type='text' value='{{$additional_agreement->date_dep_el_protocol}}' readonly />
 								</div>
 							</div>
 							<div class='row'>
@@ -139,9 +178,13 @@
 														date_signing_protocol='{{$additional_agreement->date_signing_protocol}}' 
 														date_signing_counterpartie_protocol='{{$additional_agreement->date_signing_counterpartie_protocol}}'
 														date_entry_ento_force_additional_agreement='{{$additional_agreement->date_entry_ento_force_additional_agreement}}'
+														is_oud_el='{{$additional_agreement->is_oud_el}}'
 														is_oud='{{$additional_agreement->is_oud}}'
+														is_dep_el='{{$additional_agreement->is_dep_el}}'
 														is_dep='{{$additional_agreement->is_dep}}'
+														date_oud_el_protocol='{{$additional_agreement->date_oud_el_protocol}}'
 														date_oud_protocol='{{$additional_agreement->date_oud_protocol}}'
+														date_dep_el_protocol='{{$additional_agreement->date_dep_el_protocol}}'
 														date_dep_protocol='{{$additional_agreement->date_dep_protocol}}'>Редактировать доп. соглашение</button>
 						</div>
 						<div class="col-md-2">
@@ -228,26 +271,57 @@
 								</div>
 								<div class='row'>
 									<div class="col-md-2">
-										<label>Дата сдачи на хранение</label>
+										<label>Дата сдачи на хранение в ОУД</label>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-4">
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='is_oud'>ОУД</label>
-												<input id='is_oud' class='form-check-input' name='is_oud' type="checkbox"/>
+												<label for='is_oud_el'>скан (эл. вариант)</label>
+												<input id='is_oud_el' class='form-check-input' name='is_oud_el' type="checkbox"/>
 											</div>
 										</div>
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='is_dep'>Отдел №31</label>
+												<label for='is_oud'>оригинал</label>
+												<input id='is_oud' class='form-check-input' name='is_oud' type="checkbox"/>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class='row'>
+											<div class="col-md-12">
+												<input class='datepicker form-control' name='date_oud_el_protocol' type='text' value=''/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<input class='datepicker form-control' name='date_oud_protocol' type='text' value=''/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='row'>
+									<div class="col-md-2">
+										<label>Дата сдачи на хранение в отдел №31</label>
+									</div>
+									<div class="col-md-4">
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='is_dep_el'>скан (эл. вариант)</label>
+												<input id='is_dep_el' class='form-check-input' name='is_dep_el' type="checkbox"/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='is_dep'>оригинал</label>
 												<input id='is_dep' class='form-check-input' name='is_dep' type="checkbox"/>
 											</div>
 										</div>
 									</div>
-									<div class="col-md-7">
+									<div class="col-md-6">
 										<div class='row'>
 											<div class="col-md-12">
-												<input class='datepicker form-control' name='date_oud_protocol' type='text' value=''/>
+												<input class='datepicker form-control' name='date_dep_el_protocol' type='text' value=''/>
 											</div>
 										</div>
 										<div class='row'>
@@ -329,26 +403,57 @@
 								</div>
 								<div class='row'>
 									<div class="col-md-2">
-										<label>Дата сдачи на хранение</label>
+										<label>Дата сдачи на хранение в ОУД</label>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-4">
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='update_is_oud'>ОУД</label>
-												<input id='update_is_oud' class='form-check-input' name='is_oud' type="checkbox"/>
+												<label for='update_is_oud_el'>скан (эл. вариант)</label>
+												<input id='update_is_oud_el' class='form-check-input' name='is_oud_el' type="checkbox"/>
 											</div>
 										</div>
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='update_is_dep'>Отдел №31</label>
+												<label for='update_is_oud'>оригинал</label>
+												<input id='update_is_oud' class='form-check-input' name='is_oud' type="checkbox"/>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class='row'>
+											<div class="col-md-12">
+												<input id='update_date_oud_el_protocol' class='datepicker form-control' name='date_oud_el_protocol' type='text' value=''/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<input id='update_date_oud_protocol' class='datepicker form-control' name='date_oud_protocol' type='text' value=''/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='row'>
+									<div class="col-md-2">
+										<label>Дата сдачи на хранение в отдел №31</label>
+									</div>
+									<div class="col-md-4">
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='update_is_dep_el'>скан (эл. вариант)</label>
+												<input id='update_is_dep_el' class='form-check-input' name='is_dep_el' type="checkbox"/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='update_is_dep'>оригинал</label>
 												<input id='update_is_dep' class='form-check-input' name='is_dep' type="checkbox"/>
 											</div>
 										</div>
 									</div>
-									<div class="col-md-7">
+									<div class="col-md-6">
 										<div class='row'>
 											<div class="col-md-12">
-												<input id='update_date_oud_protocol' class='datepicker form-control' name='date_oud_protocol' type='text' value=''/>
+												<input id='update_date_dep_el_protocol' class='datepicker form-control' name='date_dep_el_protocol' type='text' value=''/>
 											</div>
 										</div>
 										<div class='row'>

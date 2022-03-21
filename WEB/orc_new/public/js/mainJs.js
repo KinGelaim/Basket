@@ -250,6 +250,12 @@ $(document).ready(function(){
 				strLocation += '&counterpartie=' + $('#sel3').val();
 			else
 				strLocation += '?counterpartie=' + $('#sel3').val();
+		if($('#sel5').length > 0)
+			if($('#sel5').val().length > 0)
+				if($('#sel1').val().length > 0 || $('#sel2').val().length > 0 || $('#sel3').val().length > 0)
+					strLocation += '&goz_work=' + $('#sel5').val();
+				else
+					strLocation += '?goz_work=' + $('#sel5').val();
 		location.href = strLocation;
 	});
 	
@@ -274,6 +280,24 @@ $(document).ready(function(){
 			else
 				strLocation += '?counterpartie=' + $('#sel4').val();
 		location.href = strLocation;
+	});
+	
+	$('#selSearch').on('change', function(evt)
+	{
+		if($('#selSearch').val() == 'name_view_contract'){
+			$('#searchValueInput').val('');
+			$('#searchValueInput').css('display', 'none');
+			$('#selectNameViewWorkSearch').css('display', 'block');
+		}else{
+			$('#searchValueInput').val('');
+			$('#searchValueInput').css('display', 'block');
+			$('#selectNameViewWorkSearch').css('display', 'none');
+		}
+	});
+	
+	$('#selectNameViewWorkSearch').on('change', function(evt)
+	{
+		$('#searchValueInput').val($('#selectNameViewWorkSearch').val());
 	});
 	
 	$('.changeCounterpartie').on('change', function(evt)
@@ -303,12 +327,22 @@ $(document).ready(function(){
 			$('#update_is_oud').prop('checked', true);
 		else
 			$('#update_is_oud').prop('checked', false);
+		if($(this).attr('is_oud_el') == 1)
+			$('#update_is_oud_el').prop('checked', true);
+		else
+			$('#update_is_oud_el').prop('checked', false);
 		if($(this).attr('is_dep') == 1)
 			$('#update_is_dep').prop('checked', true);
 		else
 			$('#update_is_dep').prop('checked', false);
+		if($(this).attr('is_dep_el') == 1)
+			$('#update_is_dep_el').prop('checked', true);
+		else
+			$('#update_is_dep_el').prop('checked', false);
 		$('#update_date_oud_protocol').val($(this).attr('date_oud_protocol'));
+		$('#update_date_oud_el_protocol').val($(this).attr('date_oud_el_protocol'));
 		$('#update_date_dep_protocol').val($(this).attr('date_dep_protocol'));
+		$('#update_date_dep_el_protocol').val($(this).attr('date_dep_el_protocol'));
 	});
 	
 	$('.titleDocumentClick').on('click', function(evt){
@@ -393,6 +427,57 @@ $(document).ready(function(){
 			$('#label_date_registration_project_reestr').text('Дата регистрации заявки');
 		else
 			$('#label_date_registration_project_reestr').text('Дата регистрации проекта');
+	});
+	
+	$('.btn-update-date-contract').on('click', function(evt)
+	{
+		$('#form_update_date_contract_reestr').attr('action', $(this).attr('action_update'));
+		
+		$json = $.parseJSON($(this).attr('reestr_date_contract'));
+		
+		$('#update_name_date_contract').val($json['name_date_contract']);
+		$('#update_term_date_contract').val($json['term_date_contract']);
+		$('#update_end_date_contract').val($json['end_date_contract']);
+	});
+	
+	$('.btn-update-date-maturity').on('click', function(evt)
+	{
+		$('#form_update_date_maturity_reestr').attr('action', $(this).attr('action_update'));
+		
+		$json = $.parseJSON($(this).attr('reestr_date_maturity'));
+		
+		$('#update_name_date_maturity').val($json['name_date_maturity']);
+		$('#update_term_date_maturity').val($json['term_date_maturity']);
+		$('#update_end_date_maturity').val($json['end_date_maturity']);
+	});
+	
+	$('.btn-update-amount').on('click', function(evt)
+	{
+		$('#form_update_amount_reestr').attr('action', $(this).attr('action_update'));
+		
+		$json = $.parseJSON($(this).attr('reestr_amount'));
+		
+		$('#update_name_amount').val($json['name_amount']);
+		$('#update_value_amount').val($json['value_amount']);
+		$('#update_unit_amount option').each(function(e){
+			if($(this).val() == $json['unit_amount']) {
+				$(this).prop('selected', true);
+			}
+			else
+				$(this).prop('selected', false);
+		});
+		if ($json['vat_amount'])
+			$('#update_vat_amount').prop('checked', true);
+		else
+			$('#update_vat_amount').prop('checked', false);
+		if ($json['approximate_amount'])
+			$('#update_approximate_amount').prop('checked', true);
+		else
+			$('#update_approximate_amount').prop('checked', false);
+		if ($json['fixed_amount'])
+			$('#update_fixed_amount').prop('checked', true);
+		else
+			$('#update_fixed_amount').prop('checked', false);
 	});
 	
 	//Планово-экономический отдел
@@ -670,12 +755,74 @@ $(document).ready(function(){
 			$(mainForm + ' #update_is_oud').prop('checked', true);
 		else
 			$(mainForm + ' #update_is_oud').prop('checked', false);
+		if(additional_document['is_oud_el'] == 1)
+			$(mainForm + ' #update_is_oud_el').prop('checked', true);
+		else
+			$(mainForm + ' #update_is_oud_el').prop('checked', false);
 		if(additional_document['is_dep'] == 1)
 			$(mainForm + ' #update_is_dep').prop('checked', true);
 		else
 			$(mainForm + ' #update_is_dep').prop('checked', false);
+		if(additional_document['is_dep_el'] == 1)
+			$(mainForm + ' #update_is_dep_el').prop('checked', true);
+		else
+			$(mainForm + ' #update_is_dep_el').prop('checked', false);
 		$(mainForm + ' #update_date_oud_protocol').val(additional_document['date_oud_protocol']);
 		$(mainForm + ' #update_date_dep_protocol').val(additional_document['date_dep_protocol']);
+		$(mainForm + ' #update_date_oud_el_protocol').val(additional_document['date_oud_el_protocol']);
+		$(mainForm + ' #update_date_dep_el_protocol').val(additional_document['date_dep_el_protocol']);
+		$(mainForm + ' #update_amount_protocol').val(additional_document['amount_protocol']);
+		$(mainForm + ' #update_amount_year_protocol').val(additional_document['amount_year_protocol']);
+		//Резолюции
+		$(mainForm + ' #resolution_list').empty();
+		$.each(additional_document['resolutions'], function(key, value)
+		{
+			if(value['type_resolution'] == 1)
+				$(mainForm + ' #resolution_list').append('<option value="http://' + value['path_resolution'] + '" download_href="resolution_download/' + value['id'] + '" style="color: rgb(239,19,198);">' + value['real_name_resolution'] + '</option>');
+			else
+				$(mainForm + ' #resolution_list').append('<option value="http://' + value['path_resolution'] + '" download_href="resolution_download/' + value['id'] + '">' + value['real_name_resolution'] + '</option>');
+		});
+		$(mainForm + ' #formNewResolution').attr('action', $(this).attr('href_add_resolution'));
+		$(mainForm).modal('show');
+	});
+	
+	$('.rowsAdditionalDocument2').on('click', function(evt){
+		var additional_document = $.parseJSON($(this).attr('additional_document'));
+		var mainForm = '#edit_protocol';
+		if(additional_document['is_protocol'] == 1)
+			var mainForm = '#edit_protocol';
+		else
+			var mainForm = '#edit_additional_agreement';
+		$(mainForm + ' #formToUpdateProtocol').attr('action', $(this).attr('href_edit_additional_document'));
+		$(mainForm + ' #update_application_protocol').val(additional_document['application_protocol']);
+		$(mainForm + ' #update_name_protocol').val(additional_document['name_protocol']);
+		$(mainForm + ' #update_name_work_protocol').val(additional_document['name_work_protocol']);
+		$(mainForm + ' #update_date_protocol2').val(additional_document['date_protocol']);
+		$(mainForm + ' #update_date_on_first_protocol2').val(additional_document['date_on_first_protocol']);
+		$(mainForm + ' #update_date_registration_protocol2').val(additional_document['date_registration_protocol']);
+		$(mainForm + ' #update_date_signing_protocol2').val(additional_document['date_signing_protocol']);
+		$(mainForm + ' #update_date_signing_counterpartie_protocol2').val(additional_document['date_signing_counterpartie_protocol']);
+		$(mainForm + ' #update_date_entry_ento_force_additional_agreement2').val(additional_document['date_entry_ento_force_additional_agreement']);
+		if(additional_document['is_oud'] == 1)
+			$(mainForm + ' #update_is_oud').prop('checked', true);
+		else
+			$(mainForm + ' #update_is_oud').prop('checked', false);
+		if(additional_document['is_oud_el'] == 1)
+			$(mainForm + ' #update_is_oud_el').prop('checked', true);
+		else
+			$(mainForm + ' #update_is_oud_el').prop('checked', false);
+		if(additional_document['is_dep'] == 1)
+			$(mainForm + ' #update_is_dep').prop('checked', true);
+		else
+			$(mainForm + ' #update_is_dep').prop('checked', false);
+		if(additional_document['is_dep_el'] == 1)
+			$(mainForm + ' #update_is_dep_el').prop('checked', true);
+		else
+			$(mainForm + ' #update_is_dep_el').prop('checked', false);
+		$(mainForm + ' #update_date_oud_protocol2').val(additional_document['date_oud_protocol']);
+		$(mainForm + ' #update_date_dep_protocol2').val(additional_document['date_dep_protocol']);
+		$(mainForm + ' #update_date_oud_el_protocol2').val(additional_document['date_oud_el_protocol']);
+		$(mainForm + ' #update_date_dep_el_protocol2').val(additional_document['date_dep_el_protocol']);
 		$(mainForm + ' #update_amount_protocol').val(additional_document['amount_protocol']);
 		$(mainForm + ' #update_amount_year_protocol').val(additional_document['amount_year_protocol']);
 		//Резолюции
@@ -869,9 +1016,13 @@ $(document).ready(function(){
 			$('#tbodyForModalActs').append("<tr class='rowsContract'><td>" + 
 				(value['number_act']!=null?value['number_act']:'') + "</td><td>"+
 				(value['date_act']!=null?value['date_act']:'')+"</td><td>"+
-				value['amount_act']+"</td><td><button type='button' class='btn btn-primary editActBTN' type='button' edit_act_href='"+value['edit_href']+"' number_act='"+(value['number_act']!=null?value['number_act']:'')+"' date_act='"+(value['date_act']!=null?value['date_act']:'')+"' amount_act='"+value['amount_act']+"'>Редактировать</button></td></tr>");
+				(value['number_outgoing_act']!=null?value['number_outgoing_act']:'')+"</td><td>"+
+				(value['date_outgoing_act']!=null?value['date_outgoing_act']:'')+"</td><td>"+
+				(value['number_incoming_act']!=null?value['number_incoming_act']:'')+"</td><td>"+
+				(value['date_incoming_act']!=null?value['date_incoming_act']:'')+"</td><td>"+
+				value['amount_act']+"</td><td><button type='button' class='btn btn-primary editActBTN' type='button' edit_act_href='"+value['edit_href']+"' number_act='"+(value['number_act']!=null?value['number_act']:'')+"' date_act='"+(value['date_act']!=null?value['date_act']:'')+"' number_outgoing_act='"+(value['number_outgoing_act']!=null?value['number_outgoing_act']:'')+"' date_outgoing_act='"+(value['date_outgoing_act']!=null?value['date_outgoing_act']:'')+"' number_incoming_act='"+(value['number_incoming_act']!=null?value['number_incoming_act']:'')+"' date_incoming_act='"+(value['date_incoming_act']!=null?value['date_incoming_act']:'')+"' amount_act='"+value['amount_act']+"'>Редактировать</button></td></tr>");
 		});
-		$('#tbodyForModalActs').append("<tr class='rowsContract'><td></td><td><b>Сумма:</b></td><td><b>"+$(this).attr('amount_acts')+"</b></td><td></td></tr>");
+		$('#tbodyForModalActs').append("<tr class='rowsContract'><td></td><td></td><td></td><td></td><td></td><td><b>Сумма:</b></td><td><b>"+$(this).attr('amount_acts')+"</b></td><td></td></tr>");
 		$('#formNewAct').attr('action', $(this).attr('new_act_href'));
 		$('#modalActs').modal('show');
 	});
@@ -882,6 +1033,10 @@ $(document).ready(function(){
 		$('#formEditAct').attr('action',$(this).attr('edit_act_href'));
 		$('#edit_number_act').val($(this).attr('number_act'));
 		$('#edit_date_act').val($(this).attr('date_act'));
+		$('#edit_number_outgoing_act').val($(this).attr('number_outgoing_act'));
+		$('#edit_date_outgoing_act').val($(this).attr('date_outgoing_act'));
+		$('#edit_number_incoming_act').val($(this).attr('number_incoming_act'));
+		$('#edit_date_incoming_act').val($(this).attr('date_incoming_act'));
 		$('#edit_amount_act').val($(this).attr('amount_act'));
 	});
 	
@@ -891,6 +1046,10 @@ $(document).ready(function(){
 		$('#formEditContractAct').attr('action',$(this).attr('edit_act_href'));
 		$('#edit_contract_number_act').val($(this).attr('number_act'));
 		$('#edit_contract_date_act').val($(this).attr('date_act'));
+		$('#edit_contract_number_outgoing_act').val($(this).attr('number_outgoing_act'));
+		$('#edit_contract_date_outgoing_act').val($(this).attr('date_outgoing_act'));
+		$('#edit_contract_number_incoming_act').val($(this).attr('number_incoming_act'));
+		$('#edit_contract_date_incoming_act').val($(this).attr('date_incoming_act'));
 		$('#edit_contract_amount_act').val($(this).attr('amount_act'));
 	});
 	
@@ -1384,6 +1543,7 @@ $(document).ready(function(){
 		if(navigator.userAgent.search('Firefox') >= 0){
 			var uri = 'data:application/vnd.ms-excel;base64,', 
 			template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridLines/></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table border="2px solid black">{table}</table></body></html>',
+			templateNoneTable = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridLines/></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>',
 			base64 = function(s) {
 				return window.btoa(unescape(encodeURIComponent(s)))
 			},
@@ -1407,16 +1567,20 @@ $(document).ready(function(){
 			}*/
 			
 			//Для firefox
-			return function(table, name) {
+			return function(table, name, fileName, noneTable) {
 				if (!table.nodeType) 
 					table = document.getElementById(table)
 				var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-				window.location.href = uri + base64(format(template, ctx))
+				if (noneTable == true)
+					window.location.href = uri + base64(format(templateNoneTable, ctx))
+				else
+					window.location.href = uri + base64(format(template, ctx))
 				//downloadURI(resuri, fileName);
 			}
 		}else{
 			var uri = 'data:application/vnd.ms-excel;base64,', 
 			template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridLines/></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table border="2px solid black">{table}</table></body></html>',
+			templateNoneTable = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridLines/></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>',
 			base64 = function(s) {
 				return window.btoa(unescape(encodeURIComponent(s)))
 			},
@@ -1431,11 +1595,14 @@ $(document).ready(function(){
 				link.href = uri;
 				link.click();
 			}
-			return function(table, name, fileName) {
+			return function(table, name, fileName, noneTable) {
 				if (!table.nodeType) 
 					table = document.getElementById(table)
 				var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-				var resuri = uri + base64(format(template, ctx))
+				if (noneTable == true)
+					var resuri = uri + base64(format(templateNoneTable, ctx))
+				else
+					var resuri = uri + base64(format(template, ctx))
 				downloadURI(resuri, fileName);
 			}
 		}
@@ -1443,6 +1610,10 @@ $(document).ready(function(){
 	
 	$('#createExcel').on('click', function(e){
 		tableToExcel('resultTable',$(this).attr('real_name_table'),$(this).attr('real_name_table')+'.xls');
+	});
+	
+	$('#createExcelNoneTable').on('click', function(e){
+		tableToExcel('resultTable',$(this).attr('real_name_table'),$(this).attr('real_name_table')+'.xls', true);
 	});
 	
 	$('#createWord').on('click', function(e){

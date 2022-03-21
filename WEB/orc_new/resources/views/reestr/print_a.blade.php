@@ -60,7 +60,7 @@
 						@if(isset($contracts))
 							@foreach($contracts as $contract)
 								<tr>
-									<td>{{$contract->number_contract}}<br/>{{$contract->number_counterpartie_contract_reestr}} {{$contract->date_contract_on_first_reestr ? 'от ' . $contract->date_contract_on_first_reestr : ''}}</td>
+									<td>{{$contract->number_contract}}<br/>{{$contract->number_counterpartie_contract_reestr}} {{$contract->date_contract_on_first_reestr ? 'от ' . $contract->date_contract_on_first_reestr : ''}}<br/>{{$contract->executor_contract_reestr}}</td>
 									<td>{{$contract->counterpartie_name}}</td>
 									<td>{{$contract->item_contract}}</td>
 									<td>{{$contract->date_maturity_reestr}}</td>
@@ -85,7 +85,7 @@
 									<td colspan='8' style='text-align: center;'><?php if($text == 'Отчет о Договорах/Контрактов по подразделению по Исполнителю') echo $value[0]->executor_contract_reestr; else echo $key; ?></td>
 									@foreach($value as $contract)
 										<tr>
-											<td>{{$contract->number_contract}}<br/>{{$contract->number_counterpartie_contract_reestr}}</td>
+											<td>{{$contract->number_contract}}<br/>{{$contract->number_counterpartie_contract_reestr}}<br/>{{$contract->executor_contract_reestr}}</td>
 											<td>{{$contract->counterpartie_name}}</td>
 											<td>{{$contract->item_contract}}</td>
 											<td>{{$contract->date_maturity_reestr}}</td>

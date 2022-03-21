@@ -65,6 +65,7 @@ class ResolutionController extends Controller
 		$file = $request->file('new_file_resolution');
 		//md5
 		$md5 = md5($file);
+		$md5 = $md5 . uniqid(mt_rand(), true);
 		
 		//Путь к файлу
 		$patchPrFirst = 'resolution/'.$md5[0].$md5[1];
@@ -140,6 +141,7 @@ class ResolutionController extends Controller
 			$file = $request->file('new_file_resolution');
 			//md5
 			$md5 = md5($file);
+			$md5 = $md5 . uniqid(mt_rand(), true);
 			
 			//Путь к файлу
 			$patchPrFirst = 'resolution/'.$md5[0].$md5[1];
@@ -184,6 +186,7 @@ class ResolutionController extends Controller
 			
 			$file = $request->file('new_file_resolution');
 			$md5 = md5($file);
+			$md5 = $md5 . uniqid(mt_rand(), true);
 			
 			//Путь к файлу
 			$patchPrFirst = 'resolution_counterpartie/'.$md5[0].$md5[1];

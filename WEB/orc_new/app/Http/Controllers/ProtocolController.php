@@ -22,7 +22,7 @@ class ProtocolController extends Controller
 			$resolutions = Resolution::select(['*'])->where('id_protocol_resolution', $protocol->id)->where('deleted_at', null)->orderBy('id','desc')->get();
 			$protocol->resolutions = $resolutions;
 		}
-		$type_resolutions = DB::SELECT('SELECT * FROM type_resolutions');	
+		$type_resolutions = DB::SELECT('SELECT * FROM type_resolutions');
 		return view('reestr.protocols', ['id_contract'=>$id_contract, 'protocols'=>$protocols, 'type_resolutions'=>$type_resolutions]);
 	}
 	
@@ -34,8 +34,12 @@ class ProtocolController extends Controller
 						'id_contract' => $id_contract,
 						'is_protocol' => 1,
 						'is_oud' => $request['is_oud'] ? 1 : 0,
-						'is_dep' => $request['is_dep'] ? 1 : 0
+						'is_oud_el' => $request['is_oud_el'] ? 1 : 0,
+						'is_dep' => $request['is_dep'] ? 1 : 0,
+						'is_dep_el' => $request['is_dep_el'] ? 1 : 0
 		]);
+		$count_protocol = Protocol::select('id')->where('id_contract', $id_contract)->count();
+		$protocol->position_additional_document = $count_protocol + 1;
 		$all_dirty = JournalController::getMyChanges($protocol);
 		$protocol->save();
 		JournalController::store(Auth::User()->id,'Добавлен протокол для контракта с id = ' . $id_contract . '~' . json_encode($all_dirty));
@@ -62,8 +66,12 @@ class ProtocolController extends Controller
 						'id_contract' => $id_contract,
 						'is_additional_agreement' => 1,
 						'is_oud' => $request['is_oud'] ? 1 : 0,
-						'is_dep' => $request['is_dep'] ? 1 : 0
+						'is_oud_el' => $request['is_oud_el'] ? 1 : 0,
+						'is_dep' => $request['is_dep'] ? 1 : 0,
+						'is_dep_el' => $request['is_dep_el'] ? 1 : 0
 		]);
+		$count_additional_document = Protocol::select('id')->where('id_contract', $id_contract)->count();
+		$protocol->position_additional_document = $count_additional_document + 1;
 		$all_dirty = JournalController::getMyChanges($protocol);
 		$protocol->save();
 		if($protocol->amount_protocol)
@@ -84,7 +92,9 @@ class ProtocolController extends Controller
 		$protocol->fill($request->all());
 		$protocol->fill([
 						'is_oud' => $request['is_oud'] ? 1 : 0,
-						'is_dep' => $request['is_dep'] ? 1 : 0
+						'is_oud_el' => $request['is_oud_el'] ? 1 : 0,
+						'is_dep' => $request['is_dep'] ? 1 : 0,
+						'is_dep_el' => $request['is_dep_el'] ? 1 : 0
 		]);
 		$all_dirty = JournalController::getMyChanges($protocol);
 		$protocol->save();

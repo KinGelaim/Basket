@@ -9,14 +9,14 @@
 		@if(Auth::User())
 			<?php 
 				$is_disabled = '';
-				if(Auth::User()->hasRole()->role != 'Администратор' AND Auth::User()->hasRole()->role != 'Планово-экономический отдел')
+				if(Auth::User()->hasRole()->role != 'Администратор' AND Auth::User()->hasRole()->role != 'Планово-экономический отдел' AND Auth::User()->hasRole()->role != 'Отдел управления договорами')
 					$is_disabled = 'disabled';
 				if(Auth::User()->hasRole()->role == 'Десятый отдел')
 					if(count(explode("‐",$contract->number_contract))>1)
 						if(explode("‐",$contract->number_contract)[1] == '23')
 							$is_disabled = '';
 			?>
-			<div class="">
+			<div id='mainTableAdditionalDocuments' class="">
 				<table class="table" style='margin: 0 auto; margin-bottom: 20px;'>
 					<thead>
 						<tr>
@@ -26,6 +26,9 @@
 							<th style='text-align: center;'>Сроки проведения</th>
 							<th colspan='2' style='text-align: center;'>Сумма начальная с НДС, руб.</th>
 							<th style='text-align: center;'>Ред</th>
+							@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+								<th style='text-align: center;'>Уд</th>
+							@endif
 							<th style='text-align: center;'>Согласование</th>
 							<th style='text-align: center;'>Лист согласования</th>
 							<th style='text-align: center;'>Состояние</th>
@@ -38,6 +41,9 @@
 							<th style='text-align: center;'>всего</th>
 							<th style='text-align: center;'>в т.ч на тек. год</th>
 							<th></th>
+							@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+								<th></th>
+							@endif
 							<th></th>
 							<th></th>
 							<th></th>
@@ -52,6 +58,9 @@
 							<td>{{$contract->amount_reestr}}</td>
 							<td>{{$contract->amount_year_reestr}}</td>
 							<td></td>
+							@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+								<td></td>
+							@endif
 							<td><button class='btn btn-primary btn-href' type='button' style='width: 154px;' href='{{ route("reconciliation.contract.show", $contract->id) }}' {{$is_disabled}}>Согласование</button></td>
 							<td><button type='button' class='btn btn-primary btn-href' href='{{route("department.reconciliation.print_reconciliation",$contract->id)}}' title='Напечатать лист согласования'><!--☼--><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -226px; background-position-y: -136px;'></span></button></td>
 							<td>
@@ -70,7 +79,14 @@
 								<td>{{$additional_document->date_protocol}}</td>
 								<td>{{$additional_document->amount_protocol}}</td>
 								<td>{{$additional_document->amount_year_protocol}}</td>
-								<td><button type='button' class='btn btn-primary rowsAdditionalDocument' title='Редактировать договорной материал' additional_document='{{$additional_document}}' href_edit_additional_document="{{route('department.reestr.update_protocol', $additional_document->id)}}" href_add_resolution="{{route('resolution_store',$additional_document->id)}}"><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -91px; background-position-y: -158px;'></span></button></td>
+								@if($additional_document->is_protocol)
+									<td><button type='button' class='btn btn-primary rowsAdditionalDocument' title='Редактировать договорной материал' additional_document='{{$additional_document}}' href_edit_additional_document="{{route('department.reestr.update_protocol', $additional_document->id)}}" href_add_resolution="{{route('resolution_store',$additional_document->id)}}"><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -91px; background-position-y: -158px;'></span></button></td>
+								@else
+									<td><button type='button' class='btn btn-primary rowsAdditionalDocument2' title='Редактировать договорной материал' additional_document='{{$additional_document}}' href_edit_additional_document="{{route('department.reestr.update_protocol', $additional_document->id)}}" href_add_resolution="{{route('resolution_store',$additional_document->id)}}"><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -91px; background-position-y: -158px;'></span></button></td>
+								@endif
+								@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+									<td><button type='button' class='btn btn-danger btn-href' href='{{route("department.reestr.delete_protocol", $additional_document->id)}}' title='Удалить'><!--☼--><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -247px; background-position-y: -136px;'></span></button></td>
+								@endif
 								<td><button class='btn btn-primary btn-href' type='button' style='width: 154px;' href='{{ route("reconciliation.additional_document.show", $additional_document->id) }}' {{$is_disabled}}>Согласование</button></td>
 								<td><button type='button' class='btn btn-primary btn-href' href='{{route("reconciliation.additional_document.print_reconciliation",$additional_document->id)}}' title='Напечатать лист согласования'><span class="ui-icon ui-icon-1-1" style='background-size: 355px; background-position-x: -226px; background-position-y: -136px;'></span></button></td>
 								<td>
@@ -88,7 +104,119 @@
 					<button type='button' data-toggle="modal" data-target="#new_protocol"  class='btn btn-primary' {{$is_disabled}}>Добавить протокол</button>
 					<button type='button' data-toggle="modal" data-target="#new_additional_agreement"  class='btn btn-primary' {{$is_disabled}}>Добавить дополнительное соглашение</button>
 				@endif
+				@if(Auth::User()->hasRole()->role != 'Администрация' AND Auth::User()->hasRole()->role != 'Планово-экономический отдел')
+					<button type='button' class='btn btn-secondary steps' first_step='#mainTableAdditionalDocuments' second_step='#positionTableAdditionalDocuments' {{$is_disabled}}>Изменить порядок</button>
+				@endif
 			</div>
+			<div id='positionTableAdditionalDocuments' style='display: none;'>
+				<form method='POST' action='{{route("update_position_additional_documents", $id_contract)}}'>
+					{{csrf_field()}}
+					<table id='tableSwapRows' class="table" style='margin: 0 auto; margin-bottom: 20px;'>
+						<thead>
+							<tr>
+								<th style='text-align: center;'>Позиция</th>
+								<th style='text-align: center;'>Заявка</th>
+								<th style='text-align: center;'>Дог. мат.</th>
+								<th style='text-align: center;'>Наименование работ</th>
+								<th style='text-align: center;'>Сроки проведения</th>
+								<th colspan='2' style='text-align: center;'>Сумма начальная с НДС, руб.</th>
+								<th style='text-align: center;'>Ред</th>
+								@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+									<th style='text-align: center;'>Уд</th>
+								@endif
+								<th style='text-align: center;'>Согласование</th>
+								<th style='text-align: center;'>Лист согласования</th>
+								<th style='text-align: center;'>Состояние</th>
+							</tr>
+							<tr>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th style='text-align: center;'>всего</th>
+								<th style='text-align: center;'>в т.ч на тек. год</th>
+								<th></th>
+								@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
+									<th></th>
+								@endif
+								<th></th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<!--
+							<tr class="rowsContract" style='text-align: center;'>
+								<td></td>
+								<td>{{$contract->app_outgoing_number_reestr}}</td>
+								<td>{{$contract->number_contract}}</td>
+								<td>{{$contract->item_contract}}</td>
+								<td>{{$contract->date_maturity_reestr}}</td>
+								<td>{{$contract->amount_reestr}}</td>
+								<td>{{$contract->amount_year_reestr}}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>
+									@if(count($states) > 0)
+										{{$states[count($states)-1]->name_state}}<br/>
+										{{$states[count($states)-1]->comment_state}}<br/>
+									@endif
+								</td>
+							</tr>
+							-->
+							<?php $position = 1; ?>
+							@foreach($additional_documents as $additional_document)
+								<tr class="rowsContract cursorPointer" style='text-align: center;'>
+									<td><input class='form-control' style='width: 50px; margin: auto; text-align: center;' value='{{$position++}}' name='additional_document_position[{{$additional_document->id}}]' /></td>
+									<td>{{$additional_document->application_protocol}}</td>
+									<td>{{$additional_document->name_protocol}}</td>
+									<td>{{$additional_document->name_work_protocol}}</td>
+									<td>{{$additional_document->date_protocol}}</td>
+									<td>{{$additional_document->amount_protocol}}</td>
+									<td>{{$additional_document->amount_year_protocol}}</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td>
+										@if(count($additional_document->states) > 0)
+											{{$additional_document->states[count($additional_document->states)-1]->name_state}}<br/>
+											{{$additional_document->states[count($additional_document->states)-1]->comment_state}}<br/>
+										@endif
+									</td>
+								</tr>
+							@endforeach
+						</tbody>
+					</table>
+					<button type='button' class='btn btn-secondary steps' first_step='#positionTableAdditionalDocuments' second_step='#mainTableAdditionalDocuments'>Отменить</button>
+					@if(Auth::User()->hasRole()->role != 'Администрация' AND Auth::User()->hasRole()->role != 'Планово-экономический отдел')
+						<button type='submit' class='btn btn-primary' {{$is_disabled}}>Сохранить</button>
+					@endif
+				</form>
+			</div>
+			<script>
+				$('#tableSwapRows').sortable({
+					//items: 'tr:not(tr:first-child)',
+					items: 'tr',
+					cursor: 'pointer',
+					axis: 'y',
+					dropOnEmpty: false,
+					start: function(e, ui){
+						ui.item.addClass('selected');
+					},
+					stop: function(e, ui){
+						ui.item.removeClass('selected');
+						$(this).find('tr').each(function(index){
+							if (index > 0) {
+								$(this).find('td').eq(0).find('input').val(index - 1)
+							}
+						});
+					}
+				});
+			</script>
 			<!-- Модальное окно история состояний -->
 			<div class="modal fade" id="history_states" tabindex="-1" role="dialog" aria-labelledby="historyStatesModalLabel" aria-hidden="true">
 				<div class="modal-dialog" role="document">
@@ -342,7 +470,7 @@
 								</div>
 								<div class='row'>
 									<div class="col-md-4">
-										<label>Дата подписания ФКП "НТИИМ"</label>
+										<label style='font-size: 11px;'>Дата подписания ф-л "НТИИМ" (ФКП "НТИИМ")</label>
 									</div>
 									<div class="col-md-8">
 										<input class='datepicker form-control' name='date_signing_protocol' type='text' value=''/>
@@ -357,27 +485,66 @@
 									</div>
 								</div>
 								<div class='row'>
-									<div class="col-md-2">
-										<label>Дата сдачи на хранение</label>
+									<div class="col-md-4">
+										<label>Дата вступления в силу</label>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-8">
+										<input class='datepicker form-control' name='date_entry_ento_force_additional_agreement' type='text' value=''/>
+									</div>
+								</div>
+								<div class='row'>
+									<div class="col-md-2">
+										<label>Дата сдачи на хранение в ОУД</label>
+									</div>
+									<div class="col-md-4">
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='is_oud'>ОУД</label>
-												<input id='is_oud' class='form-check-input' name='is_oud' type="checkbox"/>
+												<label for='is_oud_el'>скан (эл. вариант)</label>
+												<input id='is_oud_el' class='form-check-input' name='is_oud_el' type="checkbox"/>
 											</div>
 										</div>
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='is_dep'>Отдел №31</label>
+												<label for='is_oud'>оригинал</label>
+												<input id='is_oud' class='form-check-input' name='is_oud' type="checkbox"/>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class='row'>
+											<div class="col-md-12">
+												<input class='datepicker form-control' name='date_oud_el_protocol' type='text' value=''/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<input class='datepicker form-control' name='date_oud_protocol' type='text' value=''/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='row'>
+									<div class="col-md-2">
+										<label>Дата сдачи на хранение в отдел №31</label>
+									</div>
+									<div class="col-md-4">
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='is_dep_el'>скан (эл. вариант)</label>
+												<input id='is_dep_el' class='form-check-input' name='is_dep_el' type="checkbox"/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='is_dep'>оригинал</label>
 												<input id='is_dep' class='form-check-input' name='is_dep' type="checkbox"/>
 											</div>
 										</div>
 									</div>
-									<div class="col-md-7">
+									<div class="col-md-6">
 										<div class='row'>
 											<div class="col-md-12">
-												<input class='datepicker form-control' name='date_oud_protocol' type='text' value=''/>
+												<input class='datepicker form-control' name='date_dep_el_protocol' type='text' value=''/>
 											</div>
 										</div>
 										<div class='row'>
@@ -488,7 +655,7 @@
 								</div>
 								<div class='row'>
 									<div class="col-md-4">
-										<label>Дата подписания ФКП "НТИИМ"</label>
+										<label style='font-size: 11px;'>Дата подписания ф-л "НТИИМ" (ФКП "НТИИМ")</label>
 									</div>
 									<div class="col-md-8">
 										<input id='update_date_signing_protocol' class='datepicker form-control' name='date_signing_protocol' type='text' value='' {{$is_disabled}}/>
@@ -503,27 +670,66 @@
 									</div>
 								</div>
 								<div class='row'>
-									<div class="col-md-2">
-										<label>Дата сдачи на хранение</label>
+									<div class="col-md-4">
+										<label>Дата вступления в силу</label>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-8">
+										<input id='update_date_entry_ento_force_additional_agreement' class='datepicker form-control' name='date_entry_ento_force_additional_agreement' type='text' value='' {{$is_disabled}}/>
+									</div>
+								</div>
+								<div class='row'>
+									<div class="col-md-2">
+										<label>Дата сдачи на хранение в ОУД</label>
+									</div>
+									<div class="col-md-4">
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='update_is_oud'>ОУД</label>
-												<input id='update_is_oud' class='form-check-input' name='is_oud' type="checkbox" {{$is_disabled}}/>
+												<label for='update_is_oud_el'>скан (эл. вариант)</label>
+												<input id='update_is_oud_el' class='form-check-input' name='is_oud_el' type="checkbox" {{$is_disabled}}/>
 											</div>
 										</div>
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='update_is_dep'>Отдел №31</label>
+												<label for='update_is_oud'>оригинал</label>
+												<input id='update_is_oud' class='form-check-input' name='is_oud' type="checkbox" {{$is_disabled}}/>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class='row'>
+											<div class="col-md-12">
+												<input id='update_date_oud_el_protocol' class='datepicker form-control' name='date_oud_el_protocol' type='text' value='' {{$is_disabled}}/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<input id='update_date_oud_protocol' class='datepicker form-control' name='date_oud_protocol' type='text' value='' {{$is_disabled}}/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='row'>
+									<div class="col-md-2">
+										<label>Дата сдачи на хранение в отдел №31</label>
+									</div>
+									<div class="col-md-4">
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='update_is_dep_el'>скан (эл. вариант)</label>
+												<input id='update_is_dep_el' class='form-check-input' name='is_dep_el' type="checkbox" {{$is_disabled}}/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='update_is_dep'>оригинал</label>
 												<input id='update_is_dep' class='form-check-input' name='is_dep' type="checkbox" {{$is_disabled}}/>
 											</div>
 										</div>
 									</div>
-									<div class="col-md-7">
+									<div class="col-md-6">
 										<div class='row'>
 											<div class="col-md-12">
-												<input id='update_date_oud_protocol' class='datepicker form-control' name='date_oud_protocol' type='text' value='' {{$is_disabled}}/>
+												<input id='update_date_dep_el_protocol' class='datepicker form-control' name='date_dep_el_protocol' type='text' value='' {{$is_disabled}}/>
 											</div>
 										</div>
 										<div class='row'>
@@ -695,7 +901,7 @@
 								</div>
 								<div class='row'>
 									<div class="col-md-4">
-										<label>Дата протокола на 1 л.:</label>
+										<label>Дата ДС на 1 л.:</label>
 									</div>
 									<div class="col-md-8">
 										<input class='datepicker form-control' name='date_on_first_protocol' type='text' value=''/>
@@ -711,7 +917,7 @@
 								</div>
 								<div class='row'>
 									<div class="col-md-4">
-										<label>Дата подписания ФКП "НТИИМ"</label>
+										<label style='font-size: 11px;'>Дата подписания ф-л "НТИИМ" (ФКП "НТИИМ")</label>
 									</div>
 									<div class="col-md-8">
 										<input class='datepicker form-control' name='date_signing_protocol' type='text' value=''/>
@@ -735,26 +941,57 @@
 								</div>
 								<div class='row'>
 									<div class="col-md-2">
-										<label>Дата сдачи на хранение</label>
+										<label>Дата сдачи на хранение в ОУД</label>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-4">
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='is_oud'>ОУД</label>
-												<input id='is_oud' class='form-check-input' name='is_oud' type="checkbox"/>
+												<label for='is_oud_el'>скан (эл. вариант)</label>
+												<input id='is_oud_el' class='form-check-input' name='is_oud_el' type="checkbox"/>
 											</div>
 										</div>
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='is_dep'>Отдел №31</label>
+												<label for='is_oud'>оригинал</label>
+												<input id='is_oud' class='form-check-input' name='is_oud' type="checkbox"/>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class='row'>
+											<div class="col-md-12">
+												<input class='datepicker form-control' name='date_oud_el_protocol' type='text' value=''/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<input class='datepicker form-control' name='date_oud_protocol' type='text' value=''/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='row'>
+									<div class="col-md-2">
+										<label>Дата сдачи на хранение в отдел №31</label>
+									</div>
+									<div class="col-md-4">
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='is_dep_el'>скан (эл. вариант)</label>
+												<input id='is_dep_el' class='form-check-input' name='is_dep_el' type="checkbox"/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='is_dep'>оригинал</label>
 												<input id='is_dep' class='form-check-input' name='is_dep' type="checkbox"/>
 											</div>
 										</div>
 									</div>
-									<div class="col-md-7">
+									<div class="col-md-6">
 										<div class='row'>
 											<div class="col-md-12">
-												<input class='datepicker form-control' name='date_oud_protocol' type='text' value=''/>
+												<input class='datepicker form-control' name='date_dep_el_protocol' type='text' value=''/>
 											</div>
 										</div>
 										<div class='row'>
@@ -844,7 +1081,7 @@
 										<label>Сроки проведения:</label>
 									</div>
 									<div class="col-md-8">
-										<input id='update_date_protocol' class='form-control' name='date_protocol' type='text' value='' {{$is_disabled}}/>
+										<input id='update_date_protocol2' class='form-control' name='date_protocol' type='text' value='' {{$is_disabled}}/>
 									</div>
 								</div>
 								<div class='row'>
@@ -852,7 +1089,7 @@
 										<label>Дата ДС на 1 л.:</label>
 									</div>
 									<div class="col-md-8">
-										<input id='update_date_on_first_protocol' class='datepicker form-control' name='date_on_first_protocol' type='text' value='' {{$is_disabled}}/>
+										<input id='update_date_on_first_protocol2' class='datepicker form-control' name='date_on_first_protocol' type='text' value='' {{$is_disabled}}/>
 									</div>
 								</div>
 								<div class='row'>
@@ -860,15 +1097,15 @@
 										<label>Дата регистрации:</label>
 									</div>
 									<div class="col-md-8">
-										<input id='update_date_registration_protocol' class='datepicker form-control' name='date_registration_protocol' type='text' value='' required {{$is_disabled}}/>
+										<input id='update_date_registration_protocol2' class='datepicker form-control' name='date_registration_protocol' type='text' value='' required {{$is_disabled}}/>
 									</div>
 								</div>
 								<div class='row'>
 									<div class="col-md-4">
-										<label>Дата подписания ФКП "НТИИМ"</label>
+										<label style='font-size: 11px;'>Дата подписания ф-л "НТИИМ" (ФКП "НТИИМ")</label>
 									</div>
 									<div class="col-md-8">
-										<input id='update_date_signing_protocol' class='datepicker form-control' name='date_signing_protocol' type='text' value='' {{$is_disabled}}/>
+										<input id='update_date_signing_protocol2' class='datepicker form-control' name='date_signing_protocol' type='text' value='' {{$is_disabled}}/>
 									</div>
 								</div>
 								<div class='row'>
@@ -876,7 +1113,7 @@
 										<label>Дата подписания контрагентом</label>
 									</div>
 									<div class="col-md-8">
-										<input id='update_date_signing_counterpartie_protocol' class='datepicker form-control' name='date_signing_counterpartie_protocol' type='text' value='' {{$is_disabled}}/>
+										<input id='update_date_signing_counterpartie_protocol2' class='datepicker form-control' name='date_signing_counterpartie_protocol' type='text' value='' {{$is_disabled}}/>
 									</div>
 								</div>
 								<div class='row'>
@@ -884,36 +1121,67 @@
 										<label>Дата вступления в силу</label>
 									</div>
 									<div class="col-md-8">
-										<input id='update_date_entry_ento_force_additional_agreement' class='datepicker form-control' name='date_entry_ento_force_additional_agreement' type='text' value='' {{$is_disabled}}/>
+										<input id='update_date_entry_ento_force_additional_agreement2' class='datepicker form-control' name='date_entry_ento_force_additional_agreement' type='text' value='' {{$is_disabled}}/>
 									</div>
 								</div>
 								<div class='row'>
 									<div class="col-md-2">
-										<label>Дата сдачи на хранение</label>
+										<label>Дата сдачи на хранение в ОУД</label>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-4">
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='update_is_oud'>ОУД</label>
-												<input id='update_is_oud' class='form-check-input' name='is_oud' type="checkbox" {{$is_disabled}}/>
+												<label for='update_is_oud_el'>скан (эл. вариант)</label>
+												<input id='update_is_oud_el' class='form-check-input' name='is_oud_el' type="checkbox" {{$is_disabled}}/>
 											</div>
 										</div>
 										<div class='row'>
 											<div class="col-md-12">
-												<label for='update_is_dep'>Отдел №31</label>
+												<label for='update_is_oud'>оригинал</label>
+												<input id='update_is_oud' class='form-check-input' name='is_oud' type="checkbox" {{$is_disabled}}/>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class='row'>
+											<div class="col-md-12">
+												<input id='update_date_oud_el_protocol2' class='datepicker form-control' name='date_oud_el_protocol' type='text' value='' {{$is_disabled}}/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<input id='update_date_oud_protocol2' class='datepicker form-control' name='date_oud_protocol' type='text' value='' {{$is_disabled}}/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class='row'>
+									<div class="col-md-2">
+										<label>Дата сдачи на хранение в отдел №31</label>
+									</div>
+									<div class="col-md-4">
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='update_is_dep_el'>скан (эл. вариант)</label>
+												<input id='update_is_dep_el' class='form-check-input' name='is_dep_el' type="checkbox" {{$is_disabled}}/>
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='update_is_dep'>оригинал</label>
 												<input id='update_is_dep' class='form-check-input' name='is_dep' type="checkbox" {{$is_disabled}}/>
 											</div>
 										</div>
 									</div>
-									<div class="col-md-7">
+									<div class="col-md-6">
 										<div class='row'>
 											<div class="col-md-12">
-												<input id='update_date_oud_protocol' class='datepicker form-control' name='date_oud_protocol' type='text' value='' {{$is_disabled}}/>
+												<input id='update_date_dep_el_protocol2' class='datepicker form-control' name='date_dep_el_protocol' type='text' value='' {{$is_disabled}}/>
 											</div>
 										</div>
 										<div class='row'>
 											<div class="col-md-12">
-												<input id='update_date_dep_protocol' class='datepicker form-control' name='date_dep_protocol' type='text' value='' {{$is_disabled}}/>
+												<input id='update_date_dep_protocol2' class='datepicker form-control' name='date_dep_protocol' type='text' value='' {{$is_disabled}}/>
 											</div>
 										</div>
 									</div>

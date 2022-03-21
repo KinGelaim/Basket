@@ -25,15 +25,21 @@
 				<button type="button" class="btn btn-primary steps" style='white-space: normal;' first_step='#printListPEO' second_step='#paymentPeriod'>Оплата за период</button>
 			</div>
 		</div>
-		@if (Auth::User())
-			@if(Auth::User()->hasRole()->role == 'Администратор')
-				<div class='row'>
-					<div class="col-md-12">
-						<button type="button" class="btn btn-second steps" style='white-space: normal;' first_step='#printListPEO' second_step='#backpackContracts'>Портфель контрактов</button>
-					</div>
-				</div>
-			@endif
-		@endif
+		<div class='row'>
+			<div class="col-md-12">
+				<button type="button" class="btn steps" style='white-space: normal;' first_step='#printListPEO' second_step='#backpackContracts'>Портфель контрактов</button>
+			</div>
+		</div>
+		<div class='row'>
+			<div class="col-md-12">
+				<button type="button" class="btn steps" style='white-space: normal;' first_step='#printListPEO' second_step='#actComplete'>Акт сдачи-приемки выполненных работ</button>
+			</div>
+		</div>
+		<div class='row'>
+			<div class="col-md-12">
+				<button type="button" class="btn steps" style='white-space: normal;' first_step='#printListPEO' second_step='#completeIspPeriodPEO'>Отчет по контрольным испытаниям</button>
+			</div>
+		</div>
 	</div>
 	<div id='printPEO' class="col-md-8 col-md-offset-2" style='display: none;'>
 		<form method='GET' action='{{route("department.leadership.peo")}}'>
@@ -212,63 +218,89 @@
 		</form>
 	</div>
 	<div id='backpackContracts' class="col-md-8 col-md-offset-2" style='display: none;'>
-		@if (Auth::User())
-			@if(Auth::User()->hasRole()->role == 'Администратор')
-				<form method='GET' action='{{route("department.leadership.peoBackpack")}}'>
-					<div class='row'>
-						<div class="col-md-12">
-							<div class="form-group">
-								<label>Выберите контрагента</label>
-								<select class="form-control" name='counterpartie'>
-									<option value=''>Все контрагенты</option>
-									@foreach($sip_counterparties as $counterpartie)
-										<option>{{$counterpartie->name}}</option>
-									@endforeach
-								</select>
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<label>Выберите вид договора</label>
-								<select class="form-control" name='view'>
-									<option value=''>Все виды договоров</option>
-									@foreach($viewContracts as $viewContract)
-										<option>{{ $viewContract->name_view_contract }}</option>
-									@endforeach
-								</select>
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<label>Выберите год</label>
-								<select class="form-control" name='year'>
-									<option value=''>Все года</option>
-									@foreach($years as $year)
-										<option>{{$year->year_contract}}</option>
-									@endforeach
-								</select>
-							</div>
-						</div>
-					</div>
-					<div class='row'>
-						<div class="col-md-6">
-							<button type="submit" class="btn btn-primary">Сформировать</button>
-						</div>
-						<div class="col-md-6">
-							<button type="button" class="btn btn-secondary steps" first_step='#backpackContracts' second_step='#printListPEO' style='float: right;'>Назад</button>
-						</div>
-					</div>
-				</form>
-			@else
-				<div class="alert alert-danger">
-					Недостаточно прав для просмотра данного элемента!
-				</div>
-				<div class='row'>
-					<div class="col-md-6">
-						<button type="button" class="btn btn-secondary steps" first_step='#backpackContracts' second_step='#printListPEO' style='float: right;'>Назад</button>
+		<form method='GET' action='{{route("department.leadership.peoBackpack")}}'>
+			<div class='row'>
+				<div class="col-md-12">
+					<div class="form-group">
+						<label>Выберите контрагента</label>
+						<select class="form-control" name='counterpartie'>
+							<option value=''>Все контрагенты</option>
+							@foreach($sip_counterparties as $counterpartie)
+								<option>{{$counterpartie->name}}</option>
+							@endforeach
+						</select>
 					</div>
 				</div>
-			@endif
-		@endif
+				<div class="col-md-12">
+					<div class="form-group">
+						<label>Выберите вид договора</label>
+						<select class="form-control" name='view'>
+							<option value=''>Все виды договоров</option>
+							@foreach($viewContracts as $viewContract)
+								<option>{{ $viewContract->name_view_contract }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="form-group">
+						<label>Выберите год</label>
+						<select class="form-control" name='year'>
+							<option value=''>Все года</option>
+							@foreach($years as $year)
+								<option>{{$year->year_contract}}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class='row'>
+				<div class="col-md-6">
+					<button type="submit" class="btn btn-primary">Сформировать</button>
+				</div>
+				<div class="col-md-6">
+					<button type="button" class="btn btn-secondary steps" first_step='#backpackContracts' second_step='#printListPEO' style='float: right;'>Назад</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id='actComplete' class="col-md-12" style='display: none;'>
+		<form method='GET' action='{{route("department.leadership.peo_act_complete")}}'>
+			<div class='row'>
+				<div class="col-md-12">
+					<label>Введите номер контракта</label>
+					<input class='form-control' type='text' name='number_contract' placeholder='08-02-2021'/>
+				</div>
+			</div>
+			<div class='row'>
+				<div class="col-md-6">
+					<button type="submit" class="btn btn-primary">Сформировать</button>
+				</div>
+				<div class="col-md-6">
+					<button type="button" class="btn btn-secondary steps" first_step='#actComplete' second_step='#printListPEO' style='float: right;'>Назад</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id='completeIspPeriodPEO' class="col-md-12" style='display: none;'>
+		<form method='GET' action='{{route("department.leadership.peo_isp_period_complete")}}'>
+			<div class='row'>
+				<div class="col-md-12">
+					<label>Выполнение за период</label>
+					<label>с</label>
+					<input class='datepicker form-control' type='text' name='date_begin'/>
+					<label>по</label>
+					<input class='datepicker form-control' type='text' name='date_end'/>
+				</div>
+			</div>
+			<div class='row'>
+				<div class="col-md-6">
+					<button type="submit" class="btn btn-primary">Сформировать</button>
+				</div>
+				<div class="col-md-6">
+					<button type="button" class="btn btn-secondary steps" first_step='#completeIspPeriodPEO' second_step='#printListPEO' style='float: right;'>Назад</button>
+				</div>
+			</div>
+		</form>
 	</div>
 </div>

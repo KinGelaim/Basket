@@ -24,6 +24,10 @@
 									<tr>
 										<th>Номер акта</th>
 										<th>Дата акта</th>
+										<th>Исходящий номер акта</th>
+										<th>Дата исходящего</th>
+										<th>Входящий номер акта</th>
+										<th>Дата входящего</th>
 										<th>Сумма с НДС, руб.</th>
 										<th>Редактировать</th>
 										@if(Auth::User()->hasRole()->role == 'Администратор')
@@ -37,6 +41,10 @@
 										<tr class='rowsContract'>
 											<td>{{$act->number_act}}</td>
 											<td>{{$act->date_act}}</td>
+											<td>{{$act->number_outgoing_act}}</td>
+											<td>{{$act->date_outgoing_act}}</td>
+											<td>{{$act->number_incoming_act}}</td>
+											<td>{{$act->date_incoming_act}}</td>
 											<td>{{is_numeric($act->amount_act) ? number_format($act->amount_act, 2, ',', ' ') : $act->amount_act}}</td>
 											<td><button type='button' class='btn btn-primary btn-href' type='button' href='{{route("department.second.edit_act", $act->id)}}'>Редактировать</button></td>
 											@if(Auth::User()->hasRole()->role == 'Администратор')
@@ -46,6 +54,10 @@
 										<?php $amount_acts += $act->amount_act; ?>
 									@endforeach
 									<tr class='rowsContract'>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
 										<td></td>
 										<td><b>Сумма:</b></td>
 										<td><b>{{is_numeric($amount_acts) ? number_format($amount_acts, 2, ',', ' ') : $amount_acts}}</b></td>

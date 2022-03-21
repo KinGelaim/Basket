@@ -11,6 +11,9 @@ use App\ComponentPack;
 use App\Protocol;
 use App\SecondDepartmentTour;
 use App\Invoice;
+use App\State;
+use App\Curator;
+use App\Counterpartie;
 use Illuminate\Http\Request;
 
 class TreeController extends Controller
@@ -226,7 +229,30 @@ class TreeController extends Controller
 	
 	public function show_contract($id_contract)
 	{
-		$contract = Contract::select(['id','number_contract'])->where('id', $id_contract)->first();
+		$contract = Contract::select(['contracts.id', 'number_contract', 'number_counterpartie_contract_reestr',
+										'id_counterpartie_contract','number_contract','name_work_contract','id_goz_contract','goz_works.name_works_goz',
+										'id_view_work_contract', 'view_works.name_view_work',
+										'reestr_contracts.number_counterpartie_contract_reestr','reestr_contracts.executor_reestr',
+										'reestr_contracts.amount_reestr','reestr_contracts.amount_contract_reestr',
+										'reestr_contracts.amount_begin_reestr', 'reestr_contracts.vat_begin_reestr', 'reestr_contracts.approximate_amount_begin_reestr', 'reestr_contracts.fixed_amount_begin_reestr',
+										'reestr_contracts.fix_amount_contract_reestr', 'reestr_contracts.vat_reestr', 'reestr_contracts.approximate_amount_reestr', 'reestr_contracts.fixed_amount_reestr',
+										'reestr_contracts.date_b_contract_reestr', 'reestr_contracts.date_e_contract_reestr', 'reestr_contracts.date_contract_reestr', 
+										'reestr_contracts.date_maturity_date_reestr', 'reestr_contracts.date_e_maturity_reestr', 'reestr_contracts.date_maturity_reestr', 'name_view_contract',
+										'item_contract','reestr_contracts.date_contract_on_first_reestr', 'executor_contract_reestr'])
+								->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')
+								->leftJoin('reestr_contracts', 'reestr_contracts.id_contract_reestr', 'contracts.id')
+								->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', 'view_contracts.id')
+								->join('goz_works', 'contracts.id_goz_contract', '=', 'goz_works.id')
+								->where('contracts.id', $id_contract)
+								->first();
+		$curators = Curator::all();
+		foreach($curators as $curator)
+			if($curator->id == $contract->executor_contract_reestr)
+				$contract->name_executor = $curator->FIO;
+		$counterparties = Counterpartie::select(['*'])->orderBy('name', 'asc')->get();
+		foreach($counterparties as $counter)
+			if($contract->id_counterpartie_contract == $counter->id)
+				$contract->name_counterpartie_contract = $counter->name;
 		$protocols = Protocol::select()->where('id_contract', $id_contract)->where('is_protocol', 1)->get();
 		$additional_agreements = Protocol::select()->where('id_contract', $id_contract)->where('is_additional_agreement', 1)->get();
 		$tours = SecondDepartmentTour::select(['second_department_tours.id', 'second_department_tours.number_duty'])
@@ -260,25 +286,92 @@ class TreeController extends Controller
 		$contract->amount_invoices = $amount_invoices;
 		$contract->amount_payments = $amount_payments;
 		$contract->amount_returns = $amount_returns;
+		//Все счета
+		$scores = Invoice::select(['*','invoices.id','view_invoices.name_view_invoice'])
+											->leftjoin('view_invoices', 'invoices.id_view_invoice', 'view_invoices.id')
+											->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+											->where('id_contract', $id_contract)
+											->where('name', 'Счет на оплату')
+											->orderBy('invoices.number_invoice', 'asc')
+											->get();
+		$prepayments = Invoice::select(['*','invoices.id','view_invoices.name_view_invoice'])
+											->leftjoin('view_invoices', 'invoices.id_view_invoice', 'view_invoices.id')
+											->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+											->where('id_contract', $id_contract)
+											->where('name', 'Аванс')
+											->orderBy('invoices.number_invoice', 'asc')
+											->get();
+		$invoices = Invoice::select(['*','invoices.id','view_invoices.name_view_invoice'])
+											->leftjoin('view_invoices', 'invoices.id_view_invoice', 'view_invoices.id')
+											->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+											->where('id_contract', $id_contract)
+											->where('name', 'Счет-фактура')
+											->orderBy('invoices.number_invoice', 'asc')
+											->get();
+		$payments = Invoice::select(['*','invoices.id','view_invoices.name_view_invoice'])
+											->leftjoin('view_invoices', 'invoices.id_view_invoice', 'view_invoices.id')
+											->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+											->where('id_contract', $id_contract)
+											->where('name', 'Оплата')
+											->orderBy('invoices.number_invoice', 'asc')
+											->get();
+		$returns = Invoice::select(['*','invoices.id','view_invoices.name_view_invoice'])
+											->leftjoin('view_invoices', 'invoices.id_view_invoice', 'view_invoices.id')
+											->join('name_invoices', 'invoices.id_name_invoice', 'name_invoices.id')
+											->where('id_contract', $id_contract)
+											->where('name', 'Возврат')
+											->orderBy('invoices.number_invoice', 'asc')
+											->get();
 		//Вся резолюция, но отмеченная, как оригиналы
 		$result = [];
 		$resolutions = Resolution::select(['*'])->where('id_contract_resolution', $contract->id)->where('type_resolution', 1)->orderBy('id','desc')->get();
 		array_push($result, $resolutions);
 		foreach($protocols as $protocol)
 		{
-			$protocol_resolutions = Resolution::select(['*'])->where('id_protocol_resolution', $protocol->id)->where('type_resolution', 1)->orderBy('id','desc')->get();
+			$protocol_resolutions = Resolution::select(['*'])->where('id_protocol_resolution', $protocol->id)->where('type_resolution', 1)->orderBy('id','desc')->get();			
 			array_push($result, $protocol_resolutions);
+			
+			$states = State::select(['states.id','name_state','comment_state','date_state','users.surname','users.name','users.patronymic'])
+					->join('users','users.id','states.id_user')
+					->where('id_protocol', $protocol->id)
+					->get();
+			
+			$protocol->complete = 0;
+			if(count($states) > 0)
+				if($states[count($states) - 1]->name_state == "Заключен" OR $states[count($states) - 1]->name_state == "Заключён")
+					$protocol->complete = 1;
 		}
 		foreach($additional_agreements as $additional_agreement)
 		{
 			$additional_agreement_resolutions = Resolution::select(['*'])->where('id_protocol_resolution', $additional_agreement->id)->where('type_resolution', 1)->orderBy('id','desc')->get();
 			array_push($result, $additional_agreement_resolutions);
+			
+			$states = State::select(['states.id','name_state','comment_state','date_state','users.surname','users.name','users.patronymic'])
+					->join('users','users.id','states.id_user')
+					->where('id_protocol', $additional_agreement->id)
+					->get();
+			
+			$additional_agreement->complete = 0;
+			if(count($states) > 0)
+				if($states[count($states) - 1]->name_state == "Заключен" OR $states[count($states) - 1]->name_state == "Заключён")
+					$additional_agreement->complete = 1;
 		}
+		//История договора
+		$states = State::select(['states.id','name_state','comment_state','date_state','users.surname','users.name','users.patronymic'])->join('users','users.id','states.id_user')->where('id_contract', $id_contract)->where('is_work_state', null)->get();
+		//Стадии выполнения
+		$work_states = State::select(['states.id','name_state','comment_state','date_state','users.surname','users.name','users.patronymic'])->join('users','users.id','states.id_user')->where('id_contract', $id_contract)->where('is_work_state', 1)->get();
 		return view('tree.show_contract', ['contract'=>$contract, 
 											'protocols'=>$protocols, 
 											'additional_agreements'=>$additional_agreements, 
 											'tours'=>$tours,
-											'resolutions'=>$result
+											'resolutions'=>$result,
+											'states'=>$states,
+											'work_states'=>$work_states,
+											'scores'=>$scores,
+											'prepayments'=>$prepayments,
+											'invoices'=>$invoices,
+											'payments'=>$payments,
+											'returns'=>$returns
 										]);
 	}
 

@@ -15,6 +15,11 @@
 			@if(Auth::User()->hasRole()->role == 'Администратор' OR Auth::User()->hasRole()->role == 'Отдел управления договорами')
 				@if(isset($contracts))
 					<div class="row">
+						<div class="col-md-6">
+							@includeif('layouts.search', ['search_arr_value'=>['number_contract'=>'№ договора','counterpartie'=>'Контрагент','executor_contract_reestr'=>'Исполнитель']])
+						</div>
+					</div>
+					<div class="row">
 						<div class="col-md-12">
 							Список договоров
 						</div>
@@ -126,6 +131,9 @@
 										@endforeach
 									</tbody>
 								</table>
+								<div class="col-md-12" style="text-align: center;">
+									@include('layouts.paginate')
+								</div>
 							@endif
 						</div>
 						<!-- Модальное окно выбора договора -->

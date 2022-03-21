@@ -9,7 +9,7 @@ class Contract extends Model
 {
 	use SoftDeletes;
 	
-	protected $fillable = ['id_document_contract','id_counterpartie_contract','number_pp','number_contract','name_work_contract', 'item_contract', 'is_sip_contract',
+	protected $fillable = ['id_document_contract','id_new_application_contract','id_counterpartie_contract','number_pp','number_contract','name_work_contract', 'item_contract', 'is_sip_contract',
 							'id_goz_contract','id_view_work_contract','all_count_contract','concluded_count_contract',
 							'amount_concluded_contract','formalization_count_contract','amount_formalization_contract','big_deal_contract','amoun_implementation_contract',
 							'comment_implementation_contract','prepayment_score_contract','invoice_score_contract','prepayment_payment_contract','amount_payment_contract',

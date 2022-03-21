@@ -87,51 +87,92 @@
 								<input class='form-control' type='text' value='{{$additional_document->date_signing_counterpartie_protocol}}' readonly />
 							</div>
 						</div>
-						@if($additional_document->is_additional_agreement)
-							<div class='row'>
-								<div class="col-md-3">
-									<label>Дата вступления в силу</label>
-								</div>
-								<div class="col-md-7">
-									<input class='form-control' type='text' value='{{$additional_document->date_entry_ento_force_additional_agreement}}' readonly />
-								</div>
-							</div>
-						@endif
 						<div class='row'>
-							<div class="col-md-1">
-								<label>Дата сдачи на хранение</label>
-							</div>
-							<div class="col-md-2">
-								<div class='row'>
-									<div class="col-md-12">
-										<label for='is_oud'>ОУД</label>
-										@if($additional_document->is_oud)
-											<input id='is_oud' class='form-check-input' type="checkbox" disabled checked />
-										@else
-											<input id='is_oud' class='form-check-input' type="checkbox" disabled />
-										@endif
-									</div>
-								</div>
-								<div class='row'>
-									<div class="col-md-12">
-										<label for='is_dep'>Отдел №31</label>
-										@if($additional_document->is_dep)
-											<input id='is_dep' class='form-check-input' type="checkbox" disabled checked />
-										@else
-											<input id='is_dep' class='form-check-input' type="checkbox" disabled />
-										@endif
-									</div>
-								</div>
+							<div class="col-md-3">
+								<label>Дата вступления в силу</label>
 							</div>
 							<div class="col-md-7">
+								<input class='form-control' type='text' value='{{$additional_document->date_entry_ento_force_additional_agreement}}' readonly />
+							</div>
+						</div>
+						<div class='row'>
+							<div class="col-md-10">
 								<div class='row'>
-									<div class="col-md-12">
-										<input class='form-control' type='text' value='{{$additional_document->date_oud_protocol}}' readonly />
+									<div class="col-md-2">
+										<label>Дата сдачи на хранение в ОУД</label>
+									</div>
+									<div class="col-md-4">
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='is_oud_el'>скан (эл. вариант)</label>
+												@if($additional_document->is_oud_el)
+													<input id='is_oud_el' class='form-check-input' type="checkbox" disabled checked />
+												@else
+													<input id='is_oud_el' class='form-check-input' type="checkbox" disabled />
+												@endif
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='is_oud'>оригинал</label>
+												@if($additional_document->is_oud)
+													<input id='is_oud' class='form-check-input' type="checkbox" disabled checked />
+												@else
+													<input id='is_oud' class='form-check-input' type="checkbox" disabled />
+												@endif
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class='row'>
+											<div class="col-md-12">
+												<input class='form-control' name='date_oud_el_protocol' type='text' value='{{$additional_document->date_oud_el_protocol}}' readonly />
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<input class='form-control' name='date_oud_protocol' type='text' value='{{$additional_document->date_oud_protocol}}' readonly />
+											</div>
+										</div>
 									</div>
 								</div>
 								<div class='row'>
-									<div class="col-md-12">
-										<input class='datepicker form-control' type='text' value='{{$additional_document->date_dep_protocol}}' readonly />
+									<div class="col-md-2">
+										<label>Дата сдачи на хранение в отдел №31</label>
+									</div>
+									<div class="col-md-4">
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='is_dep_el'>скан (эл. вариант)</label>
+												@if($additional_document->is_dep_el)
+													<input id='is_dep_el' class='form-check-input' type="checkbox" disabled checked />
+												@else
+													<input id='is_dep_el' class='form-check-input' type="checkbox" disabled />
+												@endif
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<label for='is_dep'>оригинал</label>
+												@if($additional_document->is_dep)
+													<input id='is_dep' class='form-check-input' type="checkbox" disabled checked />
+												@else
+													<input id='is_dep' class='form-check-input' type="checkbox" disabled />
+												@endif
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class='row'>
+											<div class="col-md-12">
+												<input class='form-control' name='date_dep_el_protocol' type='text' value='{{$additional_document->date_dep_el_protocol}}' readonly />
+											</div>
+										</div>
+										<div class='row'>
+											<div class="col-md-12">
+												<input class='form-control' name='date_dep_protocol' type='text' value='{{$additional_document->date_dep_protocol}}' readonly />
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

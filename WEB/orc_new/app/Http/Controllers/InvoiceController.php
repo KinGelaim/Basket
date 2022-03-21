@@ -329,9 +329,11 @@ class InvoiceController extends Controller
 										'prepayment_score_contract','invoice_score_contract','prepayment_payment_contract','amount_payment_contract','date_contact','year_contract',
 										'reestr_contracts.number_counterpartie_contract_reestr','reestr_contracts.executor_reestr',
 										'reestr_contracts.amount_reestr','reestr_contracts.amount_contract_reestr',
-										'reestr_contracts.fix_amount_contract_reestr', 'reestr_contracts.vat_reestr',
-										'reestr_contracts.date_maturity_date_reestr', 'reestr_contracts.date_maturity_reestr', 'name_view_contract', 'item_contract',
-										'executor_contract_reestr'])
+										'reestr_contracts.amount_begin_reestr', 'reestr_contracts.vat_begin_reestr', 'reestr_contracts.approximate_amount_begin_reestr', 'reestr_contracts.fixed_amount_begin_reestr',
+										'reestr_contracts.fix_amount_contract_reestr', 'reestr_contracts.vat_reestr', 'reestr_contracts.approximate_amount_reestr', 'reestr_contracts.fixed_amount_reestr',
+										'reestr_contracts.date_b_contract_reestr', 'reestr_contracts.date_e_contract_reestr', 'reestr_contracts.date_contract_reestr', 
+										'reestr_contracts.date_maturity_date_reestr', 'reestr_contracts.date_e_maturity_reestr', 'reestr_contracts.date_maturity_reestr', 'name_view_contract',
+										'item_contract','reestr_contracts.date_contract_on_first_reestr', 'executor_contract_reestr'])
 							->leftJoin('view_works', 'contracts.id_view_work_contract', '=', 'view_works.id')
 							->leftJoin('reestr_contracts', 'reestr_contracts.id_contract_reestr', 'contracts.id')
 							->leftJoin('view_contracts', 'reestr_contracts.id_view_contract', 'view_contracts.id')
@@ -423,6 +425,8 @@ class InvoiceController extends Controller
 		//dd($amount_payments);
 		$resolutions = Resolution::select(['*'])->where('id_contract_resolution', $contract->id)->where('deleted_at', null)->orderBy('resolutions.id', 'desc')->get();
 		//dump($invoices);
+		//История договора
+		$states = State::select(['states.id','name_state','comment_state','date_state','users.surname','users.name','users.patronymic'])->join('users','users.id','states.id_user')->where('id_contract', $id)->where('is_work_state', null)->get();
 		//Стадии выполнения
 		$work_states = State::select(['states.id','name_state','comment_state','date_state','users.surname','users.name','users.patronymic'])->join('users','users.id','states.id_user')->where('id_contract', $id)->where('is_work_state', 1)->get();
         return view('department.invoice.contract', ['contract'=>$contract,
@@ -436,7 +440,9 @@ class InvoiceController extends Controller
 													'amount_invoices'=>$amount_invoices,
 													'amount_payments'=>$amount_payments,
 													'amount_returns'=>$amount_returns,
-													'resolutions'=>$resolutions
+													'resolutions'=>$resolutions,
+													'states'=>$states,
+													'work_states'=>$work_states
 													]);
     }
 	
