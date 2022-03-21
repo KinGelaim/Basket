@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoTracking", "VideoTracking\VideoTracking.csproj", "{CB978675-C7C6-4757-B0E6-7B461FE42DDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CB978675-C7C6-4757-B0E6-7B461FE42DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB978675-C7C6-4757-B0E6-7B461FE42DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB978675-C7C6-4757-B0E6-7B461FE42DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB978675-C7C6-4757-B0E6-7B461FE42DDC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8EFE5C3C-AE5E-433B-A163-86099376FEFF}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal
