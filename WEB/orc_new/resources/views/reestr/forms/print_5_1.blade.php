@@ -50,7 +50,7 @@
 									<td>{{$count++}}</td>
 									<td>{{$contract->number_contract}} {{$contract->date_contract_on_first_reestr ? 'от ' . $contract->date_contract_on_first_reestr : ''}}</td>
 									<td>{{$contract->number_counterpartie_contract_reestr}}</td>
-									<td></td>
+									<td>{{$contract->date_registration_project_reestr}}</td>
 									<td>{{$contract->counterpartie_name}}</td>
 									<td>{{$contract->item_contract}}</td>
 									<td>{{$contract->amount_contract_reestr}}</td>
@@ -68,7 +68,7 @@
 											<td>{{$count++}}</td>
 											<td>{{$contract->number_contract}} {{$contract->date_contract_on_first_reestr ? 'от ' . $contract->date_contract_on_first_reestr : ''}}</td>
 											<td>{{$contract->number_counterpartie_contract_reestr}}</td>
-											<td></td>
+											<td>{{$contract->date_registration_project_reestr}}</td>
 											<td>{{$contract->counterpartie_name}}</td>
 											<td>{{$contract->item_contract}}</td>
 											<td>{{$contract->amount_contract_reestr}}</td>

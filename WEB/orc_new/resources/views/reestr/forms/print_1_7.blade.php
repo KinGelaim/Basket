@@ -45,12 +45,16 @@
 					</thead>
 					<tbody>
 						@if(isset($result))
+							<?php
+								$count = 0; $all_amount = 0;
+							?>
 							@foreach($result as $key=>$value)
 								<tr>
 									<td colspan='7' style='text-align: center;'>
 										<b>{{$key}}</b>
 									</td>
 								</tr>
+								<?php $dolg = 0; ?>
 								@foreach($value as $contract)
 									<tr>
 										<td>{{$contract->number_contract}} от<br/>{{$contract->date_contract_on_first_reestr}}<br/><br/>{{$contract->executor_contract_reestr}}</td>
@@ -59,10 +63,31 @@
 										<td>{{$contract->date_maturity_reestr}}</td>
 										<td>Договор подписан - <b>{{strtotime($contract->date_signing_contract_reestr) > strtotime($contract->date_signing_contract_counterpartie_reestr) ? $contract->date_signing_contract_reestr : $contract->date_signing_contract_counterpartie_reestr}}<b/></td>
 										<td>Дата вступления в силу - <b>{{$contract->date_entry_into_force_reestr}}</b><br/>Дата сдачи Договора на хранение - <b>{{$contract->date_save_contract_reestr}}</b></td>
-										<td><b>Исполнено:</b> {{$contract->amount_invoices}}<br/><b>Оплата:</b> {{$contract->amount_payments + $contract->amount_prepayments}}<br/><b>Задолженность: </b>{{$contract->amount_invoices - ($contract->amount_payments + $contract->amount_prepayments) > 0 ? ($contract->amount_invoices - ($contract->amount_payments + $contract->amount_prepayments)) : 0}}</td>
+										<td><b>Исполнено:</b> {{is_numeric($contract->amount_invoices) ? number_format($contract->amount_invoices, 2, '.', '&nbsp;') : $contract->amount_invoices}}<br/><b>Оплата:</b> {{number_format($contract->amount_payments + $contract->amount_prepayments, 2, '.', '&nbsp;')}}<br/><b>Задолженность: </b>{{number_format(($contract->amount_invoices - ($contract->amount_payments + $contract->amount_prepayments) > 0 ? ($contract->amount_invoices - ($contract->amount_payments + $contract->amount_prepayments)) : 0), 2, '.', '&nbsp;')}}</td>
 									</tr>
+									<?php
+										$count++;
+										if (is_numeric($contract->amount_contract_reestr))
+											$all_amount += $contract->amount_contract_reestr;
+										else if (is_numeric($contract->amount_reestr))
+											$all_amount += $contract->amount_reestr;
+											
+										$dolg += $contract->amount_invoices - ($contract->amount_payments + $contract->amount_prepayments) > 0 ? ($contract->amount_invoices - ($contract->amount_payments + $contract->amount_prepayments)) : 0;
+									?>
 								@endforeach
+								<tr>
+									<td colspan=7 style='text-align: right;'><b>Итого: Задолженность по {{$key}} на {{date('d.m.Y', time())}} г. - {{number_format($dolg, 2, '.', '&nbsp;')}} руб.</b></td>
+								</tr>
 							@endforeach
+							<tr>
+								<td style='text-align: right;'><b>Итого:</b></td>
+								<td style='text-align: center;'><b>{{$count}}</b></td>
+								<td style='text-align: center;'><b>{{number_format($all_amount, 2, '.', '&nbsp;')}}</b></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
 						@endif
 					</tbody>
 				</table>

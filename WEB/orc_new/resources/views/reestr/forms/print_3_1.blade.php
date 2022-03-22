@@ -57,7 +57,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php $result_amount = 0; ?>
+						<?php $result_amount = 0; $count = 0; ?>
 						@if(isset($contracts))
 							@foreach($contracts as $contract)
 								<tr>
@@ -77,9 +77,13 @@
 											{{$add_agreement->name_protocol}} от {{$add_agreement->date_on_first_protocol}}<br/>
 										@endforeach
 									</td>
-									<td></td>
+									<td>{{$contract->date_entry_into_force_reestr}}</td>
 								</tr>
-								<?php if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr)); else if($contract->amount_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_reestr))?>
+								<?php
+									if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr));
+									else if($contract->amount_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_reestr));
+									$count++;
+								?>
 							@endforeach
 						@elseif(isset($result))
 							@foreach($result as $key=>$value)
@@ -103,19 +107,23 @@
 													{{$add_agreement->name_protocol}} от {{$add_agreement->date_on_first_protocol}}<br/>
 												@endforeach
 											</td>
-											<td></td>
+											<td>{{$contract->date_entry_into_force_reestr}}</td>
 										</tr>
-										<?php if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr)); else if($contract->amount_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_reestr))?>
+										<?php
+											if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr));
+											else if($contract->amount_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_reestr));
+											$count++;
+										?>
 									@endforeach
 								</tr>
 							@endforeach
 						@endif
 						<tr>
 							<td></td>
-							<td></td>
-							<td></td>
 							<td style='text-align: right;'><b>Итого</b></td>
-							<td><b>{{is_numeric($result_amount) ? number_format($result_amount, 2, '.', '&nbsp;') : str_replace('.',',',$result_amount)}}</b></td>
+							<td style='text-align: center;'><b>{{$count}}</b></td>
+							<td></td>
+							<td style='text-align: center;'><b>{{is_numeric($result_amount) ? number_format($result_amount, 2, '.', '&nbsp;') : str_replace('.',',',$result_amount)}}</b></td>
 							<td></td>
 							<td></td>
 							<td></td>

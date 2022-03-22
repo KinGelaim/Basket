@@ -51,7 +51,7 @@
 					</thead>
 					<tbody>
 						@if(isset($contracts))
-							<?php $count=1; ?>
+							<?php $count=1; $all_amount = 0; ?>
 							@foreach($contracts as $contract)
 								<tr>
 									<td>{{$count++}}</td>
@@ -61,13 +61,31 @@
 									<td>{{$contract->amount_contract_reestr}}</td>
 									<td></td>
 									<td></td>
-									<td></td>
+									<td>{{$contract->date_contract_reestr}}</td>
 									<td></td>
 									<td></td>
 									<td></td>
 									<td></td>
 								</tr>
+								<?php
+									if (is_numeric($contract->amount_contract_reestr))
+										$all_amount += $contract->amount_contract_reestr;
+								?>
 							@endforeach
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td style='text-align: right;'><b>Итого:</b></td>
+								<td style='text-align: center;'>{{$all_amount}}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
 						@endif
 					</tbody>
 				</table>

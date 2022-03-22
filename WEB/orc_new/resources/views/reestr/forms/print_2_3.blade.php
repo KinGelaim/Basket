@@ -42,20 +42,28 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php $result_amount = 0; ?>
+						<?php $result_amount = 0; $count = 0; ?>
 						@if(isset($contracts))
 							@foreach($contracts as $contract)
 								<tr>
 									<td>{{$contract->number_contract}}<br/>{{$contract->number_counterpartie_contract_reestr}} {{$contract->date_contract_on_first_reestr ? 'от ' . $contract->date_contract_on_first_reestr : ''}}</td>
 									<td>{{$contract->counterpartie_name}}</td>
 									<td>{{$contract->item_contract}}</td>
-									<td></td>
+									<td>{{$contract->date_maturity_reestr}}</td>
 									<td>{{$contract->amount_contract_reestr}}</td>
 									<td>{{$contract->date_contract_reestr}}</td>
-									<td></td>
-									<td></td>
+									<td>
+										@foreach($contract->protocols as $protocol)
+											{{$protocol->name_protocol}} от {{$protocol->date_on_first_protocol}}<br/>
+										@endforeach
+										<br/>
+										@foreach($contract->add_agreements as $add_agreement)
+											{{$add_agreement->name_protocol}} от {{$add_agreement->date_on_first_protocol}}<br/>
+										@endforeach
+									</td>
+									<td>{{$contract->document_success_renouncement_reestr}}<br/>{{$contract->date_renouncement_contract}}</td>
 								</tr>
-								<?php if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr)); ?>
+								<?php if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr)); $count++; ?>
 							@endforeach
 						@elseif(isset($result))
 							@foreach($result as $key=>$value)
@@ -66,36 +74,40 @@
 											<td>{{$contract->number_contract}}<br/>{{$contract->number_counterpartie_contract_reestr}} {{$contract->date_contract_on_first_reestr ? 'от ' . $contract->date_contract_on_first_reestr : ''}}</td>
 											<td>{{$contract->counterpartie_name}}</td>
 											<td>{{$contract->item_contract}}</td>
-											<td></td>
+											<td>{{$contract->date_maturity_reestr}}</td>
 											<td>{{$contract->amount_contract_reestr}}</td>
 											<td>{{$contract->date_contract_reestr}}</td>
-											<td></td>
-											<td></td>
+											<td>
+												@foreach($contract->protocols as $protocol)
+													{{$protocol->name_protocol}} от {{$protocol->date_on_first_protocol}}<br/>
+												@endforeach
+												<br/>
+												@foreach($contract->add_agreements as $add_agreement)
+													{{$add_agreement->name_protocol}} от {{$add_agreement->date_on_first_protocol}}<br/>
+												@endforeach
+											</td>
+											<td>{{$contract->document_success_renouncement_reestr}}<br/>{{$contract->date_renouncement_contract}}</td>
 										</tr>
-										<?php if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr)); ?>
+										<?php if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr)); $count++; ?>
 									@endforeach
 								</tr>
 							@endforeach
 						@endif
 						<tr>
-							<th></th>
-							<th></th>
-							<th></th>
+							<td></td>
+							<td></td>
 							<td style='text-align: right;'><b>Итого</b></td>
-							<td><b>{{str_replace('.',',',$result_amount)}}</b></td>
-							<th></th>
-							<th></th>
-							<th></th>
+							<td style='text-align: center;'><b>{{$count}}</b></td>
+							<td style='text-align: center;'><b>{{str_replace('.',',',$result_amount)}}</b></td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 					</tbody>
 				</table>
 				<div class='row'>
 					<div class="col-md-8 col-md-offset-2">
-						@if(isset($contracts))
-							Всего проектов за период: {{count($contracts)}}
-						@elseif(isset($result))
-							Всего зарегистрировано за период: {{$count_contracts}}
-						@endif
+						
 					</div>
 				</div>
 				<div class='row'>

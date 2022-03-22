@@ -47,7 +47,7 @@
 					</thead>
 					<tbody>
 						@if(isset($contracts))
-							<?php $count=1; ?>
+							<?php $count=1; $all_nmcd = 0; $all_amount = 0; $all_economy = 0; ?>
 							@foreach($contracts as $contract)
 								<tr>
 									<td>{{$count++}}</td>
@@ -57,13 +57,35 @@
 									<td>{{$contract->nmcd_reestr}}</td>
 									<td>{{$contract->amount_contract_reestr}}</td>
 									<td>{{$contract->economy_reestr}}</td>
-									<td></td>
+									<td>{{$contract->date_contract_reestr}}</td>
 									<td></td>
 									<td></td>
 									<td></td>
 									<td></td>
 								</tr>
+								<?php
+									if (is_numeric($contract->nmcd_reestr))
+										$all_nmcd += $contract->nmcd_reestr;
+									if (is_numeric($contract->amount_contract_reestr))
+										$all_amount += $contract->amount_contract_reestr;
+									if (is_numeric($contract->economy_reestr))
+										$all_economy += $contract->economy_reestr;
+								?>
 							@endforeach
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td style='text-align: right;'><b>Итого:</b></td>
+								<td style='text-align: center;'><b>{{$all_nmcd}}</b></td>
+								<td style='text-align: center;'><b>{{$all_amount}}</b></td>
+								<td style='text-align: center;'><b>{{$all_economy}}</b></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
 						@endif
 					</tbody>
 				</table>

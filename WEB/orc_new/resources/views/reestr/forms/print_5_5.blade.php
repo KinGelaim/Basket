@@ -44,6 +44,7 @@
 					</thead>
 					<tbody>
 						@if(isset($contracts))
+							<?php $count = 0; $all_amount = 0; ?>
 							@foreach($contracts as $contract)
 								<tr>
 									<td>{{$contract->number_contract}}</td>
@@ -56,7 +57,23 @@
 									<td>{{$contract->investments_reestr==1 ? 'Инвестирование' : ''}}</td>
 									<td>{{$contract->other_reestr==1 ? 'Иное' : ''}}</td>
 								</tr>
+								<?php
+									$count++;
+									if (is_numeric($contract->amount_contract_reestr))
+										$all_amount += $contract->amount_contract_reestr;
+								?>
 							@endforeach
+							<tr>
+								<td style='text-align: right;'>Итого:</td>
+								<td style='text-align: center;'>{{$count}}</td>
+								<td style='text-align: center;'>{{$all_amount}}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
 						@endif
 					</tbody>
 				</table>

@@ -57,7 +57,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php $result_amount = 0; ?>
+						<?php $result_amount = 0; $count = 0; ?>
 						@if(isset($contracts))
 							@foreach($contracts as $contract)
 								<tr>
@@ -79,7 +79,11 @@
 										@endforeach
 									</td>
 								</tr>
-								<?php if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr)); else if($contract->amount_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_reestr))?>
+								<?php
+									if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr));
+									else if($contract->amount_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_reestr));
+									$count++;
+								?>
 							@endforeach
 						@elseif(isset($result))
 							@foreach($result as $key=>$value)
@@ -105,7 +109,11 @@
 												@endforeach
 											</td>
 										</tr>
-										<?php if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr)); else if($contract->amount_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_reestr))?>
+										<?php
+											if($contract->amount_contract_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_contract_reestr));
+											else if($contract->amount_reestr != null) $result_amount += str_replace(' ','',str_replace(',','.',$contract->amount_reestr));
+											$count++;
+										?>
 									@endforeach
 								</tr>
 							@endforeach
@@ -113,10 +121,10 @@
 						<tr>
 							<td></td>
 							<td></td>
-							<td></td>
-							<td></td>
 							<td style='text-align: right;'><b>Итого</b></td>
-							<td><b>{{is_numeric($result_amount) ? number_format($result_amount, 2, '.', '&nbsp;') : str_replace('.',',',$result_amount)}}</b></td>
+							<td style='text-align: center;'><b>{{$count}}</b></td>
+							<td></td>
+							<td style='text-align: center;'><b>{{is_numeric($result_amount) ? number_format($result_amount, 2, '.', '&nbsp;') : str_replace('.',',',$result_amount)}}</b></td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -125,11 +133,7 @@
 				</table>
 				<div class='row'>
 					<div class="col-md-8 col-md-offset-2">
-						@if(isset($contracts))
-							Всего проектов за период: {{count($contracts)}}
-						@elseif(isset($result))
-							Всего зарегистрировано за период: {{$count_contracts}}
-						@endif
+						
 					</div>
 				</div>
 				<div class='row'>

@@ -148,6 +148,11 @@
 				</div>
 				<div class='row'>
 					<div class="col-md-12">
+						<button type="button" class="btn btn-primary steps" style='white-space: normal; width: 100%;' first_step='#printList' second_step='#departmentPeriod' onclick="$('#departmentPeriod input[name=real_name_table]').val('форма сведения о количестве и об общей стоимости договоров');">Форма 2.9. Сведения о количестве и об общей стоимости договоров</button>
+					</div>
+				</div>
+				<div class='row'>
+					<div class="col-md-12">
 						<button type="button" class="btn btn-secondary steps" style='white-space: normal; width: 100%;' first_step='#procurementTable' second_step='#newTableReportsOUD'>Назад</button>
 					</div>
 				</div>
@@ -331,22 +336,37 @@
 			<div id='spApplicationTable' class='col-md-12' style='display: none;'>
 				<div class='row'>
 					<div class="col-md-12">
-						<button type="button" class="btn btn-secondary" style='white-space: normal; width: 100%;'>Форма 8.1.</button>
+						<button type="button" class="btn btn-primary steps" style='white-space: normal; width: 100%;' first_step='#printList' second_step='#departmentNoneRequiredPeriod' onclick="$('#departmentNoneRequiredPeriod input[name=real_name_table]').val('форма списки заявок без проектов');">Форма 8.1. Списки заявок, зарегистрированных в "Реестре договоров" - проектов нет за период</button>
 					</div>
 				</div>
 				<div class='row'>
 					<div class="col-md-12">
-						<button type="button" class="btn btn-secondary" style='white-space: normal; width: 100%;'>Форма 8.2.</button>
+						<button type="button" class="btn btn-primary steps" style='white-space: normal; width: 100%;' first_step='#printList' second_step='#departmentNoneRequiredPeriod' onclick="$('#departmentNoneRequiredPeriod input[name=real_name_table]').val('форма списки заявок с проектами');">Форма 8.2. Список заявок, зарегистрированных в Реестре Договоров - есть проект (стадия согласования) за период</button>
 					</div>
 				</div>
 				<div class='row'>
 					<div class="col-md-12">
-						<button type="button" class="btn btn-secondary" style='white-space: normal; width: 100%;'>Форма 8.3.</button>
+						<button type="button" class="btn btn-primary steps" style='white-space: normal; width: 100%;' first_step='#printList' second_step='#completePeriod' onclick="$('#completePeriod input[name=real_name_table]').val('форма список заявок для подготовки договоров');">Форма 8.3. СПИСОК ЗАЯВОК, для подготовки проектов Договоров (Контрактов) не зарегистрированных в "Реестре Договоров" за период</button>
 					</div>
 				</div>
 				<div class='row'>
 					<div class="col-md-12">
-						<button type="button" class="btn btn-secondary" style='white-space: normal; width: 100%;'>Форма 8.4.</button>
+						<button type="button" class="btn btn-primary steps" style='white-space: normal; width: 100%;' first_step='#printList' second_step='#completePeriod' onclick="$('#completePeriod input[name=real_name_table]').val('форма список заявок на возможность проведения испытаний');">Форма 8.4. СПИСОК ЗАЯВОК, на возможность проведения испытаний, предоставление заключений РКМ, ВП МО РФ за период</button>
+					</div>
+				</div>
+				<div class='row'>
+					<div class="col-md-12">
+						<button type="button" class="btn btn-primary steps" style='white-space: normal; width: 100%;' first_step='#printList' second_step='#completePeriod' onclick="$('#completePeriod input[name=real_name_table]').val('список заявок за период');">Форма 8.5. Список заявок за период (новые заявки)</button>
+					</div>
+				</div>
+				<div class='row'>
+					<div class="col-md-12">
+						<button type="button" class="btn btn-primary steps" style='white-space: normal; width: 100%;' first_step='#printList' second_step='#completePeriod' onclick="$('#completePeriod input[name=real_name_table]').val('список принятых заявок за период');">Форма 8.6. Список принятых заявок за период (новые заявки)</button>
+					</div>
+				</div>
+				<div class='row'>
+					<div class="col-md-12">
+						<button type="button" class="btn btn-primary steps" style='white-space: normal; width: 100%;' first_step='#printList' second_step='#completePeriod' onclick="$('#completePeriod input[name=real_name_table]').val('список отклоненных заявок за период');">Форма 8.7. Список отклоненных заявок за период (новые заявки)</button>
 					</div>
 				</div>
 				<div class='row'>
@@ -359,7 +379,7 @@
 			<div id='spShadilov' class='col-md-12' style='display: none;'>
 				<div class='row'>
 					<div class="col-md-12">
-						<button type="button" class="btn btn-secondary" style='white-space: normal; width: 100%;'>Форма 9.1.</button>
+						<button type="button" class="btn btn-primary steps" style='white-space: normal; width: 100%;' first_step='#printList' second_step='#departmentNoneRequiredPeriod' onclick="$('#departmentNoneRequiredPeriod input[name=real_name_table]').val('форма список договоров за период');">Форма 9.1. СПИСОК Договоров (Контрактов) за период</button>
 					</div>
 				</div>
 				<div class='row'>

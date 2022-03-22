@@ -75,7 +75,7 @@
 							<td></td>
 							<td></td>
 							<td style='text-align: right;'><b>Итого</b></td>
-							<td><b>{{str_replace('.',',',$result_amount)}}</b></td>
+							<td style='text-align: center;'><b>{{str_replace('.',',',$result_amount)}}</b></td>
 							<td></td>
 							<td></td>
 						</tr>

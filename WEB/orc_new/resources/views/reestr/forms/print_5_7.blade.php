@@ -40,6 +40,13 @@
 						</tr>
 					</thead>
 					<tbody>
+						<?php
+							$amount_all_procurement_reestr = 0;
+							$amount_all_marketing_reestr = 0;
+							$amount_all_investments_reestr = 0;
+							$amount_all_mob_reestr = 0;
+							$amount_all_other_reestr = 0;
+						?>
 						@foreach($result as $key=>$value)
 							<tr>
 								<td>{{$key}}</td>
@@ -84,7 +91,22 @@
 								<td>{{$all_mob_reestr}}</td>
 								<td>{{$all_other_reestr}}</td>
 							</tr>
+							<?php
+								$amount_all_procurement_reestr += $all_procurement_reestr;
+								$amount_all_marketing_reestr += $all_marketing_reestr;
+								$amount_all_investments_reestr += $all_investments_reestr;
+								$amount_all_mob_reestr += $all_mob_reestr;
+								$amount_all_other_reestr += $all_other_reestr;
+							?>
 						@endforeach
+						<tr>
+							<td style='text-align: right;'><b>Итоги:</b></td>
+							<td style='text-align: center;'><b>{{$amount_all_procurement_reestr}}</b></td>
+							<td style='text-align: center;'><b>{{$amount_all_marketing_reestr}}</b></td>
+							<td style='text-align: center;'><b>{{$amount_all_investments_reestr}}</b></td>
+							<td style='text-align: center;'><b>{{$amount_all_mob_reestr}}</b></td>
+							<td style='text-align: center;'><b>{{$amount_all_other_reestr}}</b></td>
+						</tr>
 					</tbody>
 				</table>
 				<div class='row'>

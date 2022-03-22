@@ -36,7 +36,7 @@
 					</thead>
 					<tbody>
 						@if(isset($contracts))
-							<?php $k=1; ?>
+							<?php $k=1; $all_amount_bank = 0; ?>
 							@foreach($contracts as $contract)
 								<tr>
 									<td>{{$k++}}</td>
@@ -44,17 +44,27 @@
 									<td>{{$contract->amount_bank_reestr}}</td>
 									<td>{{$contract->date_bank_reestr ? 'До ' . $contract->date_bank_reestr : ''}}</td>
 									<td>{{$contract->counterpartie_name}}</td>
-									<td></td>
+									<td>{{$contract->date_contract_reestr}}</td>
 								</tr>
+								<?php
+									if (is_numeric($contract->amount_bank_reestr))
+										$all_amount_bank += $contract->amount_bank_reestr;
+								?>
 							@endforeach
+							<tr>
+								<td></td>
+								<td style='text-align: right;'><b>Итого:</b></td>
+								<td style='text-align: center;'><b>{{$all_amount_bank}}</b></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
 						@endif
 					</tbody>
 				</table>
 				<div class='row'>
 					<div class="col-md-8 col-md-offset-2">
-						@if(isset($contracts))
-							Всего зарегистрировано за период: {{$count_contracts}}
-						@endif
+						
 					</div>
 				</div>
 				<div class='row'>

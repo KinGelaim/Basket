@@ -46,7 +46,7 @@
 								<?php $k=0; $full_amount=0; ?>
 								@foreach($contracts as $contract)
 									<tr>
-										<td>{{$contract->number_contract}}<br/>{{$contract->number_counterpartie_contract_reestr}}</td>
+										<td>{{$contract->number_contract}}<br/>{{$contract->number_counterpartie_contract_reestr}}<br/>{{$contract->executor_contract_reestr}}</td>
 										<td>
 											<?php
 												if(is_numeric($contract->amount_contract_reestr))
@@ -70,7 +70,7 @@
 									?>
 								@endforeach
 								<tr>
-									<td style='text-align: right;'><b>Итого:</b></td>
+									<td style='text-align: right;'><b>Итого: {{$k}}</b></td>
 									<td><b>{{str_replace('.',',',number_format($full_amount, 2, ',', ' '))}}</b></td>
 									<td></td>
 								</tr>

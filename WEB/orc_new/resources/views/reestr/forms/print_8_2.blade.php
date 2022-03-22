@@ -1,7 +1,7 @@
 @extends('layouts.header')
 
 @section('title')
-	Печать Список исполненных договоров
+	Печать Списки заявок, зарегистрированных в Реестре договоров - проектов нет
 @endsection
 
 @section('content')
@@ -10,12 +10,12 @@
 			<div class="">
 				<div class='row'>
 					<div class="col-md-12">
-						<button class='btn btn-primary' id='createExcel' real_name_table='Список исполненных договоров'>Сформировать Excel</button>
+						<button class='btn btn-primary' id='createExcel' real_name_table='Списки заявок, зарегистрированных в Реестре договоров - проектов нет'>Сформировать Excel</button>
 					</div>
 				</div>
 				<div class='row' style='text-align: center;'>
 					<div class="col-md-12">
-						Список исполненных договоров
+						Список заявок, зарегистрированных в Реестре Договоров - есть проект (стадия согласования)
 					</div>
 				</div>
 				<div class='row' style='text-align: center;'>
@@ -31,23 +31,22 @@
 				<table id='resultTable' class="table table-bordered tablePrint" style='margin: 0 auto; margin-top:20px; margin-bottom: 10px;'>
 					<thead style='text-align: center;'>
 						<tr>
-							<th rowspan='2'>№ договора</th>
-							<th colspan='2'>В проекте договора (контракта)</th>
-							<th rowspan='2'>ГОЗ, межзаводские, экспорт, услуги и иные</th>
-							<th rowspan='2'>Срок исполнения</th>
-							<th rowspan='2'>Дата, № входящего (исходящего) проекта Договора</th>
-							<th rowspan='2'>Дата вступления в силу (дата урегулирования разногасий)</th>
-							<th rowspan='2'>Исполнение Договора/Контракта</th>
-							<th rowspan='2'>Дата исполнения Дог./Контр.</th>
+							<th rowspan=2>Номер Дог./Контр., дата по Реестру</th>
+							<th rowspan=2>Предмет, заявка</th>
+							<th colspan=2>В реестре</th>
+							<th rowspan=2>Примечение</th>
+							<th rowspan=2>Исполнитель</th>
 						</tr>
 						<tr>
-							<th>Предмет</th>
 							<th>Сумма</th>
+							<th>Срок испытаний, сборки</th>
 						</tr>
 					</thead>
 					<tbody>
 						@if(isset($result))
-							<?php $count = 0; $all_amount = 0; ?>
+							<?php
+								$count = 0; $all_amount = 0;
+							?>
 							@foreach($result as $key=>$value)
 								<tr>
 									<td colspan='7' style='text-align: center;'>
@@ -56,15 +55,12 @@
 								</tr>
 								@foreach($value as $contract)
 									<tr>
-										<td>{{$contract->number_contract}} от<br/>{{$contract->date_contract_on_first_reestr}}<br/><br/>{{$contract->executor_contract_reestr}}</td>
+										<td>{{$contract->number_contract}}<br/>Дата регистрации заявки - {{$contract->date_registration_application_reestr}}</td>
 										<td>{{$contract->item_contract}}</td>
 										<td>{{is_numeric($contract->amount_contract_reestr) ? number_format($contract->amount_contract_reestr, 2, '.', '&nbsp;') : (is_numeric($contract->amount_reestr) ? number_format($contract->amount_reestr, 2, '.', '&nbsp;') : $contract->amount_reestr)}}</td>
-										<td>{{$contract->name_works_goz}}</td>
 										<td>{{$contract->date_maturity_reestr}}</td>
-										<td>Договор подписан - <b>{{strtotime($contract->date_signing_contract_reestr) > strtotime($contract->date_signing_contract_counterpartie_reestr) ? $contract->date_signing_contract_reestr : $contract->date_signing_contract_counterpartie_reestr}}<b/></td>
-										<td>Дата вступления в силу - <b>{{$contract->date_entry_into_force_reestr}}</b><br/>Дата сдачи Договора на хранение - <b>{{$contract->date_save_contract_reestr}}</b></td>
-										<td><b>Исполнено:</b> {{$contract->amount_invoices}}<br/><b>Оплата:</b> {{$contract->amount_payments + $contract->amount_prepayments}}<br/><b>Задолженность: </b>{{$contract->amount_invoices - ($contract->amount_payments + $contract->amount_prepayments) > 0 ? ($contract->amount_invoices - ($contract->amount_payments + $contract->amount_prepayments)) : 0}}</td>
-										<td>{{$contract->date_complete_reestr}}</td>
+										<td></td>
+										<td>{{$contract->executor_contract_reestr}}</td>
 									</tr>
 									<?php
 										$count++;
@@ -79,9 +75,6 @@
 								<td style='text-align: right;'><b>Итого:</b></td>
 								<td style='text-align: center;'><b>{{$count}}</b></td>
 								<td style='text-align: center;'><b>{{number_format($all_amount, 2, '.', '&nbsp;')}}</b></td>
-								<td></td>
-								<td></td>
-								<td></td>
 								<td></td>
 								<td></td>
 								<td></td>
